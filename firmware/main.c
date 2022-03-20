@@ -1,4 +1,5 @@
 #include "main.h"
+#include "usart.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -20,6 +21,11 @@ int main() {
 	TCCR0B |= (2 << CS00);	//divide clock by 8
 	OCR0A = 63;
 	TIMSK0 |= (1 << OCIE0A); //enable timer
+
+	//configure UART
+	UBRR0H = 0; UBRR0L = 51; //9600 baud
+	UCSR0B |= (1 << RXEN0) | (1 << TXEN0); //enable receive and transmitter
+	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); //8-bit word size
 
 	//enable global interrupts
 	sei();
