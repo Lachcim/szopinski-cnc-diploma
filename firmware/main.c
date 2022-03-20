@@ -1,6 +1,8 @@
 #include "main.h"
 #include "usart.h"
 
+#include <stdbool.h>
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -33,6 +35,12 @@ int main() {
 	//disable motors
 	DISABLE_XY_PORT |= (1 << DISABLE_XY);
 	DISABLE_Z_PORT |= (1 << DISABLE_Z);
+
+	while (true) {
+		//receive G-code block
+		char block_buf[256];
+		usart_receive_block(block_buf);
+	}
 }
 
 ISR(TIMER0_COMPA_vect) {
