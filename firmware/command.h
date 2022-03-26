@@ -2,43 +2,40 @@
 #define COMMAND_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
-#define HAS_G_MOTION ((unsigned int) 0x1)
-#define HAS_G_DISTANCE ((unsigned int) 0x2)
-#define HAS_G_OFFSET ((unsigned int) 0x4)
-#define HAS_G_FEED_RATE ((unsigned int) 0x8)
-#define HAS_G_UNIT ((unsigned int) 0x10)
-#define HAS_M_STOP ((unsigned int) 0x20)
-#define HAS_F_WORD ((unsigned int) 0x40)
-#define HAS_I_WORD ((unsigned int) 0x80)
-#define HAS_J_WORD ((unsigned int) 0x100)
-#define HAS_K_WORD ((unsigned int) 0x200)
-#define HAS_L_WORD ((unsigned int) 0x400)
-#define HAS_P_WORD ((unsigned int) 0x800)
-#define HAS_R_WORD ((unsigned int) 0x1000)
-#define HAS_X_WORD ((unsigned int) 0x2000)
-#define HAS_Y_WORD ((unsigned int) 0x4000)
-#define HAS_Z_WORD ((unsigned int) 0x8000)
+#include <avr/pgmspace.h>
+
+#define TO_FIXED(DECIMAL) (DECIMAL * 0x10000L)
+
+#define FLAG_G_MOTION ((unsigned int) 0x1)
+#define FLAG_G_DISTANCE ((unsigned int) 0x2)
+#define FLAG_G_OFFSET ((unsigned int) 0x4)
+#define FLAG_G_FEED_RATE ((unsigned int) 0x8)
+#define FLAG_G_UNITS ((unsigned int) 0x10)
+#define FLAG_F_WORD ((unsigned int) 0x20)
+#define FLAG_I_WORD ((unsigned int) 0x40)
+#define FLAG_J_WORD ((unsigned int) 0x80)
+#define FLAG_K_WORD ((unsigned int) 0x100)
+#define FLAG_L_WORD ((unsigned int) 0x200)
+#define FLAG_P_WORD ((unsigned int) 0x400)
+#define FLAG_R_WORD ((unsigned int) 0x800)
+#define FLAG_X_WORD ((unsigned int) 0x1000)
+#define FLAG_Y_WORD ((unsigned int) 0x2000)
+#define FLAG_Z_WORD ((unsigned int) 0x4000)
 
 struct word {
     char letter;
-    union {
-        struct {
-            int num_int;
-            int num_frac;
-        };
-        long num;
-    };
+    long num;
 };
 
 struct command {
     unsigned int word_flag;
-    struct word g_motion;
-    struct word g_distance_mode;
-    struct word g_offset_mode;
-    struct word g_feed_rate;
-    struct word g_unit_mode;
-    struct word m_stop;
+    long g_motion;
+    long g_distance_mode;
+    long g_offset_mode;
+    long g_feed_rate;
+    long g_unit_mode;
     long f_word;
     long i_word;
     long j_word;
@@ -49,6 +46,11 @@ struct command {
     long x_word;
     long y_word;
     long z_word;
+};
+
+struct modal_mapping {
+    long g_word;
+    unsigned int flag;
 };
 
 void parse_command(const char*, struct command*);
