@@ -118,7 +118,7 @@ long parse_number(const char** buffer, char* error) {
     else if (**buffer == '+')
         (*buffer)++;
 
-    long long integer = 0;
+    long integer = 0;
 
     //must start with a digit or decimal point
     if ((**buffer < '0' || **buffer > '9') && **buffer != '.') {
@@ -134,11 +134,12 @@ long parse_number(const char** buffer, char* error) {
             integer += **buffer - '0';
             (*buffer)++;
         }
-        integer <<= 32;
 
         //no decimal point after integer, finish parsing
-        if (**buffer != '.')
-            return negative ? -integer : integer;
+        if (**buffer != '.') {
+            if (negative) integer = -integer;
+            return integer << 16;
+        }
 
         (*buffer)++;
     }
@@ -153,6 +154,7 @@ long parse_number(const char** buffer, char* error) {
         }
     }
 
+    long long sum = (long long)integer << 32;
     long long fraction = 0;
     long long divisor = 1;
 
@@ -163,9 +165,11 @@ long parse_number(const char** buffer, char* error) {
         divisor *= 10;
         (*buffer)++;
     }
+
     fraction <<= 32;
     fraction /= divisor;
+    sum += fraction;
 
-    long long output = integer + fraction;
-    return negative ? -output : output;
+    if (negative) sum = -sum;
+    return sum >> 16;
 }
