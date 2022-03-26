@@ -1,6 +1,7 @@
 #include "command.h"
+#include "state.h"
 
-bool parse_word(const char** buffer, struct word* out_word, char* error) {
+bool parse_word(const char** buffer, struct word* out_word) {
     //ignore whitespace, comments and parameters
     while (true) {
         consume_whitespace(buffer);
@@ -11,14 +12,14 @@ bool parse_word(const char** buffer, struct word* out_word, char* error) {
 
         //handle comments
         if (**buffer == '(' || **buffer == ';') {
-            consume_comment(buffer, error);
-            if (*error != PARSED_SUCCESSFULLY) return false;
+            consume_comment(buffer);
+            if (machine_state.error != ERROR_NONE) return false;
             continue;
         }
 
         //parameters aren't supported
         if (**buffer == '#') {
-            *error = ERROR_UNSUPPORTED;
+            machine_state.error = ERROR_UNSUPPORTED;
             return false;
         }
 
@@ -32,8 +33,8 @@ bool parse_word(const char** buffer, struct word* out_word, char* error) {
     (*buffer)++;
 
     //obtain word value in 16.16 fixed-point
-    long num = parse_number(buffer, error);
-    if (*error != PARSED_SUCCESSFULLY) return false;
+    long num = parse_number(buffer);
+    if (machine_state.error != ERROR_NONE) return false;
 
     out_word->letter = letter;
     out_word->num = num;
@@ -46,7 +47,7 @@ void consume_whitespace(const char** buffer) {
         (*buffer)++;
 }
 
-void consume_comment(const char** buffer, char* error) {
+void consume_comment(const char** buffer) {
     //end-of-line comment, move pointer to end of buffer
     if (**buffer == ';') {
         while (**buffer != 0)
@@ -61,21 +62,19 @@ void consume_comment(const char** buffer, char* error) {
 
     //end of buffer reached
     if (**buffer == 0) {
-        *error = ERROR_MALFORMED;
+        machine_state.error = ERROR_MALFORMED;
         return;
     }
 
     (*buffer)++;
 }
 
-void parse_block_delete(const char** buffer, char* error) {
+bool parse_block_delete(const char** buffer) {
     consume_whitespace(buffer);
-
-    if (**buffer == '/')
-        *error = ERROR_BLOCK_DELETE;
+    return **buffer == '/';
 }
 
-void consume_line_number(const char** buffer, char* error) {
+void consume_line_number(const char** buffer) {
     consume_whitespace(buffer);
 
     //must start with N
@@ -87,7 +86,7 @@ void consume_line_number(const char** buffer, char* error) {
 
     //consume integer part
     if (**buffer < '0' || **buffer > '9') {
-        *error = ERROR_MALFORMED;
+        machine_state.error = ERROR_MALFORMED;
         return;
     }
     while (**buffer >= '0' && **buffer <= '9')
@@ -100,14 +99,14 @@ void consume_line_number(const char** buffer, char* error) {
 
     //consume fraction part
     if (**buffer < '0' || **buffer > '9') {
-        *error = ERROR_MALFORMED;
+        machine_state.error = ERROR_MALFORMED;
         return;
     }
     while (**buffer >= '0' && **buffer <= '9')
         (*buffer)++;
 }
 
-long parse_number(const char** buffer, char* error) {
+long parse_number(const char** buffer) {
     bool negative = false;
 
     //parse sign
@@ -122,7 +121,7 @@ long parse_number(const char** buffer, char* error) {
 
     //must start with a digit or decimal point
     if ((**buffer < '0' || **buffer > '9') && **buffer != '.') {
-        *error = ERROR_MALFORMED;
+        machine_state.error = ERROR_MALFORMED;
         return 0;
     }
 
@@ -149,7 +148,7 @@ long parse_number(const char** buffer, char* error) {
         (*buffer)++;
 
         if (**buffer < '0' || **buffer > '9') {
-            *error = ERROR_MALFORMED;
+            machine_state.error = ERROR_MALFORMED;
             return 0;
         }
     }

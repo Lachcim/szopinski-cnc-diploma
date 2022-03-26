@@ -1,38 +1,34 @@
 #include "command.h"
+#include "state.h"
 
-#include <stdbool.h>
-
-void parse_command(const char* buffer, struct command* command, char* error) {
-    *error = PARSED_SUCCESSFULLY;
-
-    //parse block delete and line number
-    parse_block_delete(&buffer, error);
-    if (*error != PARSED_SUCCESSFULLY) return;
-
-    consume_line_number(&buffer, error);
-    if (*error != PARSED_SUCCESSFULLY) return;
-
+void parse_command(const char* buffer, struct command* command) {
     //initialize output, mark all words as absent
     struct command output;
     output.word_flag = 0;
+
+    //parse block delete and line number
+    if (parse_block_delete(&buffer)) return;
+
+    consume_line_number(&buffer);
+    if (machine_state.error != ERROR_NONE) return;
 
     //parse words in buffer
     struct word word;
     while (true) {
         //obtain word entity, validate syntax
-        bool word_found = parse_word(&buffer, &word, error);
-        if (*error != PARSED_SUCCESSFULLY) return;
+        bool word_found = parse_word(&buffer, &word);
+        if (machine_state.error != ERROR_NONE) return;
         if (!word_found) break;
 
         //update command structure, validate semantics
-        assign_word(&output, word, error);
-        if (*error != PARSED_SUCCESSFULLY) return;
+        assign_word(&output, word);
+        if (machine_state.error != ERROR_NONE) return;
     }
 
     *command = output;
 }
 
-void assign_word(struct command* command, struct word word, char* error) {
+void assign_word(struct command* command, struct word word) {
     //assign auxillary (non-G, non-M) words
     const char* aux_letter = "FIJKLPRXYZ";
     unsigned int aux_word_flag = HAS_F_WORD;
@@ -42,7 +38,7 @@ void assign_word(struct command* command, struct word word, char* error) {
         if (word.letter == *aux_letter) {
             //raise error if the command already contains this aux word
             if (command->word_flag & aux_word_flag) {
-                *error = ERROR_DUPLICATE_WORD;
+                machine_state.error = ERROR_DUPLICATE_WORD;
                 return;
             }
 
@@ -59,7 +55,7 @@ void assign_word(struct command* command, struct word word, char* error) {
 
     //handle unsupported letters
     if (word.letter != 'G' && word.letter != 'M') {
-        *error = ERROR_UNSUPPORTED;
+        machine_state.error = ERROR_UNSUPPORTED;
         return;
     }
 }

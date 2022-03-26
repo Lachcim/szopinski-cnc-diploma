@@ -1,4 +1,5 @@
 #include "main.h"
+#include "state.h"
 #include "usart.h"
 #include "command.h"
 
@@ -6,6 +7,8 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+
+struct machine_state machine_state = {0};
 
 int main() {
 	//configure ports
@@ -38,15 +41,18 @@ int main() {
 	DISABLE_Z_PORT |= (1 << DISABLE_Z);
 
 	while (true) {
-		//receive G-code block
+		//reset busy state and await G-code block
 		char block_buf[256];
+		machine_state.busy = false;
 		usart_receive_block(block_buf);
+
+		machine_state.busy = true;
+		machine_state.error = ERROR_NONE;
 
 		//parse and execute command
 		struct command command;
-		char error;
-
-		parse_command(block_buf, &command, &error);
+		parse_command(block_buf, &command);
+		if (machine_state.error != ERROR_NONE) continue;
 	}
 }
 

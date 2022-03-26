@@ -3,19 +3,6 @@
 
 #include <stdbool.h>
 
-#define PARSED_SUCCESSFULLY 0
-#define ERROR_BUFFER_OVERFLOW 1
-#define ERROR_BLOCK_DELETE 2
-#define ERROR_MALFORMED 3
-#define ERROR_UNSUPPORTED 4
-#define ERROR_DUPLICATE_WORD 5
-#define ERROR_CONFLICTING_MODAL 6
-
-#define ENTITY_NONE 0
-#define ENTITY_WORD 1
-#define ENTITY_COMMENT 2
-#define ENTITY_PARAMETER 3
-
 #define HAS_G_MOTION ((unsigned int) 0x1)
 #define HAS_G_DISTANCE ((unsigned int) 0x2)
 #define HAS_G_OFFSET ((unsigned int) 0x4)
@@ -64,15 +51,15 @@ struct command {
     long z_word;
 };
 
-void parse_command(const char*, struct command*, char*);
-void assign_word(struct command*, struct word, char*);
+void parse_command(const char*, struct command*);
+void assign_word(struct command*, struct word);
 
-bool parse_word(const char**, struct word*, char*);
-long parse_number(const char**, char*);
+bool parse_word(const char**, struct word*);
+long parse_number(const char**);
 
 void consume_whitespace(const char**);
-void consume_comment(const char**, char*);
-void parse_block_delete(const char**, char*);
-void consume_line_number(const char**, char*);
+void consume_comment(const char**);
+bool parse_block_delete(const char**);
+void consume_line_number(const char**);
 
 #endif
