@@ -1,10 +1,13 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
+#include <stdbool.h>
+
 #define PARSED_SUCCESSFULLY 0
-#define ERROR_BLOCK_DELETE 1
-#define ERROR_INVALID_LINE_NUM 2
-#define ERROR_MALFORMED_WORD 3
+#define ERROR_BUFFER_OVERFLOW 1
+#define ERROR_BLOCK_DELETE 2
+#define ERROR_INVALID_LINE_NUM 3
+#define ERROR_MALFORMED 4
 #define ERROR_UNSUPPORTED 5
 #define ERROR_DUPLICATE_WORD 6
 #define ERROR_CONFLICTING_MODAL 7
@@ -64,10 +67,11 @@ struct command {
 
 void parse_command(const char*, struct command*, char*);
 
-char parse_entity(const char**, struct word*, char*);
+bool parse_word(const char**, struct word*, char*);
 void assign_word(struct command*, struct word, char*);
 
 void consume_whitespace(const char**);
+void consume_comment(const char**, char*);
 void parse_block_delete(const char**, char*);
 void parse_line_number(const char**, char*);
 

@@ -16,18 +16,16 @@ void parse_command(const char* buffer, struct command* command, char* error) {
     struct command output;
     output.word_flag = 0;
 
-    //parse words, comments and parameters
+    //parse words in buffer
+    struct word word;
     while (true) {
-        struct word word;
-        char entity_type = parse_entity(&buffer, &word, error);
-
+        //obtain word entity, validate syntax
+        bool word_found = parse_word(&buffer, &word, error);
         if (*error != PARSED_SUCCESSFULLY) return;
-        if (entity_type == ENTITY_NONE) break;
+        if (!word_found) break;
 
-        //assign word to modal group
-        if (entity_type == ENTITY_WORD)
-            assign_word(&output, word, error);
-
+        //update command structure, validate semantics
+        assign_word(&output, word, error);
         if (*error != PARSED_SUCCESSFULLY) return;
     }
 

@@ -1,9 +1,31 @@
 #include "command.h"
 
-char parse_entity(const char** buffer, struct word* out_word, char* error) {
-    consume_whitespace(buffer);
+bool parse_word(const char** buffer, struct word* out_word, char* error) {
+    //ignore whitespace, comments and parameters
+    while (true) {
+        consume_whitespace(buffer);
 
+        //handle end of buffer
+        if (**buffer == 0)
+            return false;
 
+        //handle comments
+        if (**buffer == '(' || **buffer == ';') {
+            consume_comment(buffer, error);
+            if (*error != PARSED_SUCCESSFULLY) return false;
+            continue;
+        }
+
+        //parameters aren't supported
+        if (**buffer == '#') {
+            *error = ERROR_UNSUPPORTED;
+            return false;
+        }
+
+        break;
+    }
+
+    return true;
 }
 
 void assign_word(struct command* command, struct word word, char* error) {
@@ -35,6 +57,28 @@ void assign_word(struct command* command, struct word word, char* error) {
 void consume_whitespace(const char** buffer) {
     while (**buffer == ' ' || **buffer == '\t')
         (*buffer)++;
+}
+
+void consume_comment(const char** buffer, char* error) {
+    //end-of-line comment, move pointer to end of buffer
+    if (**buffer == ';') {
+        while (**buffer != 0)
+            (*buffer)++;
+
+        return;
+    }
+
+    //move pointer to end of parenthesis-enclosed comment
+    while (**buffer != ')' && **buffer != 0)
+        (*buffer)++;
+
+    //end of buffer reached
+    if (**buffer == 0) {
+        *error = ERROR_MALFORMED;
+        return;
+    }
+
+    (*buffer)++;
 }
 
 void parse_block_delete(const char** buffer, char* error) {
