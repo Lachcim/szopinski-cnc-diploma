@@ -1,5 +1,6 @@
 #include "main.h"
 #include "usart.h"
+#include "command.h"
 
 #include <stdbool.h>
 
@@ -40,6 +41,12 @@ int main() {
 		//receive G-code block
 		char block_buf[256];
 		usart_receive_block(block_buf);
+
+		//parse and execute command
+		struct command command;
+		char error;
+
+		parse_command(block_buf, &command, &error);
 	}
 }
 

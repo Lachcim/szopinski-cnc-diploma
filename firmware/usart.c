@@ -12,10 +12,6 @@ void usart_receive_block(char* buf) {
         while (!(UCSR0A & (1 << RXC0)));
         char current_char = UDR0;
 
-        //discard whitespace
-        if (current_char == ' ' || current_char == '\t')
-            continue;
-
         //break on newline, consume line breaks from previous block
         if (current_char == '\r' || current_char == '\n') {
             if (i == 0) continue;
