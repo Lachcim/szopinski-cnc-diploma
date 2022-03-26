@@ -6,11 +6,10 @@
 #define PARSED_SUCCESSFULLY 0
 #define ERROR_BUFFER_OVERFLOW 1
 #define ERROR_BLOCK_DELETE 2
-#define ERROR_INVALID_LINE_NUM 3
-#define ERROR_MALFORMED 4
-#define ERROR_UNSUPPORTED 5
-#define ERROR_DUPLICATE_WORD 6
-#define ERROR_CONFLICTING_MODAL 7
+#define ERROR_MALFORMED 3
+#define ERROR_UNSUPPORTED 4
+#define ERROR_DUPLICATE_WORD 5
+#define ERROR_CONFLICTING_MODAL 6
 
 #define ENTITY_NONE 0
 #define ENTITY_WORD 1
@@ -66,13 +65,14 @@ struct command {
 };
 
 void parse_command(const char*, struct command*, char*);
+void assign_word(struct command*, struct word, char*);
 
 bool parse_word(const char**, struct word*, char*);
-void assign_word(struct command*, struct word, char*);
+long parse_number(const char**, char*);
 
 void consume_whitespace(const char**);
 void consume_comment(const char**, char*);
 void parse_block_delete(const char**, char*);
-void parse_line_number(const char**, char*);
+void consume_line_number(const char**, char*);
 
 #endif
