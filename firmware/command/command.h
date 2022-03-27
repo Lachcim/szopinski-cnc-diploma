@@ -57,6 +57,7 @@ struct modal_mapping {
 
 void parse_command(const char*, struct command*);
 void assign_word(struct command*, struct word);
+void execute_command(const struct command*);
 
 bool parse_word(const char**, struct word*);
 long parse_number(const char**);

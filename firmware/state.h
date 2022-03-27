@@ -10,6 +10,7 @@
 #define ERROR_UNSUPPORTED 4
 #define ERROR_DUPLICATE_WORD 5
 #define ERROR_CONFLICTING_MODAL 6
+#define ERROR_MISSING_ARGUMENT 7
 
 #define MOTION_RAPID 0
 #define MOTION_LINEAR 1
@@ -33,8 +34,8 @@ struct machine_state {
     int machine_y;
     int machine_z;
 
-    char error;
-    bool busy;
+    volatile char error;
+    volatile bool busy;
 
     char motion_mode;
     char distance_mode;

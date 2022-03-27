@@ -4,11 +4,13 @@ AVRDUDE ?= avrdude
 CFLAGS = -std=c99 -Os -Wall -mcall-prologues -mmcu=atmega328p
 LDFLAGS = -Wl,-gc-sections -Wl,-relax
 
-SOURCES = $(wildcard *.c)
-HEADERS = $(wildcard *.h)
+BUILD = build
+
+SOURCES = $(wildcard *.c) $(wildcard **/*.c)
+HEADERS = $(wildcard *.h) $(wildcard **/*.h)
 OBJECTS = $(patsubst %.c, $(BUILD)/%.o, $(SOURCES))
 
-BUILD = build
+BUILD_DIRS = $(sort $(dir $(OBJECTS)))
 
 $(BUILD)/firmware.hex: $(BUILD)/firmware
 	avr-objcopy -O ihex -R .eeprom $^ $@
@@ -16,11 +18,11 @@ $(BUILD)/firmware.hex: $(BUILD)/firmware
 $(BUILD)/firmware: $(OBJECTS)
 	avr-gcc $(CFLAGS) $(LDFLAGS) -o $@ $^
 
-$(BUILD)/%.o: %.c $(HEADERS) | $(BUILD)
+$(BUILD)/%.o: %.c $(HEADERS) | $(BUILD_DIRS)
 	avr-gcc -c $(CFLAGS) -o $@ $<
 
-$(BUILD):
-	mkdir -p $(BUILD)
+$(BUILD_DIRS):
+	mkdir -p $@
 
 .PHONY: clean
 clean:

@@ -1,5 +1,5 @@
 #include "command.h"
-#include "state.h"
+#include "../state.h"
 
 bool parse_word(const char** buffer, struct word* out_word) {
     //ignore whitespace, comments and parameters

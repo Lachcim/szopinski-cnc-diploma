@@ -1,7 +1,7 @@
 #include "main.h"
 #include "state.h"
 #include "usart.h"
-#include "command.h"
+#include "command/command.h"
 
 #include <stdbool.h>
 
