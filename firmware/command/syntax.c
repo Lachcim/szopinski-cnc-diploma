@@ -107,9 +107,10 @@ void consume_line_number(const char** buffer) {
 }
 
 long parse_number(const char** buffer) {
-    bool negative = false;
+    consume_whitespace(buffer);
 
     //parse sign
+    bool negative = false;
     if (**buffer == '-') {
         negative = true;
         (*buffer)++;
