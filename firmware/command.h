@@ -31,6 +31,8 @@ struct word {
 
 struct command {
     unsigned int word_flag;
+    unsigned char non_modal_count;
+    long g_non_modal[4];
     long g_motion;
     long g_distance_mode;
     long g_offset_mode;

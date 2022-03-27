@@ -51,8 +51,15 @@ int main() {
 
 		//parse and execute command
 		struct command command;
+
 		parse_command(block_buf, &command);
 		if (machine_state.error != ERROR_NONE) continue;
+
+		execute_command(&command);
+		if (machine_state.error != ERROR_NONE) continue;
+
+		//wait for interrupt-driven actions to finish
+		while (machine_state.busy && machine_state.error == ERROR_NONE);
 	}
 }
 
