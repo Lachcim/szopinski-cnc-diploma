@@ -6,20 +6,19 @@ struct modal_mapping modal_map[] = {
     {TO_FIXED(1), FLAG_G_MOTION},
     {TO_FIXED(2), FLAG_G_MOTION},
     {TO_FIXED(3), FLAG_G_MOTION},
-    {TO_FIXED(90), FLAG_G_DISTANCE},
-    {TO_FIXED(91), FLAG_G_DISTANCE},
-    {TO_FIXED(90.1), FLAG_G_OFFSET},
-    {TO_FIXED(90.2), FLAG_G_OFFSET},
-    {TO_FIXED(93), FLAG_G_FEED_RATE},
-    {TO_FIXED(94), FLAG_G_FEED_RATE},
     {TO_FIXED(20), FLAG_G_UNITS},
-    {TO_FIXED(21), FLAG_G_UNITS}
+    {TO_FIXED(21), FLAG_G_UNITS},
+    {TO_FIXED(90), FLAG_G_DISTANCE},
+    {TO_FIXED(90.1), FLAG_G_OFFSET},
+    {TO_FIXED(91), FLAG_G_DISTANCE},
+    {TO_FIXED(91.1), FLAG_G_OFFSET},
+    {TO_FIXED(93), FLAG_G_FEED_RATE},
+    {TO_FIXED(94), FLAG_G_FEED_RATE}
 };
 
 void parse_command(const char* buffer, struct command* command) {
-    //initialize output, mark all words as absent
-    struct command output;
-    output.word_flag = 0;
+    //mark all words as absent
+    command->word_flag = 0;
 
     //parse block delete and line number
     if (parse_block_delete(&buffer)) return;
@@ -36,11 +35,9 @@ void parse_command(const char* buffer, struct command* command) {
         if (!word_found) break;
 
         //update command structure, validate semantics
-        assign_word(&output, word);
+        assign_word(command, word);
         if (machine_state.error != ERROR_NONE) return;
     }
-
-    *command = output;
 }
 
 void assign_word(struct command* command, struct word word) {
@@ -74,32 +71,47 @@ void assign_word(struct command* command, struct word word) {
         return;
     }
 
-    //assign to proper modal group
-    for (unsigned char i = 0; i < sizeof(modal_map) / sizeof(struct modal_mapping); i++) {
-        if (modal_map[i].g_word != word.num)
+    //assign to proper modal group, binary search
+    unsigned char min = 0;
+    unsigned char max = sizeof(modal_map) / sizeof(struct modal_mapping) - 1;
+    int index = -1;
+
+    while (min != max) {
+        unsigned char mid = (min + max) >> 1;
+
+        if (modal_map[mid].g_word < word.num) {
+            min = mid;
             continue;
-
-        //can't have two words from the same modal group
-        if (command->word_flag & modal_map[i].flag) {
-            machine_state.error = ERROR_CONFLICTING_MODAL;
-            return;
+        }
+        if (modal_map[mid].g_word > word.num) {
+            max = mid;
+            continue;
         }
 
-        //assign values to struct
-        command->word_flag &= modal_map[i].flag;
-        switch (modal_map[i].flag)
-        {
-            case FLAG_G_MOTION: command->g_motion = word.num; break;
-            case FLAG_G_DISTANCE: command->g_distance_mode = word.num; break;
-            case FLAG_G_OFFSET: command->g_offset_mode = word.num; break;
-            case FLAG_G_FEED_RATE: command->g_feed_rate = word.num; break;
-            case FLAG_G_UNITS: command->g_unit_mode = word.num; break;
-        }
-
-        return;
+        index = mid;
+        break;
     }
 
     //no mapping found for g-word, unsupported
-    machine_state.error = ERROR_UNSUPPORTED;
-    return;
+    if (index == -1) {
+        machine_state.error = ERROR_UNSUPPORTED;
+        return;
+    }
+
+    //can't have two words from the same modal group
+    if (command->word_flag & modal_map[index].flag) {
+        machine_state.error = ERROR_CONFLICTING_MODAL;
+        return;
+    }
+
+    //assign values to struct
+    command->word_flag |= modal_map[index].flag;
+    switch (modal_map[index].flag)
+    {
+        case FLAG_G_MOTION: command->g_motion = word.num; break;
+        case FLAG_G_DISTANCE: command->g_distance_mode = word.num; break;
+        case FLAG_G_OFFSET: command->g_offset_mode = word.num; break;
+        case FLAG_G_FEED_RATE: command->g_feed_rate = word.num; break;
+        case FLAG_G_UNITS: command->g_unit_mode = word.num; break;
+    }
 }
