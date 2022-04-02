@@ -62,7 +62,3 @@ int main() {
 		while (machine_state.busy && machine_state.error == ERROR_NONE);
 	}
 }
-
-ISR(TIMER0_COMPA_vect) {
-
-}
