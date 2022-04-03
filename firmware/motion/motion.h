@@ -5,10 +5,13 @@
 
 #include <stdbool.h>
 
+#define UNITS_PER_MM TO_FIXED(201.20724)
+#define UNITS_PER_INCH TO_FIXED(5110.66389)
+
 #define MOTOR_TIMEOUT 5
 
 struct cartesian {
-    int x, y, z;
+    unsigned int x, y, z;
 };
 
 struct motion_state {

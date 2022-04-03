@@ -1,9 +1,6 @@
 #include "command.h"
-#include "../motion/motion.h"
-
-#include "../usart.h"
-#include <stdio.h>
 #include "../state.h"
+#include "../motion/motion.h"
 
 void execute_command(const struct command* command) {
     //set feed rate mode
