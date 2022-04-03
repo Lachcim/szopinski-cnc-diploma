@@ -24,6 +24,8 @@
 #define FLAG_Y_WORD ((unsigned int) 0x2000)
 #define FLAG_Z_WORD ((unsigned int) 0x4000)
 
+#define MAX_NON_MODALS 4
+
 struct word {
     char letter;
     long num;
@@ -32,7 +34,7 @@ struct word {
 struct command {
     unsigned int word_flag;
     unsigned char non_modal_count;
-    long g_non_modal[4];
+    long g_non_modal[MAX_NON_MODALS];
     long g_motion;
     long g_distance_mode;
     long g_offset_mode;
@@ -58,6 +60,7 @@ struct modal_mapping {
 void parse_command(const char*, struct command*);
 void assign_word(struct command*, struct word);
 void execute_command(const struct command*);
+bool has_non_modal(const struct command*, long);
 
 bool parse_word(const char**, struct word*);
 long parse_number(const char**);

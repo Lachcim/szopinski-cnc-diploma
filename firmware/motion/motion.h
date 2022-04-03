@@ -22,7 +22,7 @@ struct motion_state {
 
 extern struct motion_state motion_state;
 
-void translate(struct command*, struct cartesian*, struct cartesian*);
+void translate(const struct command*, struct cartesian*, struct cartesian*);
 
 void init_rapid(struct cartesian);
 
