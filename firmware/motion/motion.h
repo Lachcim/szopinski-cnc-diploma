@@ -5,8 +5,10 @@
 
 #include <stdbool.h>
 
-#define UNITS_PER_MM TO_FIXED(201.20724)
-#define UNITS_PER_INCH TO_FIXED(5110.66389)
+#define UNITS_PER_MM ((unsigned long) TO_FIXED(201.20724))
+#define UNITS_PER_MM_Z ((unsigned long) TO_FIXED(1587.30158))
+#define UNITS_PER_INCH ((unsigned long) TO_FIXED(5110.66389))
+#define UNITS_PER_INCH_Z ((unsigned long) TO_FIXED(40317.46031))
 
 #define MOTOR_TIMEOUT 5
 
