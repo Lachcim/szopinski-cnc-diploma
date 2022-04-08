@@ -56,9 +56,17 @@ void execute_command(const struct command* command) {
 
         switch (machine_state.motion_mode) {
             case MOTION_RAPID:
+            case MOTION_LINEAR:
+            case MOTION_ARC:
+            case MOTION_ARC_CCW:
                 init_rapid(xyz);
         }
+
+        return;
     }
+
+    //no motion, execution complete
+    machine_state.busy = false;
 }
 
 bool has_non_modal(const struct command* command, long word) {
