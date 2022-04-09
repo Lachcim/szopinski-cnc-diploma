@@ -25,11 +25,11 @@ int main() {
 	//configure timer
 	TCCR0A |= (1 << WGM01); //clear timer on compare
 	TCCR0B |= (2 << CS00);	//divide clock by 8
-	OCR0A = 63;
+	OCR0A = 35;
 	TIMSK0 |= (1 << OCIE0A); //enable timer
 
 	//configure UART
-	UBRR0H = 0; UBRR0L = 51; //9600 baud
+	UBRR0H = 0; UBRR0L = 129; //9600 baud
 	UCSR0B |= (1 << RXEN0) | (1 << TXEN0); //enable receive and transmitter
 	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); //8-bit word size
 
