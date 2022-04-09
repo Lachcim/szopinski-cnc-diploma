@@ -10,8 +10,6 @@
 #define UNITS_PER_INCH ((unsigned long) TO_FIXED(5110.66389))
 #define UNITS_PER_INCH_Z ((unsigned long) TO_FIXED(40317.46031))
 
-#define MOTOR_TIMEOUT 5
-
 struct cartesian {
     unsigned int x, y, z;
 };
@@ -19,10 +17,7 @@ struct cartesian {
 struct motion_state {
     void (*motion_handler)();
     bool falling_edge;
-    bool done;
-
-    unsigned char motor_timeout_xy;
-    unsigned char motor_timeout_z;
+    bool reset_busy;
 };
 
 extern struct motion_state motion_state;

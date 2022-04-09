@@ -51,7 +51,6 @@ int main() {
 
 		//parse and execute command
 		struct command command;
-
 		parse_command(block_buf, &command);
 		if (machine_state.error != ERROR_NONE) continue;
 
@@ -60,5 +59,9 @@ int main() {
 
 		//wait for interrupt-driven actions to finish
 		while (machine_state.busy && machine_state.error == ERROR_NONE);
+
+		//save power for testing
+		DISABLE_XY_PORT |= (1 << DISABLE_XY);
+		DISABLE_Z_PORT |= (1 << DISABLE_Z);
 	}
 }

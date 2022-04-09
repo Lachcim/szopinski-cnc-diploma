@@ -62,6 +62,8 @@ void execute_command(const struct command* command) {
                 init_rapid(xyz);
         }
 
+        //reset busy state upon completion
+        motion_state.reset_busy = true;
         return;
     }
 

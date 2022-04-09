@@ -42,6 +42,5 @@ void rapid_handler() {
 
     if (!move_x && !move_y && !move_z) {
         motion_state.motion_handler = 0;
-        motion_state.done = true;
     }
 }
