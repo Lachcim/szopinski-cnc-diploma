@@ -49,17 +49,13 @@ void execute_command(const struct command* command) {
                 break;
         }
 
-    //initialize motion
+    //initiate motion
     if (command->word_flag & (FLAG_X_WORD | FLAG_Y_WORD | FLAG_Z_WORD)) {
-        struct cartesian xyz, ijk;
-        translate(command, &xyz, &ijk);
-
         switch (machine_state.motion_mode) {
-            case MOTION_RAPID:
-            case MOTION_LINEAR:
             case MOTION_ARC:
             case MOTION_ARC_CCW:
-                init_rapid(xyz);
+            case MOTION_RAPID: init_rapid(command); break;
+            case MOTION_LINEAR: init_linear(command); break;
         }
 
         //reset busy state upon completion

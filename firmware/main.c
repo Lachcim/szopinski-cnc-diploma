@@ -54,6 +54,9 @@ int main() {
 		parse_command(block_buf, &command);
 		if (machine_state.error != ERROR_NONE) continue;
 
+		//enable motors for testing
+		DISABLE_XY_PORT &= ~(1 << DISABLE_XY);
+
 		execute_command(&command);
 		if (machine_state.error != ERROR_NONE) continue;
 

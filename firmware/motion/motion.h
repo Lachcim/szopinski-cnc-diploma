@@ -18,13 +18,18 @@ struct motion_state {
     void (*motion_handler)();
     bool falling_edge;
     bool reset_busy;
+
+    struct cartesian destination;
+    struct cartesian offset;
 };
 
 extern struct motion_state motion_state;
 
-void translate(const struct command*, struct cartesian*, struct cartesian*);
+void translate(const struct command*, struct cartesian*);
 
-void init_rapid(struct cartesian);
+void init_rapid(const struct command*);
 void rapid_handler();
+void init_linear(const struct command*);
+void linear_handler();
 
 #endif
