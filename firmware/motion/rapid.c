@@ -21,10 +21,10 @@ void init_rapid(const struct command* command) {
     if (dest.z > machine_state.machine_z) STEP_PORT |= (1 << Z_DIR);
     else STEP_PORT &= ~(1 << Z_DIR);
 
-    TIMSK0 &= ~(1 << OCIE0A);
+    TIMSK0 &= ~(1 << TOIE0);
     motion_state.destination = dest;
     motion_state.motion_handler = rapid_handler;
-    TIMSK0 |= (1 << OCIE0A);
+    TIMSK0 |= (1 << TOIE0);
 }
 
 void rapid_handler() {
