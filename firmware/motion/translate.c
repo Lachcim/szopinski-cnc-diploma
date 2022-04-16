@@ -14,14 +14,14 @@ void translate(const struct command* command, struct cartesian* xyz) {
     xyz->z = ((long long) command->z_word * conv_factor_z) >> 32;
 
     //if xyz words unspecified, retain current machine xyz values
-    if (!(command->word_flag & FLAG_X_WORD)) xyz->x = machine_state.machine_x;
-    if (!(command->word_flag & FLAG_Y_WORD)) xyz->y = machine_state.machine_y;
-    if (!(command->word_flag & FLAG_Z_WORD)) xyz->z = machine_state.machine_z;
+    if (!(command->word_flag & FLAG_X_WORD)) xyz->x = motion_state.machine_pos.x;
+    if (!(command->word_flag & FLAG_Y_WORD)) xyz->y = motion_state.machine_pos.y;
+    if (!(command->word_flag & FLAG_Z_WORD)) xyz->z = motion_state.machine_pos.z;
 
     //add current position in incremental mode
     if (machine_state.distance_mode == DISTANCE_INCREMENTAL) {
-        if (command->word_flag & FLAG_X_WORD) xyz->x += machine_state.machine_x;
-        if (command->word_flag & FLAG_Y_WORD) xyz->y += machine_state.machine_y;
-        if (command->word_flag & FLAG_Z_WORD) xyz->z += machine_state.machine_z;
+        if (command->word_flag & FLAG_X_WORD) xyz->x += motion_state.machine_pos.x;
+        if (command->word_flag & FLAG_Y_WORD) xyz->y += motion_state.machine_pos.y;
+        if (command->word_flag & FLAG_Z_WORD) xyz->z += motion_state.machine_pos.z;
     }
 }

@@ -27,10 +27,7 @@ void execute_command(const struct command* command) {
         unsigned long long u_per_min = (unsigned long long)command->f_word * distance_conv;
 
         //get feed rate in machine units per tick, 0.32 fixed-point
-        unsigned long u_per_tick = (u_per_min * MINUTES_PER_TICK) >> 32;
-
-        //remember square of feed rate
-        motion_state.feed_rate_sq = ((unsigned long long)u_per_tick * u_per_tick) >> 32;
+        motion_state.feed_rate = (u_per_min * MINUTES_PER_TICK) >> 32;
     }
 
     //dwell
@@ -75,15 +72,21 @@ void execute_command(const struct command* command) {
 
     //initiate motion
     if (command->word_flag & (FLAG_X_WORD | FLAG_Y_WORD | FLAG_Z_WORD)) {
+        TIMSK0 &= ~(1 << TOIE0);
+
+        //initialize motion state for the given motion mode
         switch (machine_state.motion_mode) {
-            case MOTION_ARC:
-            case MOTION_ARC_CCW:
             case MOTION_RAPID: init_rapid(command); break;
             case MOTION_LINEAR: init_linear(command); break;
+            case MOTION_ARC:
+            case MOTION_ARC_CCW:
+                break;
         }
 
-        //reset busy state upon completion
+        motion_state.origin = motion_state.machine_pos;
         motion_state.reset_busy = true;
+        motion_state.time_elapsed = 0;
+        TIMSK0 |= (1 << TOIE0);
         return;
     }
 

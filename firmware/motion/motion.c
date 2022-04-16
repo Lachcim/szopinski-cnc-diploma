@@ -4,7 +4,12 @@
 
 #include <avr/interrupt.h>
 
-struct motion_state motion_state = {0};
+struct motion_state motion_state = {
+    .machine_pos = {0, 0, 0},
+    .motion_handler = 0,
+    .falling_edge = false,
+    .feed_rate = TO_FIXED_FRAC(0.025753537)
+};
 
 void update_position() {
     //capture state of step port
@@ -12,14 +17,17 @@ void update_position() {
 
     //update machine coordinates
     if (step & (1 << X_STEP))
-        machine_state.machine_x += (step & (1 << X_DIR)) ? 1 : -1;
+        motion_state.machine_pos.x += (step & (1 << X_DIR)) ? 1 : -1;
     if (step & (1 << Y_STEP))
-        machine_state.machine_y += (step & (1 << Y_DIR)) ? 1 : -1;
+        motion_state.machine_pos.y += (step & (1 << Y_DIR)) ? 1 : -1;
     if (step & (1 << Z_STEP))
-        machine_state.machine_z += (step & (1 << Z_DIR)) ? 1 : -1;
+        motion_state.machine_pos.z += (step & (1 << Z_DIR)) ? 1 : -1;
 }
 
 ISR(TIMER0_OVF_vect) {
+    //update timer
+    motion_state.time_elapsed++;
+
     //drive step signal low every other iteration
     if (motion_state.falling_edge) {
         STEP_PORT &= ~((1 << X_STEP) | (1 << Y_STEP) | (1 << Z_STEP));
@@ -45,5 +53,4 @@ ISR(TIMER0_OVF_vect) {
     //update machine and motion state
     update_position();
     motion_state.falling_edge = true;
-    motion_state.time_elapsed++;
 }

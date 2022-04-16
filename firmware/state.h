@@ -31,10 +31,6 @@
 #define UNITS_INCH 1
 
 struct machine_state {
-    unsigned int machine_x;
-    unsigned int machine_y;
-    unsigned int machine_z;
-
     volatile char error;
     volatile bool busy;
 

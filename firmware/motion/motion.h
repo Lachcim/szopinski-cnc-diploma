@@ -15,18 +15,23 @@
 
 #define MINUTES_PER_TICK TO_FIXED_FRAC(1.0 / (60 * 78125))
 
+#define abs_diff(a, b) ((a > b) ? (a - b) : (b - a))
+
 struct cartesian {
     unsigned int x, y, z;
 };
 
 struct motion_state {
+    struct cartesian machine_pos;
+
     void (*motion_handler)();
     bool falling_edge;
     bool reset_busy;
 
-    unsigned long feed_rate_sq;
+    unsigned long feed_rate;
     unsigned long time_elapsed;
 
+    struct cartesian origin;
     struct cartesian destination;
 };
 
