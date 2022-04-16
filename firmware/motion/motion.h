@@ -5,10 +5,15 @@
 
 #include <stdbool.h>
 
+#define Z_STEP_FACTOR_FLOAT 7.888889
+#define Z_STEP_FACTOR ((unsigned long) TO_FIXED(Z_STEP_FACTOR_FLOAT))
+
 #define UNITS_PER_MM ((unsigned long) TO_FIXED(201.20724))
-#define UNITS_PER_MM_Z ((unsigned long) TO_FIXED(1587.30158))
+#define UNITS_PER_MM_Z ((unsigned long) TO_FIXED(201.20724 * Z_STEP_FACTOR_FLOAT))
 #define UNITS_PER_INCH ((unsigned long) TO_FIXED(5110.66389))
-#define UNITS_PER_INCH_Z ((unsigned long) TO_FIXED(40317.46031))
+#define UNITS_PER_INCH_Z ((unsigned long) TO_FIXED(5110.66389 * Z_STEP_FACTOR_FLOAT))
+
+#define MINUTES_PER_TICK TO_FIXED_FRAC(1.0 / (60 * 78125))
 
 struct cartesian {
     unsigned int x, y, z;
@@ -19,8 +24,10 @@ struct motion_state {
     bool falling_edge;
     bool reset_busy;
 
+    unsigned long feed_rate_sq;
+    unsigned long time_elapsed;
+
     struct cartesian destination;
-    struct cartesian offset;
 };
 
 extern struct motion_state motion_state;

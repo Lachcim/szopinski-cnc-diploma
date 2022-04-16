@@ -6,7 +6,8 @@
 
 #include <avr/pgmspace.h>
 
-#define TO_FIXED(DECIMAL) (DECIMAL * 0x10000L)
+#define TO_FIXED(DECIMAL) ((DECIMAL) * (1L << 16))
+#define TO_FIXED_FRAC(DECIMAL) ((unsigned long)((DECIMAL) * (1ULL << 32)))
 
 #define FLAG_G_MOTION ((unsigned int) 0x1)
 #define FLAG_G_DISTANCE ((unsigned int) 0x2)

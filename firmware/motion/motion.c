@@ -41,6 +41,9 @@ ISR(TIMER0_OVF_vect) {
 
     //delegate control to motion handler
     motion_state.motion_handler();
+
+    //update machine and motion state
     update_position();
     motion_state.falling_edge = true;
+    motion_state.time_elapsed++;
 }
