@@ -24,9 +24,6 @@
 #define OFFSET_INCREMENTAL 0
 #define OFFSET_ABSOLUTE 1
 
-#define FEED_RATE_CONSTANT 0
-#define FEED_RATE_INVERSE_TIME 1
-
 #define UNITS_MM 0
 #define UNITS_INCH 1
 
@@ -37,7 +34,6 @@ struct machine_state {
     char motion_mode;
     char distance_mode;
     char offset_mode;
-    char feed_rate_mode;
     char unit_mode;
 };
 

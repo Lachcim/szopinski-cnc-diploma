@@ -7,8 +7,7 @@
 struct motion_state motion_state = {
     .machine_pos = {0, 0, 0},
     .motion_handler = 0,
-    .falling_edge = false,
-    .feed_rate = TO_FIXED_FRAC(0.025753537)
+    .falling_edge = false
 };
 
 void update_position() {
@@ -25,9 +24,6 @@ void update_position() {
 }
 
 ISR(TIMER0_OVF_vect) {
-    //update timer
-    motion_state.time_elapsed++;
-
     //drive step signal low every other iteration
     if (motion_state.falling_edge) {
         STEP_PORT &= ~((1 << X_STEP) | (1 << Y_STEP) | (1 << Z_STEP));

@@ -27,19 +27,6 @@ void init_linear(const struct command* command) {
 }
 
 void linear_handler() {
-    unsigned long long max_dist = ((unsigned long long)motion_state.feed_rate * motion_state.time_elapsed) >> 32;
-
-    unsigned long travelled_dist_x = abs_diff(motion_state.origin.x, motion_state.machine_pos.x);
-    unsigned long travelled_dist_y = abs_diff(motion_state.origin.y, motion_state.machine_pos.y);
-    unsigned long travelled_dist_z = abs_diff(motion_state.origin.z, motion_state.machine_pos.z);
-
-    unsigned long long travelled_dist_sq = (unsigned long long)travelled_dist_x * travelled_dist_x
-        + (unsigned long long)travelled_dist_y * travelled_dist_y
-        + (unsigned long long)travelled_dist_z * travelled_dist_z;
-
-    if (travelled_dist_sq >= max_dist * max_dist)
-        return;
-
     if (motion_state.machine_pos.x != motion_state.destination.x)
         STEP_PORT |= (1 << X_STEP);
     else

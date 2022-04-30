@@ -28,9 +28,6 @@ struct motion_state {
     bool falling_edge;
     bool reset_busy;
 
-    unsigned long feed_rate;
-    unsigned long time_elapsed;
-
     struct cartesian origin;
     struct cartesian destination;
 };

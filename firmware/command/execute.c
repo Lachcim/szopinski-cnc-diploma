@@ -6,29 +6,12 @@
 #include <stdio.h>
 
 void execute_command(const struct command* command) {
-    //set feed rate mode
+    //set feed rate mode, only units per minute allowed
     if (command->word_flag & FLAG_G_FEED_RATE)
-        machine_state.feed_rate_mode =
-            command->g_feed_rate == TO_FIXED(93) ?
-            FEED_RATE_INVERSE_TIME : FEED_RATE_CONSTANT;
-
-    //set feed rate
-    if (command->word_flag & FLAG_F_WORD && machine_state.feed_rate_mode == FEED_RATE_CONSTANT) {
-        if (command->f_word < 0) {
-            machine_state.error = ERROR_INVALID_ARGUMENT;
+        if (command->g_feed_rate != TO_FIXED(94)) {
+            machine_state.error = ERROR_UNSUPPORTED;
             return;
         }
-
-        //get distance unit conversion factor
-        unsigned long distance_conv = (machine_state.unit_mode == UNITS_MM) ?
-            UNITS_PER_MM : UNITS_PER_INCH;
-
-        //get feed rate in machine units per minute, 32.32 fixed-point
-        unsigned long long u_per_min = (unsigned long long)command->f_word * distance_conv;
-
-        //get feed rate in machine units per tick, 0.32 fixed-point
-        motion_state.feed_rate = (u_per_min * MINUTES_PER_TICK) >> 32;
-    }
 
     //dwell
     if (has_non_modal(command, TO_FIXED(4))) {
@@ -85,7 +68,6 @@ void execute_command(const struct command* command) {
 
         motion_state.origin = motion_state.machine_pos;
         motion_state.reset_busy = true;
-        motion_state.time_elapsed = 0;
         TIMSK0 |= (1 << TOIE0);
         return;
     }
