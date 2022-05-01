@@ -31,6 +31,8 @@ struct machine_state {
     volatile char error;
     volatile bool busy;
 
+    volatile unsigned char rx_buf_space;
+
     char motion_mode;
     char distance_mode;
     char offset_mode;

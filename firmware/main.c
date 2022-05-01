@@ -8,7 +8,15 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-struct machine_state machine_state = {0};
+struct machine_state machine_state = {
+	.error = ERROR_NONE,
+	.busy = false,
+	.rx_buf_space = RX_BUFFER_SIZE,
+	.motion_mode = MOTION_RAPID,
+	.distance_mode = DISTANCE_ABSOLUTE,
+	.offset_mode = OFFSET_INCREMENTAL,
+	.unit_mode = UNITS_MM
+};
 
 int main() {
 	//configure ports
@@ -28,7 +36,7 @@ int main() {
 
 	//configure USART
 	UBRR0H = 0; UBRR0L = 128; //9600 baud
-	UCSR0B |= (1 << RXEN0) | (1 << TXEN0); //enable receive and transmitter
+	UCSR0B |= (1 << RXEN0) | (1 << RXCIE0) | (1 << TXEN0); //enable receiver and transmitter
 	UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); //8-bit word size
 
 	//enable global interrupts
