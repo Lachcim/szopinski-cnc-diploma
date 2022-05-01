@@ -23,7 +23,7 @@ void update_position() {
         motion_state.machine_pos.z += (step & (1 << Z_DIR)) ? 1 : -1;
 }
 
-ISR(TIMER0_OVF_vect) {
+ISR(TIMER0_COMPA_vect) {
     //drive step signal low every other iteration
     if (motion_state.falling_edge) {
         STEP_PORT &= ~((1 << X_STEP) | (1 << Y_STEP) | (1 << Z_STEP));

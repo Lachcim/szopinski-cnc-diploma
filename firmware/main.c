@@ -31,8 +31,9 @@ int main() {
 		| (1 << Z_DIR);
 
 	//configure timer
-	TCCR0B |= (1 << CS00); //no prescaling, f/256 = 78125 Hz
-	TIMSK0 |= (1 << TOIE0); //enable timer interrupt
+	TCCR0A |= (1 << WGM01); //clear timer on compare
+	TCCR0B |= (1 << CS02);	//prescale by 256, f/256 = 78125 Hz max
+	TIMSK0 |= (1 << OCIE0A); //enable timer interrupt
 
 	//configure USART
 	UBRR0H = 0; UBRR0L = 128; //9600 baud
@@ -68,9 +69,5 @@ int main() {
 
 		//wait for interrupt-driven actions to finish
 		while (machine_state.busy && machine_state.error == ERROR_NONE);
-
-		//save power for testing
-		DISABLE_XY_PORT |= (1 << DISABLE_XY);
-		DISABLE_Z_PORT |= (1 << DISABLE_Z);
 	}
 }

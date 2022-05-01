@@ -55,7 +55,7 @@ void execute_command(const struct command* command) {
 
     //initiate motion
     if (command->word_flag & (FLAG_X_WORD | FLAG_Y_WORD | FLAG_Z_WORD)) {
-        TIMSK0 &= ~(1 << TOIE0);
+        TIMSK0 &= ~(1 << OCIE0A);
 
         //initialize motion state for the given motion mode
         switch (machine_state.motion_mode) {
@@ -68,7 +68,7 @@ void execute_command(const struct command* command) {
 
         motion_state.origin = motion_state.machine_pos;
         motion_state.reset_busy = true;
-        TIMSK0 |= (1 << TOIE0);
+        TIMSK0 |= (1 << OCIE0A);
         return;
     }
 
