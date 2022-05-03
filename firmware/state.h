@@ -28,9 +28,10 @@
 #define UNITS_INCH 1
 
 struct machine_state {
-    volatile char error;
-    char caught_error;
     volatile bool busy;
+    unsigned int command_counter;
+    volatile unsigned char error;
+    unsigned char caught_error;
 
     volatile unsigned char rx_buf_space;
 

@@ -9,9 +9,10 @@
 #include <avr/interrupt.h>
 
 struct machine_state machine_state = {
+	.busy = false,
+	.command_counter = 0,
 	.error = ERROR_NONE,
 	.caught_error = ERROR_NONE,
-	.busy = false,
 	.rx_buf_space = RX_BUFFER_SIZE,
 	.motion_mode = MOTION_RAPID,
 	.distance_mode = DISTANCE_ABSOLUTE,
@@ -31,10 +32,15 @@ int main() {
 		| (1 << Z_STEP)
 		| (1 << Z_DIR);
 
-	//configure timer
+	//configure motion timer
 	TCCR0A |= (1 << WGM01); //clear timer on compare
 	TCCR0B |= (1 << CS02);	//prescale by 256, f/256 = 78125 Hz max
 	TIMSK0 |= (1 << OCIE0A); //enable timer interrupt
+
+	//configure feedback timer
+	TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); //CTC, prescale by 1024
+	OCR1A = 4882; //interrupt every quarter second
+	TIMSK1 |= (1 << OCIE1A); //enable interrupt
 
 	//configure USART
 	UBRR0H = 0; UBRR0L = 128; //9600 baud
@@ -59,6 +65,8 @@ int main() {
 		//await G-code block
 		char block_buf[256];
 		usart_receive_block(block_buf);
+		machine_state.command_counter++;
+		if (machine_state.error != ERROR_NONE) continue;
 
 		//parse and execute command
 		struct command command;
