@@ -21,7 +21,7 @@ void init_rapid(const struct command* command) {
     else STEP_PORT &= ~(1 << Z_DIR);
 
     //run timer at max rate
-    OCR0A = 0;
+    OCR0A = 1;
 
     //update motion state
     motion_state.destination = dest;

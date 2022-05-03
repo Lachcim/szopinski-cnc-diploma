@@ -42,7 +42,7 @@ void init_linear(const struct command* command) {
     acc_y = (unsigned long long)motion_state.machine_pos.y << 30;
     acc_z = (unsigned long long)motion_state.machine_pos.z << 30;
 
-    //divide timer frequency by 4
+    //divide timer frequency by 3
     OCR0A = 2;
 
     //set appropriate motion handler
