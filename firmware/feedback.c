@@ -4,8 +4,7 @@
 #include <avr/interrupt.h>
 
 static struct feedback feedback = {
-    .header = "PLOTFEEDB",
-    .footer = "\r\n"
+    .header = "PLOTFEEDBACK"
 };
 
 ISR(TIMER1_COMPA_vect) {
