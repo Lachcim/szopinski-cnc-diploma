@@ -29,6 +29,7 @@
 
 struct machine_state {
     volatile char error;
+    char caught_error;
     volatile bool busy;
 
     volatile unsigned char rx_buf_space;

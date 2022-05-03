@@ -10,6 +10,7 @@
 
 struct machine_state machine_state = {
 	.error = ERROR_NONE,
+	.caught_error = ERROR_NONE,
 	.busy = false,
 	.rx_buf_space = RX_BUFFER_SIZE,
 	.motion_mode = MOTION_RAPID,
@@ -48,13 +49,16 @@ int main() {
 	DISABLE_Z_PORT |= (1 << DISABLE_Z);
 
 	while (true) {
-		//reset busy state and await G-code block
-		char block_buf[256];
-		machine_state.busy = false;
-		usart_receive_block(block_buf);
+		//reset machine state
+		if (machine_state.error != ERROR_NONE) {
+			machine_state.caught_error = machine_state.error;
+			machine_state.error = ERROR_NONE;
+			machine_state.busy = false;
+		}
 
-		machine_state.busy = true;
-		machine_state.error = ERROR_NONE;
+		//await G-code block
+		char block_buf[256];
+		usart_receive_block(block_buf);
 
 		//parse and execute command
 		struct command command;
