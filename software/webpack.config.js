@@ -11,7 +11,7 @@ const mainConfig = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: "babel-loader"
             }
@@ -20,7 +20,7 @@ const mainConfig = {
 };
 
 const rendererConfig = {
-    entry: "./src/renderer/main.js",
+    entry: "./src/renderer/main.jsx",
     target: "electron-renderer",
     output: {
         filename: "szopinski-cnc-diploma.renderer.js",
@@ -31,7 +31,12 @@ const rendererConfig = {
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                use: "babel-loader"
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["@babel/preset-react"]
+                    }
+                }
             }
         ]
     },
@@ -39,7 +44,10 @@ const rendererConfig = {
         new HtmlWebpackPlugin({
             template: "./src/index.html"
         })
-    ]
+    ],
+    resolve: {
+        extensions: [".js", ".jsx"]
+    }
 };
 
 module.exports = [mainConfig, rendererConfig];

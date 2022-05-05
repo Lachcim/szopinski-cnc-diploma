@@ -7,8 +7,12 @@
   "license": "GPL-3.0-only",
   "main": "build/szopinski-cnc-diploma.main.js",
   "scripts": {
-    "dev": "webpack --mode=development",
+    "dev": "webpack --mode=development --watch",
     "start": "electron ."
+  },
+  "dependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",

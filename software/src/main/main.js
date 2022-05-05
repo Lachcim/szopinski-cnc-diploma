@@ -3,7 +3,7 @@ import path from "path";
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
-        title: 'Szopiński CNC Diploma',
+        title: "Szopiński CNC Diploma",
         width: 800,
         height: 600
     });
