@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../style.scss";
 
 import StatusBar from "./components/status-bar";
 import FadeScreen from "./components/fade-screen";
 
-export default function App() {
-    const [screenContent, setScreenContent] = useState("dupa");
+import PortSelect from "./screens/port-select";
 
-    useEffect(() => {
-        setTimeout(() => setScreenContent("trupa"), 1000);
-    }, []);
+export default function App() {
+    const [currentScreen, setCurrentScreen] = useState(<PortSelect onSelect={() => setCurrentScreen(<PortSelect/>)}/>);
 
     return (
         <>
             <StatusBar/>
             <main className="main-content">
                 <FadeScreen>
-                    {screenContent}
+                    { currentScreen }
                 </FadeScreen>
             </main>
         </>
