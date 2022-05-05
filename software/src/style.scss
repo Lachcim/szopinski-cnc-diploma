@@ -1,7 +1,37 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
 body {
-    color: red;
+    display: flex;
+    flex-direction: column;
 
-    p {
-        color: blue;
+    font-family: Roboto, sans-serif;
+    font-size: 10pt;
+}
+
+.status-bar {
+    color: #FFFFFF;
+    background: linear-gradient(#7B1FA2, #4A148C);
+
+    height: 4rem;
+    padding: 0 1em;
+
+    display: flex;
+    align-items: center;
+
+    .machine {
+        font-size: 12pt;
+        margin: 0;
     }
+}
+
+.main-content {
+    padding: 1em;
+}
+
+@font-face {
+    font-family: Roboto;
+    font-weight: 400;
+    src: url("../assets/roboto-regular.ttf");
 }

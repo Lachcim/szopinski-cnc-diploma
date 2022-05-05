@@ -46,6 +46,10 @@ const rendererConfig = {
                     "css-loader",
                     "sass-loader"
                 ]
+            },
+            {
+                test: /.ttf/,
+                type: "asset/resource"
             }
         ]
     },
