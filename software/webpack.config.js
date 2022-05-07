@@ -26,6 +26,7 @@ const rendererConfig = {
         filename: "szopinski-cnc-diploma.renderer.js",
         path: path.resolve(__dirname, "build")
     },
+    devtool: false,
     module: {
         rules: [
             {
