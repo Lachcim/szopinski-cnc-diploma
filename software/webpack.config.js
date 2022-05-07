@@ -16,6 +16,16 @@ const mainConfig = {
                 use: "babel-loader"
             }
         ]
+    },
+    node: {
+        __filename: true,
+        __dirname: true
+    },
+    resolve: {
+        alias: {
+            main: path.resolve(__dirname, 'src/main/'),
+            renderer: path.resolve(__dirname, 'src/renderer/')
+        }
     }
 };
 
@@ -64,7 +74,11 @@ const rendererConfig = {
         })
     ],
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
+        alias: {
+            main: path.resolve(__dirname, 'src/main/'),
+            renderer: path.resolve(__dirname, 'src/renderer/')
+        }
     }
 };
 

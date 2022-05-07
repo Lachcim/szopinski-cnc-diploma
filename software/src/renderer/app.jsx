@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "../style.scss";
 
-import StatusBar from "./components/status-bar";
-import FadeScreen from "./components/fade-screen";
+import StatusBar from "renderer/components/status-bar";
+import FadeScreen from "renderer/components/fade-screen";
 
-import PortSelect from "./screens/port-select";
+import PortSelect from "renderer/screens/port-select";
 
 export default function App() {
     const [currentScreen, setCurrentScreen] = useState(<PortSelect onSelect={() => setCurrentScreen(<PortSelect/>)}/>);

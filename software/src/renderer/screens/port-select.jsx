@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SerialPort } from "serialport";
 
-import LargeButton from "../components/large-button";
+import LargeButton from "renderer/components/large-button";
 import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
 export default function PortSelect() {
