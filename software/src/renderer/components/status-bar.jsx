@@ -7,5 +7,5 @@ export default function StatusBar() {
                 Machine not connected.
             </p>
         </header>
-    )
+    );
 }

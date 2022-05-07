@@ -8,7 +8,8 @@
   "main": "build/szopinski-cnc-diploma.main.js",
   "scripts": {
     "dev": "webpack --mode=development --watch",
-    "start": "electron ."
+    "start": "electron .",
+    "lint": "eslint --fix src"
   },
   "dependencies": {
     "react": "^18.1.0",
@@ -21,6 +22,9 @@
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "electron": "^18.2.0",
+    "eslint": "^8.15.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "html-webpack-plugin": "^5.5.0",
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",

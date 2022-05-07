@@ -1,8 +1,8 @@
 import React from "react";
 import LargeButton from "../components/large-button";
-import { VscDebugDisconnect, VscPlug } from "react-icons/vsc"
+import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
-export default function PortSelect({onSelect}) {
+export default function PortSelect({ onSelect }) {
     return (
         <div className="micro-screen">
             <h1>
@@ -24,5 +24,5 @@ export default function PortSelect({onSelect}) {
                 </LargeButton>
             </div>
         </div>
-    )
+    );
 }
