@@ -54,6 +54,10 @@ const rendererConfig = {
             }
         ]
     },
+    node: {
+        __filename: true,
+        __dirname: true
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/index.html"

@@ -69,6 +69,9 @@ body {
         flex: 1;
         overflow-y: auto;
 
+        & > .placeholder {
+            text-align: center;
+        }
         & > *:nth-child(n + 1) {
             margin-bottom: 0.5rem;
         }

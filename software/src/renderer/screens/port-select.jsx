@@ -1,8 +1,55 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { SerialPort } from "serialport";
+
 import LargeButton from "../components/large-button";
 import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
-export default function PortSelect({ onSelect }) {
+export default function PortSelect() {
+    const [ports, setPorts] = useState([]);
+    const [success, setSuccess] = useState(null);
+
+    const fetchPorts = () => {
+        //obtain list of serial ports and update state
+        SerialPort.list()
+            .then(newPorts => {
+                setPorts(newPorts);
+                setSuccess(true);
+            })
+            .catch(() => setSuccess(false));
+    };
+
+    useEffect(() => {
+        //query ports on first render
+        fetchPorts();
+
+        //repeat serial port query every second, clear on cleanup
+        const queryInterval = setInterval(fetchPorts, 1000);
+        return () => clearInterval(queryInterval);
+    }, []);
+
+    const getOptionList = () => {
+        if (success == null)
+            return (<p className="placeholder">Loading...</p>);
+
+        if (ports.length == 0)
+            return (
+                <p className="placeholder">
+                    {
+                        success ? "There are no available ports"
+                            : "Failed to load available ports"
+                    }
+                </p>
+            );
+
+        return ports.map(port => (
+            <LargeButton
+                icon={<VscPlug/>}
+                title={port.path}
+                key={port.path}
+            />
+        ));
+    };
+
     return (
         <div className="micro-screen">
             <h1>
@@ -14,14 +61,7 @@ export default function PortSelect({ onSelect }) {
                 will be used to establish a connection to the CNC machine.
             </p>
             <div className="option-list">
-                <LargeButton onClick={() => onSelect("COM3")}>
-                    <VscPlug/>
-                    COM3
-                </LargeButton>
-                <LargeButton onClick={() => onSelect("/dev/tty0")}>
-                    <VscPlug/>
-                    /dev/tty0
-                </LargeButton>
+                { getOptionList() }
             </div>
         </div>
     );
