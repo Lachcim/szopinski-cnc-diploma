@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 
 function createWindow() {
@@ -27,4 +27,13 @@ app.on("ready", () => {
 app.on("window-all-closed", () => {
     if (process.platform != "darwin")
         app.quit();
+});
+
+ipcMain.on("set-port", (event, port) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+
+    if (port)
+        window.setTitle(`${port} - Szopiński CNC Diploma`);
+    else
+        window.setTitle("Szopiński CNC Diploma");
 });

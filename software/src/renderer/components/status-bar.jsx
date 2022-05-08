@@ -52,13 +52,12 @@ export default function StatusBar() {
 
     return (
         <header className="status-bar">
-            <p className="machine">
-                <span
-                    title={getDotTitle()}
-                    className={`status-dot ${getDotClass()}`}
-                />
+            <div className="machine">
+                <div className={`status-dot ${getDotClass()}`}>
+                    <p className="tooltip">{ getDotTitle() }</p>
+                </div>
                 { getMachineName() }
-            </p>
+            </div>
         </header>
     );
 }

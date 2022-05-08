@@ -1,8 +1,7 @@
 html, body {
     height: 100%;
     margin: 0;
-}
-body {
+
     font-family: Roboto, sans-serif;
     font-size: 10pt;
 }
@@ -17,7 +16,7 @@ body {
     color: #FFFFFF;
     background: linear-gradient(#7B1FA2, #4A148C);
 
-    height: 4rem;
+    height: 5rem;
     padding: 0 1em;
 
     display: flex;
@@ -29,6 +28,7 @@ body {
 
         .status-dot {
             display: inline-block;
+            position: relative;
 
             width: 0.8em;
             height: 0.8em;
@@ -42,6 +42,23 @@ body {
             &.idle { background-color: #64DD17; }
             &.busy { background-color: #42A5F5; }
             &.error { background-color: #E53935; }
+
+            .tooltip {
+                position: absolute;
+                left: 0;
+                top: 100%;
+
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+
+                font-size: 1rem;
+                white-space: nowrap;
+                background-color: rgba(0, 0, 0, 0.75);
+                border-radius: 2px;
+
+                display: none;
+            }
+            &:hover .tooltip { display: block }
         }
     }
 }
@@ -54,7 +71,7 @@ body {
     overflow: hidden;
 
     h1 {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         font-weight: 400;
     }
     h1 svg, h2 svg {
@@ -76,7 +93,7 @@ body {
 
 .micro-screen {
     margin: 0 auto;
-    max-width: 24rem;
+    max-width: 28rem;
     height: 100%;
 
     display: flex;
@@ -98,7 +115,7 @@ body {
         }
     }
     .footer-option {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         text-align: center;
     }
 }
@@ -109,7 +126,7 @@ button {
     border: 1px solid #BDBDBD;
     background-color: #FAFAFA;
 
-    min-width: 5rem;
+    min-width: 6rem;
     padding: 0.25rem;
 
     &:hover {
@@ -124,7 +141,7 @@ button {
         display: flex;
         align-items: center;
         width: 100%;
-        min-height: 4rem;
+        min-height: 5rem;
 
         text-align: left;
         border-radius: 1px;
@@ -133,11 +150,11 @@ button {
         transition-duration: 0.1s;
 
         header {
-            font-size: 1.1rem;
+            font-size: 1.3rem;
         }
         svg {
-            width: 2.5rem;
-            height: 2rem;
+            width: 2.7rem;
+            height: 2.2rem;
             margin-right: 0.5rem;
         }
     }
@@ -173,8 +190,8 @@ button {
 
         svg {
             animation: 0.75s linear infinite spin;
-            width: 3em;
-            height: 3em;
+            width: 4em;
+            height: 4em;
             display: block;
         }
     }
@@ -199,30 +216,30 @@ button {
 
     .window {
         width: 100%;
-        max-width: 22rem;
+        max-width: 26rem;
 
-        border-radius: 0.5rem;
+        border-radius: 0.7rem;
         box-shadow: 0 0 1rem #212121;
 
         .title {
             color: #FFFFFF;
-            font-size: 1rem;
+            font-size: 1.2rem;
 
             background-color: #B71C1C;
-            border-radius: 0.5rem 0.5rem 0 0;
+            border-radius: 0.7rem 0.7rem 0 0;
             padding: 0.75rem;
 
             svg {
-                width: 1.2rem;
-                height: 1.2rem;
+                width: 1.5rem;
+                height: 1.5rem;
                 vertical-align: bottom;
-                margin-right: 0.25rem;
+                margin-right: 0.5rem;
             }
         }
         .content {
             padding: 1rem;
             background-color: #FFFFFF;
-            border-radius: 0 0 0.5rem 0.5rem;
+            border-radius: 0 0 0.7rem 0.7rem;
 
             & > *:first-child { margin-top: 0; }
             & > *:last-child { margin-bottom: 0; }

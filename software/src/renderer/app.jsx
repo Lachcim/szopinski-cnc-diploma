@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ipcRenderer } from "electron";
 import { useRoutes, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../style.scss";
@@ -25,7 +26,13 @@ export default function App() {
         if (connection.status == "disconnected" && connection.error) {
             setDisplayedError(connection.error);
         }
-    }, [connection.status, connection.error]);
+
+        const displayedPort = (
+            connection.status != "disconnected" || connection.error
+        ) && connection.port;
+
+        ipcRenderer.send("set-port", displayedPort);
+    }, [connection.status, connection.error, connection.port]);
 
     return (
         <>
