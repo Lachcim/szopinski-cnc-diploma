@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const mainConfig = {
-    entry: "./src/main/main.js",
+    entry: "./src/main.js",
     target: "electron-main",
     output: {
         filename: "szopinski-cnc-diploma.main.js",
@@ -16,21 +16,11 @@ const mainConfig = {
                 use: "babel-loader"
             }
         ]
-    },
-    node: {
-        __filename: true,
-        __dirname: true
-    },
-    resolve: {
-        alias: {
-            main: path.resolve(__dirname, 'src/main/'),
-            renderer: path.resolve(__dirname, 'src/renderer/')
-        }
     }
 };
 
 const rendererConfig = {
-    entry: "./src/renderer/main.jsx",
+    entry: "./src/renderer/renderer.jsx",
     target: "electron-renderer",
     output: {
         filename: "szopinski-cnc-diploma.renderer.js",
@@ -76,8 +66,7 @@ const rendererConfig = {
     resolve: {
         extensions: [".js", ".jsx"],
         alias: {
-            main: path.resolve(__dirname, 'src/main/'),
-            renderer: path.resolve(__dirname, 'src/renderer/')
+            renderer: path.resolve(__dirname, "src/renderer/")
         }
     }
 };

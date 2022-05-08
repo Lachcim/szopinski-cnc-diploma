@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { SerialPort } from "serialport";
 
 import LargeButton from "renderer/components/large-button";
 import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
+import { requestConnection } from "renderer/state/actions";
+
 export default function PortSelect() {
     const [ports, setPorts] = useState([]);
     const [success, setSuccess] = useState(null);
+
+    const connectionStatus = useSelector(state => state.connection.status);
+    const dispatch = useDispatch();
+
+    console.log(connectionStatus);
 
     const fetchPorts = () => {
         //obtain list of serial ports and update state
@@ -45,6 +53,7 @@ export default function PortSelect() {
             <LargeButton
                 icon={<VscPlug/>}
                 title={port.path}
+                onClick={() => dispatch(requestConnection(port.path))}
                 key={port.path}
             />
         ));
