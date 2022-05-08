@@ -52,6 +52,7 @@ function connect(port) {
         if (error) store.dispatch(connectionFailed());
         else store.dispatch(disconnect());
     });
+    connection.on("error", () => store.dispatch(connectionFailed()));
     connection.on("open", registerTimeout);
 
     //pipe connection through delimiter parser

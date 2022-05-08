@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { SerialPort } from "serialport";
 
 import Loader from "renderer/components/loader";
@@ -13,6 +14,7 @@ export default function PortSelect() {
     const [success, setSuccess] = useState(null);
     const connectionStatus = useSelector(state => state.connection.status);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const fetchPorts = () => {
         //obtain list of serial ports and update state
@@ -32,6 +34,12 @@ export default function PortSelect() {
         const queryInterval = setInterval(fetchPorts, 1000);
         return () => clearInterval(queryInterval);
     }, []);
+
+    useEffect(() => {
+        //redirect to workflow screen upon connection
+        if (connectionStatus == "connected")
+            navigate("../workflowSelect");
+    }, [connectionStatus, navigate]);
 
     const getOptionList = () => {
         if (success == null)
@@ -67,13 +75,13 @@ export default function PortSelect() {
                 Please select a serial port to open. The selected port
                 will be used to establish a connection to the CNC machine.
             </p>
-            <div className="option-list">
+            <div className="option-list full-length">
                 { getOptionList() }
+                {
+                    connectionStatus == "connecting" &&
+                    <Loader text="Connecting..."/>
+                }
             </div>
-            {
-                connectionStatus == "connecting" &&
-                <Loader text="Connecting..."/>
-            }
         </div>
     );
 }
