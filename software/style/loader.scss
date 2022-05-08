@@ -1,0 +1,32 @@
+.loader {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(255, 255, 255, 0.75);
+
+    .spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg {
+            animation: 0.75s linear infinite spin;
+            width: 4em;
+            height: 4em;
+            display: block;
+        }
+    }
+    .text {
+        text-align: center;
+        margin-bottom: 0;
+    }
+}
+
+@keyframes spin {
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
+}

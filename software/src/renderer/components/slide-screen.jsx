@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "style/slide-screen";
 
 export default function SlideScreen({ screenKey, children }) {
     const [stableScreenKey, setStableScreenKey] = useState(screenKey);

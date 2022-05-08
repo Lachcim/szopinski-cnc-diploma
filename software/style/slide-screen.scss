@@ -1,0 +1,28 @@
+.slide-screen {
+    position: absolute;
+    inset: 0;
+
+    animation-duration: 0.25s;
+    animation-timing-function: ease;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(2rem);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes slide-out {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-2rem);
+        opacity: 0;
+    }
+}

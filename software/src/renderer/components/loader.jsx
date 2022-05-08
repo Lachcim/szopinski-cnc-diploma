@@ -1,4 +1,5 @@
 import React from "react";
+import "style/loader";
 import { AiOutlineLoading } from "react-icons/ai";
 
 export default function Loader({ text }) {

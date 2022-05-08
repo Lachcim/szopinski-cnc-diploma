@@ -64,9 +64,10 @@ const rendererConfig = {
         })
     ],
     resolve: {
-        extensions: [".js", ".jsx"],
+        extensions: [".js", ".jsx", ".scss"],
         alias: {
-            renderer: path.resolve(__dirname, "src/renderer/")
+            renderer: path.resolve(__dirname, "src/renderer/"),
+            style: path.resolve(__dirname, "style")
         }
     }
 };

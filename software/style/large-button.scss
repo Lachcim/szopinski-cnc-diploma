@@ -1,0 +1,21 @@
+.large-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 5rem;
+
+    text-align: left;
+    border-radius: 1px;
+
+    transition-property: border-color, background-color;
+    transition-duration: 0.1s;
+
+    header {
+        font-size: 1.3rem;
+    }
+    svg {
+        width: 2.7rem;
+        height: 2.2rem;
+        margin-right: 0.5rem;
+    }
+}

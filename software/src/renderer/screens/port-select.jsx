@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { SerialPort } from "serialport";
 
 import Loader from "renderer/components/loader";
+import MicroScreen from "renderer/components/micro-screen";
 import LargeButton from "renderer/components/large-button";
 import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
@@ -66,7 +67,7 @@ export default function PortSelect() {
     };
 
     return (
-        <div className="micro-screen">
+        <MicroScreen>
             <h1>
                 <VscDebugDisconnect/>
                 Select a serial port
@@ -82,6 +83,6 @@ export default function PortSelect() {
                     <Loader text="Connecting..."/>
                 }
             </div>
-        </div>
+        </MicroScreen>
     );
 }

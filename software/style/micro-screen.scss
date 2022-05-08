@@ -1,0 +1,28 @@
+.micro-screen {
+    margin: 0 auto;
+    max-width: 28rem;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    .option-list {
+        overflow-y: auto;
+        position: relative;
+
+        &.full-length {
+            flex: 1;
+        }
+
+        .placeholder {
+            text-align: center;
+        }
+        & > *:nth-child(n + 1) {
+            margin-bottom: 0.5rem;
+        }
+    }
+    .footer-option {
+        font-size: 0.85rem;
+        text-align: center;
+    }
+}

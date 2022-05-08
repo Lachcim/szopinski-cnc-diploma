@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { ipcRenderer } from "electron";
 import { useRoutes, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import "../style.scss";
+import "style/root";
 
 import StatusBar from "renderer/components/status-bar";
+import MainContent from "renderer/components/main-content";
 import SlideScreen from "renderer/components/slide-screen";
 
 import PortSelect from "renderer/screens/port-select";
 import WorkflowSelect from "renderer/screens/workflow-select";
-import ConnectionErrorModal from "./components/connection-error-modal";
+import ConnectionErrorModal from "renderer/components/connection-error-modal";
 
 export default function App() {
     const navigate = useNavigate();
@@ -37,11 +38,11 @@ export default function App() {
     return (
         <>
             <StatusBar/>
-            <main className="main-content">
+            <MainContent>
                 <SlideScreen screenKey={location.pathname}>
                     { currentScreen }
                 </SlideScreen>
-            </main>
+            </MainContent>
             {
                 displayedError &&
                 <ConnectionErrorModal

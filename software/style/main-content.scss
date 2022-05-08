@@ -1,0 +1,19 @@
+.main-content {
+    flex: 1;
+    margin: 1em;
+
+    position: relative;
+    overflow: hidden;
+
+    h1 {
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+    h1 svg, h2 svg {
+        width: 1.66em;
+        height: 1.66em;
+
+        vertical-align: middle;
+        margin-right: 0.25em;
+    }
+}

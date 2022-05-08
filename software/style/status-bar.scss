@@ -1,0 +1,50 @@
+.status-bar {
+    color: #FFFFFF;
+    background: linear-gradient(#7B1FA2, #4A148C);
+
+    height: 5rem;
+    padding: 0 1em;
+
+    display: flex;
+    align-items: center;
+
+    .machine {
+        font-size: 12pt;
+        margin: 0;
+
+        .status-dot {
+            display: inline-block;
+            position: relative;
+
+            width: 0.8em;
+            height: 0.8em;
+            border-radius: 50%;
+            margin-right: 0.5em;
+
+            box-shadow: 0 0.1em 0.1em #212121;
+
+            &.disconnected { background-color: #9E9E9E; }
+            &.transition { background-color: #FFD600; }
+            &.idle { background-color: #64DD17; }
+            &.busy { background-color: #42A5F5; }
+            &.error { background-color: #E53935; }
+
+            .tooltip {
+                position: absolute;
+                left: 0;
+                top: 100%;
+
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+
+                font-size: 1rem;
+                white-space: nowrap;
+                background-color: rgba(0, 0, 0, 0.75);
+                border-radius: 2px;
+
+                display: none;
+            }
+            &:hover .tooltip { display: block }
+        }
+    }
+}

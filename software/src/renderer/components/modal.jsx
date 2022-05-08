@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "style/modal";
 
 import { VscWarning } from "react-icons/vsc";
 

@@ -1,0 +1,14 @@
+.link-button {
+    display: inline;
+    font-size: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+
+    color: #29B6F6;
+    text-decoration: underline;
+
+    &:hover {
+        background: none;
+    }
+}

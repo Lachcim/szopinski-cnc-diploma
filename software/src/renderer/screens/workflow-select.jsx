@@ -2,7 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+import MicroScreen from "renderer/components/micro-screen";
 import LargeButton from "renderer/components/large-button";
+import LinkButton from "renderer/components/link-button";
 import { VscTools, VscFileBinary, VscTerminal, VscEdit } from "react-icons/vsc";
 import { requestDisconnect } from "renderer/cnc/state";
 
@@ -16,7 +18,7 @@ export default function WorkflowSelect() {
     };
 
     return (
-        <div className="micro-screen">
+        <MicroScreen>
             <h1>
                 <VscTools/>
                 Select a workflow
@@ -46,13 +48,10 @@ export default function WorkflowSelect() {
             </div>
             <p className="footer-option">
                 Or { " " }
-                <button
-                    className="link-button"
-                    onClick={disconnect}
-                >
+                <LinkButton onClick={disconnect}>
                     choose a different machine
-                </button>
+                </LinkButton>
             </p>
-        </div>
+        </MicroScreen>
     );
 }

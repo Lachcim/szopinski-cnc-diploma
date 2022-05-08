@@ -1,4 +1,5 @@
 import React from "react";
+import "style/large-button";
 
 export default function LargeButton({ icon, title, children, ...props }) {
     return (

@@ -1,4 +1,5 @@
 import React from "react";
+import "style/status-bar";
 import { useSelector } from "react-redux";
 
 export default function StatusBar() {
