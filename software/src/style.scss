@@ -65,7 +65,7 @@ body {
         margin-right: 0.25em;
     }
 
-    .fade-screen {
+    .slide-screen {
         position: absolute;
         inset: 0;
 
@@ -194,6 +194,9 @@ button {
 
     background-color: rgba(0, 0, 0, 0.75);
 
+    animation-duration: 0.25s;
+    animation-timing-function: ease;
+
     .window {
         width: 100%;
         max-width: 22rem;
@@ -231,7 +234,17 @@ button {
     }
 }
 
-@keyframes fade-out {
+@keyframes slide-in {
+    from {
+        transform: translateX(2rem);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+@keyframes slide-out {
     from {
         transform: translateX(0);
         opacity: 1;
@@ -242,14 +255,12 @@ button {
     }
 }
 @keyframes fade-in {
-    from {
-        transform: translateX(2rem);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 @keyframes spin {
     from { transform: rotate(0); }

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useRoutes, useNavigate } from "react-router-dom";
+import { useRoutes, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "../style.scss";
 
 import StatusBar from "renderer/components/status-bar";
+import SlideScreen from "renderer/components/slide-screen";
 
 import PortSelect from "renderer/screens/port-select";
 import WorkflowSelect from "renderer/screens/workflow-select";
@@ -11,6 +12,7 @@ import ConnectionErrorModal from "./components/connection-error-modal";
 
 export default function App() {
     const navigate = useNavigate();
+    const location = useLocation();
     const currentScreen = useRoutes([
         { path: "/portSelect", element: <PortSelect /> },
         { path: "/workflowSelect", element: <WorkflowSelect /> },
@@ -29,7 +31,9 @@ export default function App() {
         <>
             <StatusBar/>
             <main className="main-content">
-                { currentScreen }
+                <SlideScreen screenKey={location.pathname}>
+                    { currentScreen }
+                </SlideScreen>
             </main>
             {
                 displayedError &&
