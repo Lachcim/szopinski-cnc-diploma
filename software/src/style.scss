@@ -90,7 +90,7 @@ body {
             flex: 1;
         }
 
-        & > .placeholder {
+        .placeholder {
             text-align: center;
         }
         & > *:nth-child(n + 1) {
@@ -103,22 +103,14 @@ body {
     }
 }
 
-.large-button {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    min-height: 4rem;
-
-    font-family: inherit;
-    text-align: left;
-
+button {
     cursor: pointer;
+    font-family: inherit;
     border: 1px solid #BDBDBD;
     background-color: #FAFAFA;
-    border-radius: 1px;
 
-    transition-property: border-color, background-color;
-    transition-duration: 0.1s;
+    min-width: 5rem;
+    padding: 0.25rem;
 
     &:hover {
         background-color: #EEEEEE;
@@ -128,29 +120,40 @@ body {
         background-color: #E1F5FE;
     }
 
-    & header {
-        font-size: 1.1rem;
+    &.large-button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 4rem;
+
+        text-align: left;
+        border-radius: 1px;
+
+        transition-property: border-color, background-color;
+        transition-duration: 0.1s;
+
+        header {
+            font-size: 1.1rem;
+        }
+        svg {
+            width: 2.5rem;
+            height: 2rem;
+            margin-right: 0.5rem;
+        }
     }
-    & svg {
-        width: 2.5rem;
-        height: 2rem;
-        margin-right: 0.5rem;
+
+    &.link-button {
+        display: inline;
+        font-size: inherit;
+        background: none;
+        border: none;
+        padding: 0;
+
+        color: #29B6F6;
+        text-decoration: underline;
+
+        &.hover { color: #4FC3F7; }
     }
-}
-
-.link-button {
-    display: inline;
-    font-family: inherit;
-    font-size: inherit;
-    background: none;
-    border: none;
-    padding: 0;
-
-    cursor: pointer;
-    color: #29B6F6;
-    text-decoration: underline;
-
-    &.hover { color: #4FC3F7; }
 }
 
 .loader {
@@ -163,21 +166,68 @@ body {
 
     background-color: rgba(255, 255, 255, 0.75);
 
-    & .spinner {
+    .spinner {
         display: flex;
         justify-content: center;
         align-items: center;
 
-        & > svg {
+        svg {
             animation: 0.75s linear infinite spin;
             width: 3em;
             height: 3em;
             display: block;
         }
     }
-    & .text {
+    .text {
         text-align: center;
         margin-bottom: 0;
+    }
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(0, 0, 0, 0.75);
+
+    .window {
+        width: 100%;
+        max-width: 22rem;
+
+        border-radius: 0.5rem;
+        box-shadow: 0 0 1rem #212121;
+
+        .title {
+            color: #FFFFFF;
+            font-size: 1rem;
+
+            background-color: #B71C1C;
+            border-radius: 0.5rem 0.5rem 0 0;
+            padding: 0.75rem;
+
+            svg {
+                width: 1.2rem;
+                height: 1.2rem;
+                vertical-align: bottom;
+                margin-right: 0.25rem;
+            }
+        }
+        .content {
+            padding: 1rem;
+            background-color: #FFFFFF;
+            border-radius: 0 0 0.5rem 0.5rem;
+
+            & > *:first-child { margin-top: 0; }
+            & > *:last-child { margin-bottom: 0; }
+
+            .close {
+                text-align: center;
+            }
+        }
     }
 }
 

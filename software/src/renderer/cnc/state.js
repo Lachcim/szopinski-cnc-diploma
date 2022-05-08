@@ -44,9 +44,6 @@ export const store = configureStore({
             state.connection.error = "connectionFailed";
         });
         builder.addCase(requestDisconnect, (state, action) => {
-            if (state.connection.status != "connected")
-                return;
-
             state.connection.status = "disconnecting";
             state.connection.error = action.payload ?? null;
             state.connection.updateRequested = true;
