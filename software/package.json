@@ -12,6 +12,7 @@
     "lint": "eslint --fix src"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
     "@serialport/parser-delimiter": "^10.3.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",

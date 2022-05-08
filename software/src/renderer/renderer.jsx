@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 
 import App from "renderer/app";
-import store from "renderer/state/store";
+import { store } from "renderer/cnc/state";
 
 import "renderer/cnc/feedback";
 

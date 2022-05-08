@@ -1,97 +1,79 @@
 import { SerialPort } from "serialport";
 import { DelimiterParser } from "@serialport/parser-delimiter";
-import store from "renderer/state/store";
 import {
+    store,
+    setConnecting,
+    receiveFeedback,
     connectionFailed,
-    connectionTimedOut,
-    malformedFeedback,
-    receiveFeedback
-} from "renderer/state/actions";
+    requestDisconnect,
+    setDisconnecting,
+    disconnect
+} from "renderer/cnc/state";
+import FeedbackPacket from "renderer/cnc/feedback-packet";
 
-let connection = null;
+let connection;
 let timeout;
 
-const errorDict = [
-    null,
-    "bufferOverflow",
-    "blockDelete",
-    "malformedInput",
-    "unsupportedFeature",
-    "duplicateWord",
-    "conflictingModal",
-    "missingArgument",
-    "invalidArgument"
-];
-
 function registerTimeout() {
-    //dispatch timeout event if no feedback received in due time
-    timeout = setTimeout(() => store.dispatch(connectionTimedOut()), 500);
-}
+    timeout = setTimeout(() => {
+        if (!connection.isOpen)
+            return;
 
-function validatePacket(data) {
-    //all fields take exactly 10 bytes
-    if (data.length != 10)
-        return false;
-
-    //busy field is a boolean
-    if (data[0] > 1)
-        return false;
-
-    //error must be mapped
-    if (errorDict[data[2]] === undefined)
-        return false;
-
-    return true;
+        store.dispatch(requestDisconnect("timedOut"));
+    }, 500);
 }
 
 function handleFeedback(data) {
-    //data received in time, prevent timeout error
     clearTimeout(timeout);
 
     //validate data
-    if (!validatePacket(data)) {
-        store.dispatch(malformedFeedback());
+    const packet = new FeedbackPacket(data);
+    if (!packet.validate()) {
+        store.dispatch(requestDisconnect("malformed"));
         return;
     }
 
     //update global state with the received feedback
-    store.dispatch(receiveFeedback({
-        busy: Boolean(data[0]),
-        commandCounter: data[1],
-        error: errorDict[data[2]],
-        machinePos: {
-            x: data[3] & data[4] << 8,
-            y: data[5] & data[6] << 8,
-            z: data[7] & data[8] << 8
-        },
-        bufferSpace: data[9]
-    }));
+    store.dispatch(receiveFeedback(packet.parse()));
 
     //set timeout for next packet
     registerTimeout();
 }
 
-//subscribe to all changes in the store
-store.subscribe(() => {
-    const state = store.getState();
-    const portChanged = connection?.path != state.connection.port;
-
-    //only handle new connection requests
-    if (state.connection.status != "connecting" || !portChanged)
-        return;
-
+function connect(port) {
     //attempt to open a connection
     connection = new SerialPort({
-        path: state.connection.port,
+        path: port,
         baudRate: 9600
     });
 
     //handle errors and register initial timeout
-    connection.on("error", () => store.dispatch(connectionFailed()));
+    connection.on("close", error => {
+        if (error) store.dispatch(connectionFailed());
+        else store.dispatch(disconnect());
+    });
     connection.on("open", registerTimeout);
 
     //pipe connection through delimiter parser
     const parser = new DelimiterParser({ delimiter: "PLOTFEEDBACK" });
     parser.on("data", handleFeedback);
     connection.pipe(parser);
+}
+
+//subscribe to all changes in the store
+store.subscribe(() => {
+    const state = store.getState();
+
+    //only handle new connection requests
+    if (!state.connection.updateRequested)
+        return;
+
+    if (state.connection.status == "connecting") {
+        connect(state.connection.port);
+        store.dispatch(setConnecting());
+    }
+    else {
+        connection.close();
+        store.dispatch(setDisconnecting());
+    }
 });
