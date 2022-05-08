@@ -4,8 +4,8 @@ import path from "path";
 function createWindow() {
     const mainWindow = new BrowserWindow({
         title: "Szopiński CNC Diploma",
-        width: 800,
-        height: 600,
+        width: 1024,
+        height: 720,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false

@@ -26,6 +26,23 @@ body {
     .machine {
         font-size: 12pt;
         margin: 0;
+
+        .status-dot {
+            display: inline-block;
+
+            width: 0.8em;
+            height: 0.8em;
+            border-radius: 50%;
+            margin-right: 0.5em;
+
+            box-shadow: 0 0.1em 0.1em #212121;
+
+            &.disconnected { background-color: #9E9E9E; }
+            &.transition { background-color: #FFD600; }
+            &.idle { background-color: #64DD17; }
+            &.busy { background-color: #42A5F5; }
+            &.error { background-color: #E53935; }
+        }
     }
 }
 
