@@ -29,7 +29,7 @@
 
 struct machine_state {
     volatile bool busy;
-    unsigned int command_counter;
+    unsigned char command_counter;
     volatile unsigned char error;
     unsigned char caught_error;
 
