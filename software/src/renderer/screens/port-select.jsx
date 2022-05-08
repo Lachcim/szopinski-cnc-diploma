@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SerialPort } from "serialport";
 
+import Loader from "renderer/components/loader";
 import LargeButton from "renderer/components/large-button";
 import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
@@ -10,6 +11,7 @@ import { requestConnection } from "renderer/cnc/state";
 export default function PortSelect() {
     const [ports, setPorts] = useState([]);
     const [success, setSuccess] = useState(null);
+    const connectionStatus = useSelector(state => state.connection.status);
     const dispatch = useDispatch();
 
     const fetchPorts = () => {
@@ -68,6 +70,10 @@ export default function PortSelect() {
             <div className="option-list">
                 { getOptionList() }
             </div>
+            {
+                connectionStatus == "connecting" &&
+                <Loader text="Connecting..."/>
+            }
         </div>
     );
 }
