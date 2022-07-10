@@ -15,7 +15,13 @@ const initialState = {
         error: null,
         updateRequested: false
     },
-    machineState: null
+    machineState: null,
+    config: {
+        workspaceWidth: 206,
+        workspaceHeight: 230,
+        unitsPerMm: 201.20724,
+        unitsPerMmZ: 1587.30158
+    }
 };
 
 export const store = configureStore({

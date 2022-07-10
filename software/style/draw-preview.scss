@@ -1,0 +1,20 @@
+.draw-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    svg {
+        margin: 1em;
+        box-shadow: 0 0 1em #9E9E9E;
+    }
+    div.coordinates {
+        display: flex;
+        justify-content: center;
+
+        p {
+            font-family: "Roboto Mono", monospace;
+            display: block;
+            margin: 0 auto;
+        }
+    }
+}

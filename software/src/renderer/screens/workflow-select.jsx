@@ -36,6 +36,7 @@ export default function WorkflowSelect() {
                 <LargeButton
                     icon={<VscTerminal/>}
                     title="Command prompt"
+                    onClick={() => navigate("/commandPrompt")}
                 >
                     Type and execute commands line by line
                 </LargeButton>

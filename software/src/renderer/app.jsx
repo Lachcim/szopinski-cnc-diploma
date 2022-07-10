@@ -10,6 +10,8 @@ import SlideScreen from "renderer/components/slide-screen";
 
 import PortSelect from "renderer/screens/port-select";
 import WorkflowSelect from "renderer/screens/workflow-select";
+import CommandPrompt from "renderer/screens/command-prompt";
+
 import ConnectionErrorModal from "renderer/components/connection-error-modal";
 
 export default function App() {
@@ -18,6 +20,7 @@ export default function App() {
     const currentScreen = useRoutes([
         { path: "/portSelect", element: <PortSelect /> },
         { path: "/workflowSelect", element: <WorkflowSelect /> },
+        { path: "/commandPrompt", element: <CommandPrompt /> },
     ]);
 
     const [displayedError, setDisplayedError] = useState(null);
