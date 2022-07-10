@@ -79,7 +79,7 @@ export default function PortSelect() {
             <div className="option-list full-length">
                 { getOptionList() }
                 {
-                    connectionStatus == "connecting" &&
+                    connectionStatus != "disconnected" &&
                     <Loader text="Connecting..."/>
                 }
             </div>
