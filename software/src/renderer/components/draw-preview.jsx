@@ -2,56 +2,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import "style/draw-preview";
 
-export default function DrawPreview({ history, activeIndex }) {
+export default function DrawPreview({ history, active }) {
     const position = useSelector(state => state.machineState?.machinePos);
     const config = useSelector(state => state.config);
 
     //margin for workarea preview box
-    const X_MARGIN = 2;
-    const Y_MARGIN = 2;
-
-    //svg generators for different types of strokes
-    const getRapidSVG = (stroke) => {
-
-    };
-    const getLinearSVG = (stroke) => {
-        return (
-            <path
-                d={`M ${stroke.from.x + X_MARGIN} ${stroke.from.y + Y_MARGIN}
-                    L ${stroke.to.x + X_MARGIN} ${stroke.to.y + Y_MARGIN}`}
-            />
-        );
-    };
-    const getArcSVG = (stroke) => {
-
-    };
-
-    //generate svg representing the current stroke and all previous strokes
-    const getSVG = () => {
-        const output = [];
-        const typeHandlers = {
-            rapid: getRapidSVG,
-            linear: getLinearSVG,
-            arc: getArcSVG
-        };
-
-        //no strokes yet
-        if (activeIndex == null)
-            return output;
-
-        for (let i = 0; i <= activeIndex; i++) {
-            const stroke = history[i];
-            const rawSVG = typeHandlers[stroke.type](stroke);
-
-            output.push(React.cloneElement(rawSVG, {
-                stroke: i == activeIndex ? "#1565C0" : undefined,
-                vectorEffect: "non-scaling-stroke",
-                key: i
-            }));
-        }
-
-        return output;
-    };
+    const X_MARGIN = 5;
+    const Y_MARGIN = 5;
 
     //tool position
     const x = (position?.x ?? 0) / config.unitsPerMm;
@@ -61,16 +18,13 @@ export default function DrawPreview({ history, activeIndex }) {
     //SVG view box size representing the workspace + a constant margin
     const viewBoxWidth = config.workspaceWidth + X_MARGIN * 2;
     const viewBoxHeight = config.workspaceHeight + Y_MARGIN * 2;
-    const viewBox = `0 0 ${viewBoxWidth} ${viewBoxHeight}`;
+    const viewBox = `${-X_MARGIN} ${-Y_MARGIN} ${viewBoxWidth} ${viewBoxHeight}`;
 
     return (
         <div className="draw-preview">
             <svg viewBox={viewBox}>
-                <g
-                    stroke="#BDBDBD"
-                    strokeWidth="0.25mm"
-                >
-                    { getSVG() }
+                <g strokeWidth="0.25mm">
+
                 </g>
                 <path
                     stroke="#E53935"
@@ -78,8 +32,8 @@ export default function DrawPreview({ history, activeIndex }) {
                     strokeLinecap="round"
                     vectorEffect="non-scaling-stroke"
                     d="M 0 0 l 0.001, 0"
-                    transform={`translate(${x + 2} ${y + 2})`}
-                    style={{ transition: "transform 1s linear" }}
+                    transform={`translate(${x} ${y})`}
+                    style={{ transition: "transform 0.1s linear" }}
                 />
             </svg>
             <div className="coordinates">

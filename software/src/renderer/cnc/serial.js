@@ -11,12 +11,12 @@ import {
 } from "renderer/cnc/state";
 import FeedbackPacket from "renderer/cnc/feedback-packet";
 
-let connection;
+export let serialPort;
 let timeout;
 
 function registerTimeout() {
     timeout = setTimeout(() => {
-        if (!connection.isOpen)
+        if (!serialPort.isOpen)
             return;
 
         store.dispatch(requestDisconnect("timedOut"));
@@ -42,23 +42,23 @@ function handleFeedback(data) {
 
 function connect(port) {
     //attempt to open a connection
-    connection = new SerialPort({
+    serialPort = new SerialPort({
         path: port,
         baudRate: 9600
     });
 
     //handle errors and register initial timeout
-    connection.on("close", error => {
+    serialPort.on("close", error => {
         if (error) store.dispatch(connectionFailed());
         else store.dispatch(disconnect());
     });
-    connection.on("error", () => store.dispatch(connectionFailed()));
-    connection.on("open", registerTimeout);
+    serialPort.on("error", () => store.dispatch(connectionFailed()));
+    serialPort.on("open", registerTimeout);
 
     //pipe connection through delimiter parser
     const parser = new DelimiterParser({ delimiter: "PLOTFEEDBACK" });
     parser.on("data", handleFeedback);
-    connection.pipe(parser);
+    serialPort.pipe(parser);
 }
 
 //subscribe to all changes in the store
@@ -74,7 +74,7 @@ store.subscribe(() => {
         store.dispatch(setConnecting());
     }
     else {
-        connection.close();
+        serialPort.close();
         store.dispatch(setDisconnecting());
     }
 });

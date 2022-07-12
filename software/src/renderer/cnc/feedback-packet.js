@@ -9,6 +9,11 @@ const errorDict = [
     "missingArgument",
     "invalidArgument"
 ];
+const strokeTypeDict = {
+    r: "rapid",
+    l: "linear",
+    a: "arc"
+};
 
 export default class FeedbackPacket {
     constructor(data) {
@@ -32,17 +37,34 @@ export default class FeedbackPacket {
     }
 
     parse() {
+        const parseInt16 = (pos) => this.data[pos] | this.data[pos + 1] << 8;
+
         //parse raw bytes into machine state object
         return {
             busy: Boolean(this.data[0]),
             commandCounter: this.data[1],
             error: errorDict[this.data[2]],
             machinePos: {
-                x: this.data[3] & this.data[4] << 8,
-                y: this.data[5] & this.data[6] << 8,
-                z: this.data[7] & this.data[8] << 8
+                x: parseInt16(3),
+                y: parseInt16(5),
+                z: parseInt16(7)
             },
-            bufferSpace: this.data[9]
+            bufferSpace: this.data[9],
+            stroke: {
+                type: strokeTypeDict[String.fromCharCode(this.data[10])],
+                from: {
+                    x: parseInt16(11),
+                    y: parseInt16(13)
+                },
+                to: {
+                    x: parseInt16(15),
+                    y: parseInt16(17)
+                },
+                center: {
+                    x: parseInt16(19),
+                    y: parseInt16(21)
+                }
+            }
         };
     }
 }

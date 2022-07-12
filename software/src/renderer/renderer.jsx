@@ -6,7 +6,7 @@ import { MemoryRouter } from "react-router-dom";
 import App from "renderer/app";
 import { store } from "renderer/cnc/state";
 
-import "renderer/cnc/feedback";
+import "renderer/cnc/serial";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
