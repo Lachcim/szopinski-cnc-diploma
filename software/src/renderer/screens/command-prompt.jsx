@@ -1,43 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { enqueueCommands } from "renderer/cnc/state";
 
 import DrawScreen from "renderer/components/draw-screen";
 import DrawPreview from "renderer/components/draw-preview";
-import CNCSender from "renderer/cnc/cnc-sender";
 
 export default function CommandPrompt() {
-    const { current: history } = useRef([]);
-
-    const cncSender = useRef();
-    const [initializing, setInitializing] = useState(false);
-    const [delta, setDelta] = useState(null);
-
-    const machineBusy = useSelector(state => state.machineState?.busy);
+    const dispatch = useDispatch();
+    const total = useSelector(state => state.totalCommandCounter);
 
     useEffect(() => {
-        cncSender.current = new CNCSender();
-        cncSender.current.onInitialBusyCleared = () => setInitializing(false);
-        cncSender.current.onDeltaChange = setDelta;
-
-        if (cncSender.current.initialBusy)
-            setInitializing(true);
-
-        setTimeout(() => cncSender.current.enqueue(["x50 y150"]), 5000);
-        setTimeout(() => cncSender.current.enqueue(["x0 y0"]), 10000);
-
-        return () => cncSender.current.disconnect();
+        setTimeout(() => dispatch(enqueueCommands(["x200 y50", "x0 y100"])), 5000);
+        setTimeout(() => dispatch(enqueueCommands(["x0 y0"])), 10000);
     }, []);
 
     return (
         <DrawScreen
             drawPreview={
                 <DrawPreview
-                    history={history}
-                    active={machineBusy && !initializing}
+                    history={[]}
+                    active={false}
                 />
             }
         >
-            { delta }
+            { total }
         </DrawScreen>
     );
 }

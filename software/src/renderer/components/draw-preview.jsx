@@ -1,23 +1,28 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import {
+    UNITS_PER_MM,
+    UNITS_PER_MM_Z,
+    WORKSPACE_WIDTH_MM,
+    WORKSPACE_HEIGHT_MM
+} from "renderer/cnc/config";
 import "style/draw-preview";
 
 export default function DrawPreview({ history, active }) {
     const position = useSelector(state => state.machineState?.machinePos);
-    const config = useSelector(state => state.config);
 
     //margin for workarea preview box
     const X_MARGIN = 5;
     const Y_MARGIN = 5;
 
     //tool position
-    const x = (position?.x ?? 0) / config.unitsPerMm;
-    const y = (position?.y ?? 0) / config.unitsPerMm;
-    const z = (position?.z ?? 0) / config.unitsPerMmZ;
+    const x = (position?.x ?? 0) / UNITS_PER_MM;
+    const y = (position?.y ?? 0) / UNITS_PER_MM;
+    const z = (position?.z ?? 0) / UNITS_PER_MM_Z;
 
     //SVG view box size representing the workspace + a constant margin
-    const viewBoxWidth = config.workspaceWidth + X_MARGIN * 2;
-    const viewBoxHeight = config.workspaceHeight + Y_MARGIN * 2;
+    const viewBoxWidth = WORKSPACE_WIDTH_MM + X_MARGIN * 2;
+    const viewBoxHeight = WORKSPACE_HEIGHT_MM + Y_MARGIN * 2;
     const viewBox = `${-X_MARGIN} ${-Y_MARGIN} ${viewBoxWidth} ${viewBoxHeight}`;
 
     return (
