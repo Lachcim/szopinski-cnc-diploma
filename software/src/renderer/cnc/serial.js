@@ -15,6 +15,7 @@ import FeedbackPacket from "renderer/cnc/feedback-packet";
 
 let serialPort;
 let timeout;
+let firstReceived = false;
 
 function registerTimeout() {
     timeout = setTimeout(() => {
@@ -67,10 +68,16 @@ function updateCommandCounter(oldCounter) {
 function handleFeedback(data) {
     clearTimeout(timeout);
 
+    //handle partial packet when first connecting
+    const ignoreMalformed = !firstReceived;
+    firstReceived = true;
+
     //validate data
     const packet = new FeedbackPacket(data);
     if (!packet.validate()) {
-        store.dispatch(requestDisconnect("malformed"));
+        if (!ignoreMalformed)
+            store.dispatch(requestDisconnect("malformed"));
+
         return;
     }
 
@@ -121,6 +128,7 @@ store.subscribe(() => {
     }
     else {
         serialPort.close();
+        firstReceived = false;
         store.dispatch(setDisconnecting());
     }
 });
