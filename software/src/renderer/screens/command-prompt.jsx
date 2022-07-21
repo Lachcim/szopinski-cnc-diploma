@@ -9,11 +9,6 @@ export default function CommandPrompt() {
     const dispatch = useDispatch();
     const total = useSelector(state => state.totalCommandCounter);
 
-    useEffect(() => {
-        setTimeout(() => dispatch(enqueueCommands(["x200 y50", "x0 y100"])), 5000);
-        setTimeout(() => dispatch(enqueueCommands(["x0 y0"])), 10000);
-    }, []);
-
     return (
         <DrawScreen
             drawPreview={
@@ -23,7 +18,7 @@ export default function CommandPrompt() {
                 />
             }
         >
-            { total }
+
         </DrawScreen>
     );
 }

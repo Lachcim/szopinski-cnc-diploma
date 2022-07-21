@@ -1,19 +1,4 @@
-const errorDict = [
-    null,
-    "bufferOverflow",
-    "blockDelete",
-    "malformedInput",
-    "unsupportedFeature",
-    "duplicateWord",
-    "conflictingModal",
-    "missingArgument",
-    "invalidArgument"
-];
-const strokeTypeDict = {
-    r: "rapid",
-    l: "linear",
-    a: "arc"
-};
+import { ERRORS, STROKE_TYPES } from "renderer/cnc/config";
 
 export default class FeedbackPacket {
     constructor(data) {
@@ -21,8 +6,8 @@ export default class FeedbackPacket {
     }
 
     validate() {
-        //all fields take exactly 10 bytes
-        if (this.data.length != 10)
+        //all fields take exactly 22 bytes
+        if (this.data.length != 22)
             return false;
 
         //busy field is a boolean
@@ -30,7 +15,11 @@ export default class FeedbackPacket {
             return false;
 
         //error must be mapped
-        if (errorDict[this.data[2]] === undefined)
+        if (ERRORS[this.data[2]] === undefined)
+            return false;
+
+        //stroke types must be mapped
+        if (STROKE_TYPES[this.data[10]] === undefined)
             return false;
 
         return true;
@@ -40,18 +29,29 @@ export default class FeedbackPacket {
         const parseInt16 = (pos) => this.data[pos] | this.data[pos + 1] << 8;
 
         //parse raw bytes into machine state object
-        return {
+        const machineState = {
             busy: Boolean(this.data[0]),
-            commandCounter: this.data[1],
-            error: errorDict[this.data[2]],
-            machinePos: {
+            commandParity: Boolean(this.data[1]),
+            error: ERRORS[this.data[2]],
+            position: {
                 x: parseInt16(3),
                 y: parseInt16(5),
                 z: parseInt16(7)
             },
-            bufferSpace: this.data[9],
-            stroke: {
-                type: strokeTypeDict[String.fromCharCode(this.data[10])],
+            bufferSpace: this.data[9]
+        };
+
+        //parse stroke interpretation
+        const getStrokeData = () => {
+            const strokeType = STROKE_TYPES[String.fromCharCode(this.data[10])];
+
+            //command doesn't trigger stroke
+            if (!strokeType)
+                return null;
+
+            //parse start and end points
+            const stroke = {
+                type: strokeType,
                 from: {
                     x: parseInt16(11),
                     y: parseInt16(13)
@@ -59,12 +59,23 @@ export default class FeedbackPacket {
                 to: {
                     x: parseInt16(15),
                     y: parseInt16(17)
-                },
-                center: {
+                }
+            };
+
+            //for arcs, parse center point
+            if (strokeType == "arc") {
+                stroke.center = {
                     x: parseInt16(19),
                     y: parseInt16(21)
-                }
+                };
             }
+
+            return stroke;
+        };
+
+        return {
+            ...machineState,
+            stroke: getStrokeData()
         };
     }
 }
