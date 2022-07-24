@@ -6,6 +6,10 @@
 #include <stdio.h>
 
 void execute_command(const struct command* command) {
+    //command deleted, ignore remaining fields
+    if (command->deleted)
+        return;
+
     //set feed rate mode, only units per minute allowed
     if (command->word_flag & FLAG_G_FEED_RATE)
         if (command->g_feed_rate != TO_FIXED(94)) {
