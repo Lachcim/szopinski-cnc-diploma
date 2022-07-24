@@ -16,7 +16,7 @@ static struct command_feedback command_feedback = {
 void send_command_started() {
     command_feedback.finished = false;
     command_feedback.error = machine_state.error;
-    command_feedback.interpretation = motion_state.busy ? machine_state.motion_mode : 'x';
+    command_feedback.interpretation = motion_state.motion_handler ? machine_state.motion_mode : 'x';
     command_feedback.origin = motion_state.origin;
     command_feedback.destination = motion_state.destination;
     command_feedback.center = motion_state.center;

@@ -65,7 +65,6 @@ void execute_command(const struct command* command) {
         }
 
         motion_state.origin = motion_state.machine_pos;
-        motion_state.busy = true;
     }
 }
 

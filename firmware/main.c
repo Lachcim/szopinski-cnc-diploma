@@ -75,12 +75,12 @@ int main() {
 		}
 
 		//if motion started, wait for it to finish
-		if (motion_state.busy) {
+		if (motion_state.motion_handler) {
 			DISABLE_XY_PORT &= ~(1 << DISABLE_XY);
 			DISABLE_Z_PORT &= ~(1 << DISABLE_Z);
 
 			ENABLE_MOTION_TIMER;
-			while (motion_state.busy);
+			while (motion_state.motion_handler);
 			DISABLE_MOTION_TIMER;
 
 			DISABLE_XY_PORT |= (1 << DISABLE_XY);

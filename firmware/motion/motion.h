@@ -27,8 +27,7 @@ struct cartesian {
 struct motion_state {
     struct cartesian machine_pos;
 
-    void (*motion_handler)();
-    volatile bool busy;
+    void (*volatile motion_handler)();
     bool falling_edge;
 
     struct cartesian origin;

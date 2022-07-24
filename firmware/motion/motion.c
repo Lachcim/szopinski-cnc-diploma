@@ -7,7 +7,6 @@
 struct motion_state motion_state = {
     .machine_pos = {0, 0, 0},
     .motion_handler = 0,
-    .busy = false,
     .falling_edge = false
 };
 
@@ -34,10 +33,8 @@ ISR(TIMER0_COMPA_vect) {
     }
 
     //if there is no motion handler, do nothing
-    if (!motion_state.motion_handler) {
-        motion_state.busy = false;
+    if (!motion_state.motion_handler)
         return;
-    }
 
     //delegate control to motion handler
     motion_state.motion_handler();
