@@ -34,6 +34,7 @@ struct word {
 
 struct command {
     unsigned int word_flag;
+    bool deleted;
     unsigned char non_modal_count;
     long g_non_modal[MAX_NON_MODALS];
     long g_motion;

@@ -22,9 +22,12 @@ void parse_command(const char* buffer, struct command* command) {
     command->word_flag = 0;
     command->non_modal_count = 0;
 
-    //parse block delete and line number
-    if (parse_block_delete(&buffer)) return;
+    //parse block delete
+    command->deleted = parse_block_delete(&buffer);
+    if (command->deleted)
+        return;
 
+    //parse line number
     consume_line_number(&buffer);
     if (machine_state.error != ERROR_NONE) return;
 
