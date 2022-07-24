@@ -17,6 +17,9 @@
 
 #define abs_diff(a, b) ((a > b) ? (a - b) : (b - a))
 
+#define ENABLE_MOTION_TIMER TIMSK0 |= (1 << OCIE0A)
+#define DISABLE_MOTION_TIMER TIMSK0 &= ~(1 << OCIE0A)
+
 struct cartesian {
     unsigned int x, y, z;
 };
@@ -25,11 +28,12 @@ struct motion_state {
     struct cartesian machine_pos;
 
     void (*motion_handler)();
+    volatile bool busy;
     bool falling_edge;
-    bool reset_busy;
 
     struct cartesian origin;
     struct cartesian destination;
+    struct cartesian center;
 };
 
 extern struct motion_state motion_state;

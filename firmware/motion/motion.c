@@ -7,10 +7,11 @@
 struct motion_state motion_state = {
     .machine_pos = {0, 0, 0},
     .motion_handler = 0,
+    .busy = false,
     .falling_edge = false
 };
 
-void update_position() {
+static inline void update_position() {
     //capture state of step port
     char step = STEP_PORT;
 
@@ -34,12 +35,7 @@ ISR(TIMER0_COMPA_vect) {
 
     //if there is no motion handler, do nothing
     if (!motion_state.motion_handler) {
-        //reset busy state if motion has just completed
-        if (motion_state.reset_busy) {
-            machine_state.busy = false;
-            motion_state.reset_busy = false;
-        }
-
+        motion_state.busy = false;
         return;
     }
 

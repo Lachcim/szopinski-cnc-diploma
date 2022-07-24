@@ -1,7 +1,9 @@
 #include "main.h"
 #include "state.h"
 #include "usart.h"
+#include "feedback.h"
 #include "command/command.h"
+#include "motion/motion.h"
 
 #include <stdbool.h>
 
@@ -9,10 +11,7 @@
 #include <avr/interrupt.h>
 
 struct machine_state machine_state = {
-	.busy = false,
-	.command_counter = 0,
 	.error = ERROR_NONE,
-	.caught_error = ERROR_NONE,
 	.rx_buf_space = RX_BUFFER_SIZE,
 	.motion_mode = MOTION_RAPID,
 	.distance_mode = DISTANCE_ABSOLUTE,
@@ -35,7 +34,6 @@ int main() {
 	//configure motion timer
 	TCCR0A |= (1 << WGM01); //clear timer on compare
 	TCCR0B |= (1 << CS02);	//prescale by 256, f/256 = 78125 Hz max
-	TIMSK0 |= (1 << OCIE0A); //enable timer interrupt
 
 	//configure feedback timer
 	TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); //CTC, prescale by 1024
@@ -55,31 +53,34 @@ int main() {
 	DISABLE_Z_PORT |= (1 << DISABLE_Z);
 
 	while (true) {
-		//reset machine state
-		if (machine_state.error != ERROR_NONE) {
-			machine_state.caught_error = machine_state.error;
-			machine_state.error = ERROR_NONE;
-			machine_state.busy = false;
-		}
-
 		//await G-code block
-		char block_buf[256];
+		char block_buf[RX_BUFFER_SIZE];
 		usart_receive_block(block_buf);
-		machine_state.command_counter++;
-		if (machine_state.error != ERROR_NONE) continue;
 
 		//parse and execute command
 		struct command command;
 		parse_command(block_buf, &command);
-		if (machine_state.error != ERROR_NONE) continue;
 
-		//enable motors for testing
-		DISABLE_XY_PORT &= ~(1 << DISABLE_XY);
+		if (machine_state.error != ERROR_NONE)
+			execute_command(&command);
 
-		execute_command(&command);
-		if (machine_state.error != ERROR_NONE) continue;
+		//send feedback on how the command was parsed
+		send_command_started();
 
-		//wait for interrupt-driven actions to finish
-		while (machine_state.busy && machine_state.error == ERROR_NONE);
+		//finish processing if error occurred
+		if (machine_state.error) {
+			machine_state.error = ERROR_NONE;
+			send_command_finished();
+			continue;
+		}
+
+		//if motion started, wait for it to finish
+		if (motion_state.busy) {
+			ENABLE_MOTION_TIMER;
+			while (motion_state.busy);
+			DISABLE_MOTION_TIMER;
+		}
+
+		send_command_finished();
 	}
 }

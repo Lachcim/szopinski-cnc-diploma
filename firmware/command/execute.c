@@ -55,8 +55,6 @@ void execute_command(const struct command* command) {
 
     //initiate motion
     if (command->word_flag & (FLAG_X_WORD | FLAG_Y_WORD | FLAG_Z_WORD)) {
-        TIMSK0 &= ~(1 << OCIE0A);
-
         //initialize motion state for the given motion mode
         switch (machine_state.motion_mode) {
             case MOTION_RAPID: init_rapid(command); break;
@@ -67,13 +65,8 @@ void execute_command(const struct command* command) {
         }
 
         motion_state.origin = motion_state.machine_pos;
-        motion_state.reset_busy = true;
-        TIMSK0 |= (1 << OCIE0A);
-        return;
+        motion_state.busy = true;
     }
-
-    //no motion, execution complete
-    machine_state.busy = false;
 }
 
 bool has_non_modal(const struct command* command, long word) {
