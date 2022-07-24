@@ -21,10 +21,13 @@ void send_command_started() {
     command_feedback.destination = motion_state.destination;
     command_feedback.center = motion_state.center;
 
+    while (USART_SENDING);
     usart_send(&command_feedback, sizeof(command_feedback));
 }
 void send_command_finished() {
     command_feedback.finished = true;
+
+    while (USART_SENDING);
     usart_send(&command_feedback, sizeof(command_feedback));
 }
 
@@ -32,5 +35,6 @@ ISR(TIMER1_COMPA_vect) {
     timed_feedback.machine_pos = motion_state.machine_pos;
     timed_feedback.rx_buf_space = machine_state.rx_buf_space;
 
-    usart_send(&timed_feedback, sizeof(timed_feedback));
+    if (!USART_SENDING)
+        usart_send(&timed_feedback, sizeof(timed_feedback));
 }

@@ -49,9 +49,6 @@ void usart_receive_block(char* buf) {
 }
 
 void usart_send(const void* buf, size_t size) {
-    //wait for transmission to finish
-    while (USART_SENDING);
-
     //set iterator and enable data buffer empty interrupts
     transmit_iter = buf;
     transmit_counter = size;

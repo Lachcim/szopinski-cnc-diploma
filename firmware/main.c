@@ -61,7 +61,7 @@ int main() {
 		struct command command;
 		parse_command(block_buf, &command);
 
-		if (machine_state.error != ERROR_NONE)
+		if (machine_state.error == ERROR_NONE)
 			execute_command(&command);
 
 		//send feedback on how the command was parsed
@@ -76,9 +76,15 @@ int main() {
 
 		//if motion started, wait for it to finish
 		if (motion_state.busy) {
+			DISABLE_XY_PORT &= ~(1 << DISABLE_XY);
+			DISABLE_Z_PORT &= ~(1 << DISABLE_Z);
+
 			ENABLE_MOTION_TIMER;
 			while (motion_state.busy);
 			DISABLE_MOTION_TIMER;
+
+			DISABLE_XY_PORT |= (1 << DISABLE_XY);
+			DISABLE_Z_PORT |= (1 << DISABLE_Z);
 		}
 
 		send_command_finished();
