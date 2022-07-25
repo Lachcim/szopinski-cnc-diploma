@@ -6,7 +6,6 @@ export const UNITS_PER_MM_Z = 1587.30158;
 
 export const ERRORS = [
     null,
-    "bufferOverflow",
     "blockDelete",
     "malformedInput",
     "unsupportedFeature",
@@ -20,5 +19,6 @@ export const STROKE_TYPES = {
     x: null,
     r: "rapid",
     l: "linear",
-    a: "arc"
+    a: "arc",
+    c: "ccwArc"
 };

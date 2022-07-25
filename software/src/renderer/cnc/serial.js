@@ -7,7 +7,9 @@ import {
     requestDisconnect,
     setDisconnecting,
     disconnect,
-    receiveFeedback
+    receiveFeedback,
+    commandStarted,
+    commandFinished
 } from "renderer/cnc/store";
 import FeedbackPacket from "renderer/cnc/feedback-packet";
 
@@ -47,7 +49,13 @@ function handleFeedback(data) {
     }
 
     //update global state with the received feedback
-    store.dispatch(receiveFeedback(packet.parse()));
+    const packetData = packet.parse();
+    if (packetData.type == "timed")
+        store.dispatch(receiveFeedback(packetData));
+    else if (!packetData.finished)
+        store.dispatch(commandStarted(packetData));
+    else
+        store.dispatch(commandFinished());
 }
 
 function connect(port) {

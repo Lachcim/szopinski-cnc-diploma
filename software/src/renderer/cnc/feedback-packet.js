@@ -6,12 +6,25 @@ export default class FeedbackPacket {
     }
 
     validate() {
-        //all fields take exactly 22 bytes
+        //must contain packet type
+        if (this.data.length == 0)
+            return false;
+
+        //must be valid type
+        const packetType = String.fromCharCode(this.data[0]);
+        if (packetType != "t" && packetType != "c")
+            return false;
+
+        //timed feedback requires no validation beyond size check
+        if (packetType == "t")
+            return this.data.size == 8;
+
+        //command feedback size check
         if (this.data.length != 22)
             return false;
 
-        //busy field is a boolean
-        if (this.data[0] > 1)
+        //finished field is a boolean
+        if (this.data[1] > 1)
             return false;
 
         //error must be mapped
@@ -19,63 +32,42 @@ export default class FeedbackPacket {
             return false;
 
         //stroke types must be mapped
-        if (STROKE_TYPES[this.data[10]] === undefined)
+        if (STROKE_TYPES[this.data[3]] === undefined)
             return false;
 
         return true;
     }
 
     parse() {
+        const rawType = String.fromCharCode(this.data[0]);
         const parseInt16 = (pos) => this.data[pos] | this.data[pos + 1] << 8;
 
-        //parse raw bytes into machine state object
-        const machineState = {
-            busy: Boolean(this.data[0]),
-            commandParity: Boolean(this.data[1]),
-            error: ERRORS[this.data[2]],
-            position: {
-                x: parseInt16(3),
-                y: parseInt16(5),
-                z: parseInt16(7)
-            },
-            bufferSpace: this.data[9]
-        };
-
-        //parse stroke interpretation
-        const getStrokeData = () => {
-            const strokeType = STROKE_TYPES[String.fromCharCode(this.data[10])];
-
-            //command doesn't trigger stroke
-            if (!strokeType)
-                return null;
-
-            //parse start and end points
-            const stroke = {
-                type: strokeType,
-                from: {
-                    x: parseInt16(11),
-                    y: parseInt16(13)
-                },
-                to: {
-                    x: parseInt16(15),
-                    y: parseInt16(17)
-                }
+        //arrange timed feedback packet data into flat structure
+        if (rawType == "t") {
+            return {
+                type: "timed",
+                machineX: parseInt16(1),
+                machineY: parseInt16(3),
+                machineZ: parseInt16(5),
+                bufferSpace: this.data[7]
             };
+        }
 
-            //for arcs, parse center point
-            if (strokeType == "arc") {
-                stroke.center = {
-                    x: parseInt16(19),
-                    y: parseInt16(21)
-                };
-            }
-
-            return stroke;
-        };
-
+        //command feedback
         return {
-            ...machineState,
-            stroke: getStrokeData()
+            type: "command",
+            finished: Boolean(this.data[1]),
+            error: ERRORS[this.data[2]],
+            strokeType: STROKE_TYPES[this.data[3]],
+            originX: parseInt16(4),
+            originY: parseInt16(6),
+            originZ: parseInt16(8),
+            destinationX: parseInt16(10),
+            destinationY: parseInt16(12),
+            destinationZ: parseInt16(14),
+            centerX: parseInt16(16),
+            centerY: parseInt16(18),
+            centerZ: parseInt16(20)
         };
     }
 }
