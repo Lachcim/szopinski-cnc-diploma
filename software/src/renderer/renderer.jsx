@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter } from "react-router-dom";
 
 import App from "renderer/app";
-import { store } from "renderer/cnc/state";
+import { store } from "renderer/cnc/store";
 
 import "renderer/cnc/serial";
 

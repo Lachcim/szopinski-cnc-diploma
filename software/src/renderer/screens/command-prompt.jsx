@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { enqueueCommands } from "renderer/cnc/state";
+import { useDispatch } from "react-redux";
+import { sendCommand } from "renderer/cnc/store";
 
 import DrawScreen from "renderer/components/draw-screen";
 import DrawPreview from "renderer/components/draw-preview";
 
 export default function CommandPrompt() {
     const dispatch = useDispatch();
-    const total = useSelector(state => state.totalCommandCounter);
+
+    useEffect(() => {
+        setTimeout(() => dispatch(sendCommand("x50")), 3000);
+        setTimeout(() => dispatch(sendCommand("x100 y50")), 8000);
+        setTimeout(() => dispatch(sendCommand("x0 y0")), 13000);
+    }, [dispatch]);
 
     return (
         <DrawScreen
@@ -18,7 +23,7 @@ export default function CommandPrompt() {
                 />
             }
         >
-
+            dupa trupa
         </DrawScreen>
     );
 }

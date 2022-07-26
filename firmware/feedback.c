@@ -3,9 +3,9 @@
 
 #include <avr/interrupt.h>
 
-static struct timed_feedback timed_feedback = {
+static struct pos_feedback pos_feedback = {
     .header = "PLOTFEEDBACK",
-    .feedback_type = 't'
+    .feedback_type = 'p'
 };
 
 static struct command_feedback command_feedback = {
@@ -14,6 +14,7 @@ static struct command_feedback command_feedback = {
 };
 
 void send_command_started() {
+    command_feedback.rx_buf_space = machine_state.rx_buf_space;
     command_feedback.finished = false;
     command_feedback.error = machine_state.error;
     command_feedback.interpretation = motion_state.motion_handler ? machine_state.motion_mode : 'x';
@@ -32,9 +33,9 @@ void send_command_finished() {
 }
 
 ISR(TIMER1_COMPA_vect) {
-    timed_feedback.machine_pos = motion_state.machine_pos;
-    timed_feedback.rx_buf_space = machine_state.rx_buf_space;
+    if (USART_SENDING)
+        return;
 
-    if (!USART_SENDING)
-        usart_send(&timed_feedback, sizeof(timed_feedback));
+    pos_feedback.machine_pos = motion_state.machine_pos;
+    usart_send(&pos_feedback, sizeof(pos_feedback));
 }

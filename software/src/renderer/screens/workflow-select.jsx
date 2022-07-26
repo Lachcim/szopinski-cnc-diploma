@@ -6,7 +6,7 @@ import MicroScreen from "renderer/components/micro-screen";
 import LargeButton from "renderer/components/large-button";
 import LinkButton from "renderer/components/link-button";
 import { VscTools, VscFileBinary, VscTerminal, VscEdit } from "react-icons/vsc";
-import { requestDisconnect } from "renderer/cnc/state";
+import { requestDisconnect } from "renderer/cnc/store";
 
 export default function WorkflowSelect() {
     const navigate = useNavigate();

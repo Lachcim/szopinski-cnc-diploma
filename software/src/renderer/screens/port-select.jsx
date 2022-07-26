@@ -8,7 +8,7 @@ import MicroScreen from "renderer/components/micro-screen";
 import LargeButton from "renderer/components/large-button";
 import { VscDebugDisconnect, VscPlug } from "react-icons/vsc";
 
-import { requestConnection } from "renderer/cnc/state";
+import { requestConnection } from "renderer/cnc/store";
 
 export default function PortSelect() {
     const [ports, setPorts] = useState([]);

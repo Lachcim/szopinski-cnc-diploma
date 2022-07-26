@@ -7,7 +7,7 @@ import {
     requestDisconnect,
     setDisconnecting,
     disconnect,
-    receiveFeedback,
+    positionFeedback,
     commandStarted,
     commandFinished
 } from "renderer/cnc/store";
@@ -31,6 +31,10 @@ function resetTimeout() {
     }, 500);
 }
 
+function sendCommands() {
+
+}
+
 function handleFeedback(data) {
     //reset receive timeout
     resetTimeout();
@@ -50,10 +54,17 @@ function handleFeedback(data) {
 
     //update global state with the received feedback
     const packetData = packet.parse();
-    if (packetData.type == "timed")
-        store.dispatch(receiveFeedback(packetData));
-    else if (!packetData.finished)
+
+    if (packetData.type == "position") {
+        store.dispatch(positionFeedback(packetData));
+        return;
+    }
+
+    if (!packetData.finished) {
+        //send commands when buffer space becomes known
         store.dispatch(commandStarted(packetData));
+        sendCommands();
+    }
     else
         store.dispatch(commandFinished());
 }
