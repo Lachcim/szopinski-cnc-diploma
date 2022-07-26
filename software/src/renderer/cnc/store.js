@@ -92,6 +92,7 @@ export const store = configureStore({
                     busy: false,
                     bufferSpace: 255
                 };
+                state.commandHistory = [];
             }
 
             //update position

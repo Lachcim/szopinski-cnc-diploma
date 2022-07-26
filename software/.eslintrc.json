@@ -55,6 +55,10 @@
             "error",
             "always"
         ],
+        "no-constant-condition": [
+            "error",
+            { "checkLoops": false }
+        ],
         "react/prop-types": [
             "off"
         ],

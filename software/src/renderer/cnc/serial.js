@@ -1,5 +1,6 @@
 import { SerialPort } from "serialport";
 import { DelimiterParser } from "@serialport/parser-delimiter";
+import FeedbackPacket from "renderer/cnc/feedback-packet";
 import {
     store,
     setConnecting,
@@ -7,11 +8,12 @@ import {
     requestDisconnect,
     setDisconnecting,
     disconnect,
+    commandSent,
     positionFeedback,
     commandStarted,
     commandFinished
 } from "renderer/cnc/store";
-import FeedbackPacket from "renderer/cnc/feedback-packet";
+import { findFirstCommand } from "renderer/cnc/history-utils";
 
 let serialPort;
 let timeout;
@@ -32,7 +34,25 @@ function resetTimeout() {
 }
 
 function sendCommands() {
+    const textEncoder = new TextEncoder();
+    let bufferSpace = store.getState().machineState.bufferSpace;
 
+    while (true) {
+        //obtain first command in queue
+        const command = findFirstCommand(store.getState(), "unsent");
+        if (!command)
+            return;
+
+        //no more room in buffer
+        const commandBytes = textEncoder.encode(command.text + "\n");
+        if (commandBytes.length > bufferSpace)
+            return;
+
+        //write command to serial, update queue
+        serialPort.write(commandBytes);
+        bufferSpace -= commandBytes.length;
+        store.dispatch(commandSent());
+    }
 }
 
 function handleFeedback(data) {
@@ -57,6 +77,7 @@ function handleFeedback(data) {
 
     if (packetData.type == "position") {
         store.dispatch(positionFeedback(packetData));
+        sendCommands(); //debug
         return;
     }
 

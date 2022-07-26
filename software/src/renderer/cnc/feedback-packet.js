@@ -32,7 +32,7 @@ export default class FeedbackPacket {
             return false;
 
         //stroke types must be mapped
-        if (STROKE_TYPES[this.data[4]] === undefined)
+        if (STROKE_TYPES[String.fromCharCode(this.data[4])] === undefined)
             return false;
 
         return true;
