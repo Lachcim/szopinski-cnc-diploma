@@ -14,6 +14,8 @@ static struct command_feedback command_feedback = {
 };
 
 void send_command_started() {
+    while (USART_SENDING);
+
     command_feedback.rx_buf_space = machine_state.rx_buf_space;
     command_feedback.finished = false;
     command_feedback.error = machine_state.error;
@@ -22,13 +24,11 @@ void send_command_started() {
     command_feedback.destination = motion_state.destination;
     command_feedback.center = motion_state.center;
 
-    while (USART_SENDING);
     usart_send(&command_feedback, sizeof(command_feedback));
 }
 void send_command_finished() {
-    command_feedback.finished = true;
-
     while (USART_SENDING);
+    command_feedback.finished = true;
     usart_send(&command_feedback, sizeof(command_feedback));
 }
 
