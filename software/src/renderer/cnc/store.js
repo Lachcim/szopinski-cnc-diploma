@@ -1,12 +1,10 @@
 import { configureStore, createAction, createReducer } from "@reduxjs/toolkit";
 import { findFirstCommand } from "renderer/cnc/history-utils";
 
-export const requestConnection = createAction("machine/connectionRequested");
-export const setConnecting = createAction("machine/connecting");
+export const connect = createAction("machine/connect");
 export const connectionFailed = createAction("machine/connectionFailed");
-export const requestDisconnect = createAction("machine/disconnectRequested");
-export const setDisconnecting = createAction("machine/disconnecting");
-export const disconnect = createAction("machine/disconnected");
+export const disconnect = createAction("machine/disconnect");
+export const disconnected = createAction("machine/disconnected");
 
 export const sendCommand = createAction("machine/sendCommand");
 export const commandSent = createAction("machine/commandSent");
@@ -19,8 +17,7 @@ const initialState = {
     connection: {
         port: null,
         status: "disconnected",
-        error: null,
-        updateRequested: false
+        error: null
     },
     machineState: null,
     commandHistory: []
@@ -28,41 +25,28 @@ const initialState = {
 
 export const store = configureStore({
     reducer: createReducer(initialState, builder => {
-        builder.addCase(requestConnection, (state, action) => {
+        builder.addCase(connect, (state, action) => {
             //connection may only be requested when disconnected
             if (state.connection.status != "disconnected")
                 return;
 
-            //request connection, set connection port and raise update flag
             state.connection = {
                 port: action.payload,
                 status: "connecting",
-                error: null,
-                updateRequested: true
+                error: null
             };
-        });
-        builder.addCase(setConnecting, state => {
-            //connection is being opened by the serial interface, lower update flag
-            state.connection.status = "connecting";
-            state.connection.updateRequested = false;
         });
         builder.addCase(connectionFailed, state => {
             //fault detected by serial interface, mark as diconnected
             state.connection.status = "disconnected";
             state.connection.error = "connectionFailed";
         });
-        builder.addCase(requestDisconnect, (state, action) => {
-            //request disconnection, raise update flag
+        builder.addCase(disconnect, (state, action) => {
+            //request disconnection
             state.connection.status = "disconnecting";
             state.connection.error = action.payload ?? null;
-            state.connection.updateRequested = true;
         });
-        builder.addCase(setDisconnecting, state => {
-            //connection is being closed, lower update flag
-            state.connection.status = "disconnecting";
-            state.connection.updateRequested = false;
-        });
-        builder.addCase(disconnect, state => {
+        builder.addCase(disconnected, state => {
             //connection closed, mark as disconnected
             state.connection.status = "disconnected";
             state.machineState = null;

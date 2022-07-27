@@ -6,14 +6,14 @@ import MicroScreen from "renderer/components/micro-screen";
 import LargeButton from "renderer/components/large-button";
 import LinkButton from "renderer/components/link-button";
 import { VscTools, VscFileBinary, VscTerminal, VscEdit } from "react-icons/vsc";
-import { requestDisconnect } from "renderer/cnc/store";
+import { disconnect } from "renderer/cnc/store";
 
 export default function WorkflowSelect() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const disconnect = () => {
-        dispatch(requestDisconnect());
+    const requestDiconnect = () => {
+        dispatch(disconnect());
         navigate("/portSelect");
     };
 
@@ -49,7 +49,7 @@ export default function WorkflowSelect() {
             </div>
             <p className="footer-option">
                 Or { " " }
-                <LinkButton onClick={disconnect}>
+                <LinkButton onClick={requestDiconnect}>
                     choose a different machine
                 </LinkButton>
             </p>

@@ -3,10 +3,7 @@ import { DelimiterParser } from "@serialport/parser-delimiter";
 import FeedbackPacket from "renderer/cnc/feedback-packet";
 import {
     store,
-    setConnecting,
     connectionFailed,
-    requestDisconnect,
-    setDisconnecting,
     disconnect,
     commandSent,
     positionFeedback,
@@ -29,7 +26,7 @@ function resetTimeout() {
         if (!serialPort.isOpen)
             return;
 
-        store.dispatch(requestDisconnect("timedOut"));
+        store.dispatch(disconnect("timedOut"));
     }, 500);
 }
 
@@ -67,7 +64,7 @@ function handleFeedback(data) {
     const packet = new FeedbackPacket(data);
     if (!packet.validate()) {
         if (!ignoreMalformed)
-            store.dispatch(requestDisconnect("malformed"));
+            store.dispatch(disconnect("malformed"));
 
         return;
     }
@@ -77,7 +74,6 @@ function handleFeedback(data) {
 
     if (packetData.type == "position") {
         store.dispatch(positionFeedback(packetData));
-        sendCommands(); //debug
         return;
     }
 
@@ -114,20 +110,28 @@ function connect(port) {
     firstReceived = false;
 }
 
+let prevConnectionStatus = "disconnected";
+let prevCommandCount = 0;
+
 //subscribe to all changes in the store
 store.subscribe(() => {
     const state = store.getState();
 
     //handle new connection/disconnection requests
-    if (!state.connection.updateRequested)
-        return;
+    if (!state.connection.status != prevConnectionStatus) {
+        prevConnectionStatus = state.connection.status;
 
-    if (state.connection.status == "connecting") {
-        connect(state.connection.port);
-        store.dispatch(setConnecting());
+        if (state.connection.status == "connecting")
+            connect(state.connection.port);
+        else if (state.connection.status == "disconnecting")
+            serialPort.close();
     }
-    else {
-        serialPort.close();
-        store.dispatch(setDisconnecting());
+
+    //handle new commands
+    if (state.commandHistory.length != prevCommandCount) {
+        prevCommandCount = state.commandHistory.length;
+
+        if (!findFirstCommand(state, "sent"))
+            sendCommands();
     }
 });

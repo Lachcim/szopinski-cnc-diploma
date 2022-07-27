@@ -9,9 +9,9 @@ export default function CommandPrompt() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        setTimeout(() => dispatch(sendCommand("x50")), 3000);
-        setTimeout(() => dispatch(sendCommand("x100 y50")), 8000);
-        setTimeout(() => dispatch(sendCommand("x0 y0")), 13000);
+        setTimeout(() => dispatch(sendCommand("x50")), 1000);
+        setTimeout(() => dispatch(sendCommand("x100 y50")), 3000);
+        setTimeout(() => dispatch(sendCommand("x0 y0")), 5000);
     }, [dispatch]);
 
     return (
