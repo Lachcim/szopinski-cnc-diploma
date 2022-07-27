@@ -6,6 +6,22 @@
     svg {
         margin: 1em;
         box-shadow: 0 0 1em #9E9E9E;
+
+        .tool-tracker {
+            stroke: #E53935;
+            stroke-width: 1mm;
+            stroke-linecap: round;
+
+            transition: transform 0.25s linear;
+        }
+        .strokes > * {
+            stroke: #000000;
+            stroke-width: 1.5px;
+            stroke-linecap: round;
+        }
+        .strokes > *.active {
+            stroke: #0091EA;
+        }
     }
     div.coordinates {
         display: flex;

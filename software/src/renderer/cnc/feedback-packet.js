@@ -56,7 +56,7 @@ export default class FeedbackPacket {
             bufferSpace: this.data[1],
             finished: Boolean(this.data[2]),
             error: ERRORS[this.data[3]],
-            strokeType: STROKE_TYPES[this.data[4]],
+            strokeType: STROKE_TYPES[String.fromCharCode(this.data[4])],
             originX: parseInt16(5),
             originY: parseInt16(7),
             originZ: parseInt16(9),

@@ -8,12 +8,76 @@ import {
 } from "renderer/cnc/config";
 import "style/draw-preview";
 
-export default function DrawPreview({ history, active }) {
-    const position = useSelector(state => state.machineState?.machinePos);
+//margin for workarea preview box
+const X_MARGIN = 5;
+const Y_MARGIN = 5;
 
-    //margin for workarea preview box
-    const X_MARGIN = 5;
-    const Y_MARGIN = 5;
+function visualizeStroke(command, index) {
+    //not drawn yet
+    if (command.status != "executed" && command.status != "executing")
+        return;
+
+    //not a stroke
+    if (command.stroke.type == null)
+        return;
+
+    const active = command.status == "executing" ? "active" : "";
+
+    if (command.stroke.type == "rapid") {
+        const deltaX = command.stroke.destination.x - command.stroke.origin.x;
+        const deltaY = command.stroke.destination.y - command.stroke.origin.y;
+
+        const firstDeltaX = Math.sign(deltaX) * Math.min(deltaX, deltaY);
+        const firstDeltaY = Math.sign(deltaY) * Math.min(deltaX, deltaY);
+        const midpointX = command.stroke.origin.x + firstDeltaX;
+        const midpointY = command.stroke.origin.y + firstDeltaY;
+
+        const distinctMidpoint = midpointX != command.stroke.destination.x || midpointY != command.stroke.destination.y;
+
+        return (
+            <React.Fragment key={index}>
+                <line
+
+                    className={active}
+                    vectorEffect="non-scaling-stroke"
+                    x1={command.stroke.origin.x / UNITS_PER_MM}
+                    y1={command.stroke.origin.y / UNITS_PER_MM}
+                    x2={midpointX / UNITS_PER_MM}
+                    y2={midpointY / UNITS_PER_MM}
+                />
+                {
+                    distinctMidpoint &&
+                    <line
+                        key={index + 0.5}
+                        className={active}
+                        vectorEffect="non-scaling-stroke"
+                        x1={midpointX / UNITS_PER_MM}
+                        y1={midpointY / UNITS_PER_MM}
+                        x2={command.stroke.destination.x / UNITS_PER_MM}
+                        y2={command.stroke.destination.y / UNITS_PER_MM}
+                    />
+                }
+            </React.Fragment>
+        );
+    }
+
+    if (command.stroke.type == "linear")
+        return (
+            <line
+                key={index}
+                className={active}
+                vectorEffect="non-scaling-stroke"
+                x1={command.stroke.origin.x / UNITS_PER_MM}
+                y1={command.stroke.origin.y / UNITS_PER_MM}
+                x2={command.stroke.destination.x / UNITS_PER_MM}
+                y2={command.stroke.destination.y / UNITS_PER_MM}
+            />
+        );
+}
+
+export default function DrawPreview() {
+    const position = useSelector(state => state.machineState?.position);
+    const commands = useSelector(state => state.commandHistory);
 
     //tool position
     const x = (position?.x ?? 0) / UNITS_PER_MM;
@@ -28,17 +92,14 @@ export default function DrawPreview({ history, active }) {
     return (
         <div className="draw-preview">
             <svg viewBox={viewBox}>
-                <g strokeWidth="0.25mm">
-
+                <g className="strokes">
+                    { commands.map(visualizeStroke) }
                 </g>
                 <path
-                    stroke="#E53935"
-                    strokeWidth="1mm"
-                    strokeLinecap="round"
+                    className="tool-tracker"
                     vectorEffect="non-scaling-stroke"
                     d="M 0 0 l 0.001, 0"
                     transform={`translate(${x} ${y})`}
-                    style={{ transition: "transform 0.1s linear" }}
                 />
             </svg>
             <div className="coordinates">
