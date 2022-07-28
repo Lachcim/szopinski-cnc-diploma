@@ -14,7 +14,7 @@ const Y_MARGIN = 5;
 
 function visualizeStroke(command, index) {
     //not drawn yet
-    if (command.status != "executed" && command.status != "executing")
+    if (command.status != "done" && command.status != "executing")
         return;
 
     //not a stroke

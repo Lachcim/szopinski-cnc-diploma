@@ -1,0 +1,46 @@
+.command-preview {
+    border: 1px solid #BDBDBD;
+    border-radius: 1px;
+
+    display: block;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+
+    .command {
+        font-family: "Roboto Mono";
+        padding: 0.5rem;
+
+        color: #424242;
+        border-bottom: 1px solid #E0E0E0;
+        background-color: #FAFAFA;
+
+        &:last-child {
+            border-bottom: none;
+        }
+        .status {
+            margin: 0;
+            float: right;
+            user-select: none;
+        }
+
+        &.executing {
+            color: #01579B;
+            border-bottom: 1px solid #81D4FA;
+            background-color: #E1F5FE;
+        }
+        &.sent {
+            color: #F57F17;
+            border-bottom: 1px solid #FDD835;
+            background-color: #FFFDE7;
+        }
+        &.unsent {
+            color: #E65100;
+            border-bottom: 1px solid #FFB74D;
+            background-color: #FFF3E0;
+        }
+    }
+    .command:last-child {
+        border-bottom: none;
+    }
+}

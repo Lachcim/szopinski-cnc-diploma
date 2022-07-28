@@ -4,7 +4,7 @@ export function findFirstCommand(state, rawStatus) {
         "unsent": 0,
         "sent": 1,
         "executing": 2,
-        "executed": 3
+        "done": 3
     };
     const status = statusDict[rawStatus];
 

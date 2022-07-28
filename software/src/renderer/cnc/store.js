@@ -122,7 +122,7 @@ export const store = configureStore({
         });
         builder.addCase(commandFinished, state => {
             //mark executing command as executed
-            findFirstCommand(state, "executing").status = "executed";
+            findFirstCommand(state, "executing").status = "done";
             state.machineState.busy = false;
         });
     })
