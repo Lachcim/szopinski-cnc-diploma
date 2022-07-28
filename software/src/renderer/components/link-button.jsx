@@ -1,13 +1,13 @@
 import React from "react";
 import "style/link-button";
 
-export default function LinkButton(props) {
+export default function LinkButton({ children, props }) {
     return (
         <button
             className="link-button"
             {...props}
         >
-            choose a different machine
+            { children }
         </button>
     );
 }

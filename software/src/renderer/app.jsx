@@ -18,9 +18,9 @@ export default function App() {
     const navigate = useNavigate();
     const location = useLocation();
     const currentScreen = useRoutes([
-        { path: "/portSelect", element: <PortSelect /> },
-        { path: "/workflowSelect", element: <WorkflowSelect /> },
-        { path: "/commandPrompt", element: <CommandPrompt /> },
+        { path: "/portSelect", element: <PortSelect/> },
+        { path: "/workflowSelect", element: <WorkflowSelect/> },
+        { path: "/commandPrompt", element: <CommandPrompt/> },
     ]);
 
     const [displayedError, setDisplayedError] = useState(null);

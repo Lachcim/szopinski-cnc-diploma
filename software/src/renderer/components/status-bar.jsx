@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 export default function StatusBar() {
     const connection = useSelector(state => state.connection);
     const busy = useSelector(state => state.machineState?.busy);
-    const error = useSelector(state => state.machineState?.error);
 
     const getMachineName = () => {
         if (connection.status == "disconnected") {
@@ -32,16 +31,12 @@ export default function StatusBar() {
         if (connection.status == "disconnecting")
             return "Disconnecting";
 
-        if (error) return "Error";
         if (busy) return "Busy";
-
         return "Idle";
     };
     const getDotClass = () => {
         if (connection.status == "connected") {
-            if (error) return "error";
             if (busy) return "busy";
-
             return "idle";
         }
 

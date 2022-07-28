@@ -2,8 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { sendCommand } from "renderer/cnc/store";
 
-import DrawScreen from "renderer/components/draw-screen";
-import DrawPreview from "renderer/components/draw-preview";
+import WorkScreen from "renderer/components/work-screen";
 
 export default function CommandPrompt() {
     const dispatch = useDispatch();
@@ -15,15 +14,8 @@ export default function CommandPrompt() {
     }, [dispatch]);
 
     return (
-        <DrawScreen
-            drawPreview={
-                <DrawPreview
-                    history={[]}
-                    active={false}
-                />
-            }
-        >
+        <WorkScreen title="Command prompt">
             dupa trupa
-        </DrawScreen>
+        </WorkScreen>
     );
 }

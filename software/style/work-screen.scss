@@ -1,0 +1,42 @@
+.work-screen {
+    display: flex;
+    flex-direction: column;
+
+    margin: 0 auto;
+    height: 100%;
+
+    .title {
+        padding: 1rem;
+        background-color: #F5F5F5;
+
+        font-size: 12pt;
+        font-weight: 600;
+
+        svg {
+            width: 1.6rem;
+            height: 1.6rem;
+            margin-right: 0.2rem;
+            vertical-align: bottom;
+        }
+        a {
+            color: inherit;
+        }
+    }
+    .preview-main {
+        flex: 1;
+        display: flex;
+
+        padding: 1rem;
+
+        .preview {
+            width: 33%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .work-screen-main {
+            flex: 1;
+        }
+    }
+}
