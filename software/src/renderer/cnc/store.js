@@ -53,6 +53,10 @@ export const store = configureStore({
         });
 
         builder.addCase(sendCommand, (state, action) => {
+            //no empty commands
+            if (action.payload.replace(/\s/, "").length == 0)
+                return;
+
             //add command to history
             state.commandHistory.push({
                 text: action.payload,

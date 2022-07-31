@@ -9,13 +9,16 @@ export default function CommandPreview() {
     return (
         <ul className="command-preview">
             {
-                commands.map(command => (
-                    <li className={`command ${command.status}`}>
-                        <p className="status">{command.status}</p>
-                        {command.text}
+                commands.map((command, index) => (
+                    <li
+                        key={index}
+                        className={`command ${command.status}`}
+                    >
+                        <p className="status">{ command.status }</p>
+                        { command.text }
                     </li>
                 ))
             }
         </ul>
-    )
+    );
 }
