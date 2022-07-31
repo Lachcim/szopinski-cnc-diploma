@@ -15,6 +15,15 @@ export const ERRORS = [
     "invalidArgument"
 ];
 
+export const ERROR_MESSAGES = {
+    malformedInput: "Malformed input",
+    unsupportedFeature: "Unsupported G-code",
+    duplicateWord: "Duplicate word",
+    conflictingModal: "Conflicting words",
+    missingArgument: "Missing argument",
+    invalidArgument: "Invalid argument"
+};
+
 export const STROKE_TYPES = {
     x: null,
     r: "rapid",

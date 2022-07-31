@@ -1,6 +1,8 @@
 import React from "react";
-import "style/status-bar";
 import { useSelector } from "react-redux";
+import "style/status-bar";
+
+import Tooltip from "renderer/components/tooltip";
 
 export default function StatusBar() {
     const connection = useSelector(state => state.connection);
@@ -50,7 +52,7 @@ export default function StatusBar() {
         <header className="status-bar">
             <div className="machine">
                 <div className={`status-dot ${getDotClass()}`}>
-                    <p className="tooltip">{ getDotTitle() }</p>
+                    <Tooltip>{ getDotTitle() }</Tooltip>
                 </div>
                 { getMachineName() }
             </div>

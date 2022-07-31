@@ -18,7 +18,7 @@ function visualizeStroke(command, index) {
         return;
 
     //not a stroke
-    if (command.stroke.type == null)
+    if (command.error || command.stroke.type == null)
         return;
 
     const active = command.status == "executing" ? "active" : "";

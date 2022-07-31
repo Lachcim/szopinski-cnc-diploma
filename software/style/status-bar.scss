@@ -28,23 +28,7 @@
             &.idle { background-color: #64DD17; }
             &.busy { background-color: #42A5F5; }
 
-            .tooltip {
-                position: absolute;
-                left: 0;
-                top: 100%;
-
-                margin: 0.5rem 0 0;
-                padding: 0.5rem;
-
-                font-size: 1rem;
-                white-space: nowrap;
-                background-color: rgba(0, 0, 0, 0.75);
-                border-radius: 2px;
-
-                display: none;
-                z-index: 2;
-            }
-            &:hover .tooltip { display: block }
+            &:hover .tooltip { display: unset; }
         }
     }
 }
