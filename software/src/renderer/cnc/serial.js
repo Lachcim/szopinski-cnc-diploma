@@ -5,6 +5,7 @@ import {
     store,
     connectionFailed,
     disconnect,
+    disconnected,
     commandSent,
     positionFeedback,
     commandStarted,
@@ -96,7 +97,7 @@ function connect(port) {
     //handle errors and register initial timeout
     serialPort.on("close", error => {
         if (error) store.dispatch(connectionFailed());
-        else store.dispatch(disconnect());
+        else store.dispatch(disconnected());
     });
     serialPort.on("error", () => store.dispatch(connectionFailed()));
     serialPort.on("open", resetTimeout);
