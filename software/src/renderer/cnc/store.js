@@ -8,6 +8,7 @@ export const disconnected = createAction("machine/disconnected");
 
 export const sendCommand = createAction("machine/sendCommand");
 export const commandSent = createAction("machine/commandSent");
+export const clearHistory = createAction("machine/clearHistory");
 
 export const positionFeedback = createAction("machine/positionFeedback");
 export const commandStarted = createAction("machine/commandStarted");
@@ -69,19 +70,25 @@ export const store = configureStore({
             //mark first unsent command in queue as sent
             findFirstCommand(state, "unsent").status = "sent";
         });
+        builder.addCase(clearHistory, state => {
+            //remove all executed commands from history
+            state.commandHistory = state.commandHistory.filter(command =>
+                command.status != "done"
+            );
+        });
 
         builder.addCase(positionFeedback, (state, action) => {
-            //connection established
-            state.connection.status = "connected";
-
             //initialize machine state if newly connected
-            if (!state.machineState) {
+            if (state.connection.status != "connected") {
                 state.machineState = {
                     busy: false,
                     bufferSpace: 255
                 };
                 state.commandHistory = [];
             }
+
+            //connection established
+            state.connection.status = "connected";
 
             //update position
             state.machineState.position = {
