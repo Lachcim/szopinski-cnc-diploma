@@ -27,36 +27,43 @@ function visualizeStroke(command, index) {
         const deltaX = command.stroke.destination.x - command.stroke.origin.x;
         const deltaY = command.stroke.destination.y - command.stroke.origin.y;
 
-        const firstDeltaX = Math.sign(deltaX) * Math.min(deltaX, deltaY);
-        const firstDeltaY = Math.sign(deltaY) * Math.min(deltaX, deltaY);
-        const midpointX = command.stroke.origin.x + firstDeltaX;
-        const midpointY = command.stroke.origin.y + firstDeltaY;
-
-        const distinctMidpoint = midpointX != command.stroke.destination.x || midpointY != command.stroke.destination.y;
-
-        return (
-            <React.Fragment key={index}>
+        if (deltaX == 0 || deltaY == 0 || Math.abs(deltaX) == Math.abs(deltaY)) {
+            return (
                 <line
-
+                    key={index}
                     className={active}
                     vectorEffect="non-scaling-stroke"
                     x1={command.stroke.origin.x / UNITS_PER_MM}
                     y1={command.stroke.origin.y / UNITS_PER_MM}
-                    x2={midpointX / UNITS_PER_MM}
-                    y2={midpointY / UNITS_PER_MM}
+                    x2={command.stroke.destination.x / UNITS_PER_MM}
+                    y2={command.stroke.destination.y / UNITS_PER_MM}
                 />
-                {
-                    distinctMidpoint &&
-                    <line
-                        key={index + 0.5}
-                        className={active}
-                        vectorEffect="non-scaling-stroke"
-                        x1={midpointX / UNITS_PER_MM}
-                        y1={midpointY / UNITS_PER_MM}
-                        x2={command.stroke.destination.x / UNITS_PER_MM}
-                        y2={command.stroke.destination.y / UNITS_PER_MM}
-                    />
-                }
+            );
+        }
+
+        const diagonalDelta = Math.min(Math.abs(deltaX), Math.abs(deltaY));
+        const diagonalDeltaX = diagonalDelta * Math.sign(deltaX);
+        const diagonalDeltaY = diagonalDelta * Math.sign(deltaY);
+
+        return (
+            <React.Fragment key={index}>
+                <line
+                    className={active}
+                    vectorEffect="non-scaling-stroke"
+                    x1={command.stroke.origin.x / UNITS_PER_MM}
+                    y1={command.stroke.origin.y / UNITS_PER_MM}
+                    x2={(command.stroke.origin.x + diagonalDeltaX) / UNITS_PER_MM}
+                    y2={(command.stroke.origin.y + diagonalDeltaY) / UNITS_PER_MM}
+                />
+                <line
+                    className={active}
+                    vectorEffect="non-scaling-stroke"
+                    x1={(command.stroke.origin.x + diagonalDeltaX) / UNITS_PER_MM}
+                    y1={(command.stroke.origin.y + diagonalDeltaY) / UNITS_PER_MM}
+                    x2={command.stroke.destination.x / UNITS_PER_MM}
+                    y2={command.stroke.destination.y / UNITS_PER_MM}
+
+                />
             </React.Fragment>
         );
     }
