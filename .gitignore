@@ -2,3 +2,26 @@ build/
 node_modules/
 yarn.lock
 .vscode/
+
+# Core latex/pdflatex auxiliary files:
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+*.app
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.run.xml
+*.synctex.gz
+
+szopinski-cnc-diploma.pdf
