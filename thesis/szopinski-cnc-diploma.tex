@@ -28,15 +28,8 @@
 \date{2022}
 \maketitle
 
-% english abstract
 \cleardoublepage
-\abstract \lipsum[1-3]
-\keywords XXX, XXX, XXX
-
-% polish abstract
-\clearpage
-\secondabstract \kant[1-3]
-\secondkeywords XXX, XXX, XXX
+\input{abstract}
 
 \pagestyle{plain}
 
@@ -46,68 +39,52 @@
 \cleardoublepage
 \pagestyle{headings}
 
-% thesis sections
-\input{1-wstep}
-\input{2-de-finibus}
-\input{3-code-listings}
+\input{introduction}
+
+\clearpage
+\section{Hardware}
+\subsection{Analysis}
+\subsection{Mechanics overview}
+\subsection{Electronics overview}
+\subsection{Detailed description}
+
+\section{Firmware}
+\subsection{Analysis}
+\subsection{Overview}
+\subsection{Detailed description}
+
+\section{Software}
+\subsection{Analysis}
+\subsection{Overview}
+\subsection{Detailed description}
+
+\section{Final product}
+\subsection{CNC capabilities}
+\subsection{User interface}
+
+\section{Summary}
 
 \cleardoublepage
 \printbibliography
 \clearpage
 
-% Wykaz symboli i skrótów.
-% Pamiętaj, żeby posortować symbole alfabetycznie
-% we własnym zakresie. Makro \acronymlist
-% generuje właściwy tytuł sekcji, w zależności od języka.
-% Makro \acronym dodaje skrót/symbol do listy,
-% zapewniając podstawowe formatowanie.
 \acronymlist
-\acronym{EiTI}{Wydział Elektroniki i Technik Informacyjnych}
-\acronym{PW}{Politechnika Warszawska}
-\acronym{WEIRD}{ang. \emph{Western, Educated, Industrialized, Rich and Democratic}}
+
+% acronym list \acronym{acronym}{definition}
+
 \vspace{0.8cm}
 
-%--------------------------------------
-% Spisy: rysunków, tabel, załączników
-%--------------------------------------
 \pagestyle{plain}
 
-\listoffigurestoc    % Spis rysunków.
-\vspace{1cm}         % vertical space
-\listoftablestoc     % Spis tabel.
-\vspace{1cm}         % vertical space
-\listofappendicestoc % Spis załączników
+\listoffigurestoc
+\vspace{1cm}
+\listoftablestoc
+\vspace{1cm}
+\listofappendicestoc
 
-%-------------
-% Załączniki
-%-------------
-
-% Obrazki i tabele w załącznikach nie trafiają do spisów
 \captionsetup[figure]{list=no}
 \captionsetup[table]{list=no}
 
-% Załącznik 1
-\clearpage
-\appendix{Nazwa załącznika 1}
-\lipsum[1-3]
-\begin{figure}[!h]
-	\centering hello
-	\caption{Obrazek w załączniku.}
-\end{figure}
-\lipsum[4-7]
-
-% Załącznik 2
-\clearpage
-\appendix{Nazwa załącznika 2}
-\lipsum[1-2]
-\begin{table}[!h] \centering
-    \caption{Tabela w załączniku.}
-    \begin{tabular} {| c | c | r |} \hline
-        Kolumna 1       & Kolumna 2 & Liczba \\ \hline\hline
-        cell1           & cell2     & 60     \\ \hline
-        \multicolumn{2}{|r|}{Suma:} & 123,45 \\ \hline
-    \end{tabular}
-\end{table}
-\lipsum[3-4]
+% appendices
 
 \end{document}

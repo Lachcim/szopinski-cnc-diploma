@@ -1,0 +1,132 @@
+\clearpage
+\section{Introduction}
+
+\subsection{CNC machine design}
+
+Computer numerical control (CNC) is a technique which utilizes a computer to
+automate the control of a machining tool. By modern definitions, ``machining''
+refers to a process in which a material is manipulated to obtain a desired
+shape, either through subtractive or additive manufacturing. Machining tools
+provide a means to guide a cutting tool along a strictly controlled path
+relative to the workpiece, free of human error.
+
+A machining tool with an extensive range of motion in the horizontal plane, but
+a limited range of motion in the vertical axis, is commonly called a plotter.
+Before the advent of the inkjet printer, these devices were used in engineering
+settings to plot functions and draw line art on paper. In modern contexts,
+plotters are employed to create inscriptions on rigid or otherwise
+unconventional surfaces, where printers may not be used.
+
+In the recent years, CNC machines have been rapidly growing in popularity as
+household devices. This is especially true of one such machine, the 3D printer,
+which moves a nozzle in three-dimensional space to create a shape out of molten
+plastic. As consumers become familiar with CNC technologies, computer-controlled
+plotters, drills and lathes may soon become standard workshop equipment.
+
+The concept of numerical control of machining tools is not new; the first
+solutions involving punched cards date back to the 1950s. Since that time,
+various manufacturers have implemented their own standards for communicating
+with machines, the most prominent of which is a data format named G-code.
+Originally developed by Gerber Scientific, the format was adopted by many
+companies and has become a de-facto industry standard.
+
+In its original form, G-code lacked the ability to read, manipulate and store
+data, which made it more akin to a vector graphics description format than to a
+programming language. Basic G-code instructions modify the state of the machine
+and instruct it to move to a specified position. The machine state impacts the
+interpretation of commands and the interpolation between requested positions.
+
+The basic set of instructions enables the operator to (including but not
+limited to):
+\begin{itemize}
+    \item Move in a straight line, draw an arc, or move the tool rapidly
+    \item Adjust the movement speed
+    \item Switch between absolute and relative positioning
+    \item Change the origin of the coordinate system
+    \item Switch between metric and US customary units
+\end{itemize}
+Various manufacturers, however, have opted to implement their own versions of
+G-code. This includes differences in instruction encoding, interpretation, and
+parsing. Only a small subset of instructions and syntaxes may be expected to
+work on all machines universally.
+
+Due to G-code's origin as a vector data format rather than a communication
+protocol, there is also no standarized way to obtain any sort of feedback from
+the machine to its controlling computer. To establish two-way communication
+with the machine, manufacturers employ proprietary solutions.
+
+\subsection{GUI application design}
+
+Modern developments in user interface design show a tendency to step away from
+native user controls in favor of web technologies. Desktop and mobile
+applications present their interface as an embedded browser window where
+controls are implemented using HTML, CSS and JavaScript. This improves user
+experience by presenting the user with a modern and familiar UI.
+
+A commonly used software framework for creating this kind of applications is
+Electron. It consists of three crucial components:
+\begin{itemize}
+    \item A standalone JavaScript engine, Node.js. This enables JavaScript to
+    be executed outside of a browser context, thanks to which the entire
+    application may be written in JavaScript.
+    \item JavaScript bindings for native OS functionality, such as interacting
+    with the window system or capturing the screen contents. Node.js, being a
+    web server by design, lacks this functionality.
+    \item A browser context in which the UI code is executed and rendered.
+\end{itemize}
+
+When building complex UI applications, it is important to maintain and follow
+a strict set of rules regarding data flow and update logic. Between managing
+the global program state, handling user interactions and rendering interface
+updates, it may be difficult to write readable and maintainable code. A popular
+solution to this problem is the React framework, which facilitates the
+development of UI applications by introducing the following design principles:
+\begin{itemize}
+    \item The UI is split into components, each of which is only responsible
+    for rendering a small part of the application. Components maintain the
+    logical state and handle the side effects of whatever abstraction they
+    represent.
+    \item Components follow a declarative convention where their rendered
+    output is determined solely by their state. This removes the need for
+    update logic.
+    \item Components can only directly influence components directly contained
+    within them. This creates an unidirectional data flow that is easy to manage
+    and maintain.
+\end{itemize}
+
+\subsection{About this thesis}
+
+The goal of this thesis was to design and to construct a CNC plotter together
+with the software needed to control it. The machine implements a subset of the
+G-code instruction set that is suitable for general-purpose plotting operations
+on flat surfaces. The software is aimed at the consumer market and as such, it
+must be easy to set up and use. It is a GUI application which communicates with
+the machine over a wired connection.
+
+As part of the project, the following was done:
+\begin{enumerate}
+    \item A mechanical system capable of moving a drawing instrument in
+    three-dimensional space was prepared. The system is a combination of
+    pre-made aluminum components and custom-made 3D-printed connector parts.
+    \item A microcontroller system was designed to drive stepper motors and to
+    communicate with control software. It utilizes ready-made printed circuit
+    boards containing driver ICs and the necessary discrete components. A
+    custom-made PCB was prepared to house the microcontroller chip together
+    with its peripherals.
+    \item A firmware program was created to execute CNC instructions and to send
+    feedback to control software. It features original code only.
+    \item A GUI application was developed to act as an interface between the
+    user and the machine. Several common software frameworks were used to
+    implement the generic parts of the program.
+\end{enumerate}
+
+This thesis is divided into several sections discribing the hardware, the
+firmware and the software individually. Each section begins with an analysis
+of the relevant project requirements, then goes on to provide a general
+overview of the accepted solution, and in the end gives a detailed description
+of each major component of the implementation. The final section of this
+document contains an analysis of the finished project and drawn conclusions.
+
+Attached to this document is the source code for all described software, the
+schematics of the designed microcontroller system and its PCB, and technical
+drawings showing the mechanical system.

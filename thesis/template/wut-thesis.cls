@@ -147,7 +147,8 @@
 % Basic configuration
 %----------------------
 \setstretch{1.15}
-\setlength{\parindent}{5mm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
 \counterwithin{equation}{section}
 \counterwithin{figure}{section}
 \counterwithin{table}{section}
