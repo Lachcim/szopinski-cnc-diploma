@@ -2,9 +2,6 @@
 #include "../state.h"
 #include "../motion/motion.h"
 
-#include "../usart.h"
-#include <stdio.h>
-
 void execute_command(const struct command* command) {
     //command deleted, ignore remaining fields
     if (command->deleted)

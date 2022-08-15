@@ -34,7 +34,7 @@ void usart_receive_block(char* buf) {
         char current_char = usart_receive();
 
         //break on newline, consume line breaks from previous block
-        if (current_char == '\r' || current_char == '\n') {
+        if (current_char == '\r' || current_char == '\n' || current_char == 0) {
             if (i == 0) continue;
             break;
         }
