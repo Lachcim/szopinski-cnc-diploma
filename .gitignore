@@ -25,3 +25,6 @@ yarn.lock
 *.synctex.gz
 
 szopinski-cnc-diploma.pdf
+
+*.sch-bak
+fp-info-cache
