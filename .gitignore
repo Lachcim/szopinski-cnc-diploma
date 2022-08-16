@@ -29,3 +29,4 @@ szopinski-cnc-diploma.pdf
 *.sch-bak
 fp-info-cache
 *.kicad_pcb-bak
+*.net
