@@ -20,7 +20,7 @@ U 1 1 62FABA28
 P 3200 1150
 F 0 "U2" H 3200 1392 50  0000 C CNN
 F 1 "L7805" H 3200 1301 50  0000 C CNN
-F 2 "Package_TO_SOT_THT:TO-220-3_Horizontal_TabDown" H 3225 1000 50  0001 L CIN
+F 2 "Package_TO_SOT_THT:TO-220-3_Vertical" H 3225 1000 50  0001 L CIN
 F 3 "http://www.st.com/content/ccc/resource/technical/document/datasheet/41/4f/b3/b0/12/d4/47/88/CD00000444.pdf/files/CD00000444.pdf/jcr:content/translations/en.CD00000444.pdf" H 3200 1100 50  0001 C CNN
 	1    3200 1150
 	1    0    0    -1  
@@ -108,7 +108,7 @@ U 1 1 62FB7032
 P 4200 1500
 F 0 "C2" H 4315 1546 50  0000 L CNN
 F 1 "100n" H 4315 1455 50  0000 L CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric" H 4238 1350 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D6.0mm_W4.4mm_P5.00mm" H 4238 1350 50  0001 C CNN
 F 3 "~" H 4200 1500 50  0001 C CNN
 	1    4200 1500
 	1    0    0    -1  
@@ -165,7 +165,7 @@ U 1 1 62FBB303
 P 4250 4550
 F 0 "C3" H 4365 4596 50  0000 L CNN
 F 1 "22p" H 4365 4505 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 4288 4400 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D6.0mm_W4.4mm_P5.00mm" H 4288 4400 50  0001 C CNN
 F 3 "~" H 4250 4550 50  0001 C CNN
 	1    4250 4550
 	1    0    0    -1  
@@ -213,7 +213,7 @@ U 1 1 62FE1616
 P 3550 4550
 F 0 "R1" H 3620 4596 50  0000 L CNN
 F 1 "10k" H 3620 4505 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric" V 3480 4550 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 3480 4550 50  0001 C CNN
 F 3 "~" H 3550 4550 50  0001 C CNN
 	1    3550 4550
 	1    0    0    -1  
@@ -296,7 +296,7 @@ U 1 1 62FBBC52
 P 4750 4550
 F 0 "C4" H 4865 4596 50  0000 L CNN
 F 1 "22p" H 4865 4505 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric" H 4788 4400 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D6.0mm_W4.4mm_P5.00mm" H 4788 4400 50  0001 C CNN
 F 3 "~" H 4750 4550 50  0001 C CNN
 	1    4750 4550
 	1    0    0    -1  
@@ -845,7 +845,7 @@ U 1 1 63119743
 P 5450 5150
 F 0 "R2" H 5520 5196 50  0000 L CNN
 F 1 "10k" H 5520 5105 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric" V 5380 5150 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 5380 5150 50  0001 C CNN
 F 3 "~" H 5450 5150 50  0001 C CNN
 	1    5450 5150
 	1    0    0    -1  
@@ -879,7 +879,7 @@ U 1 1 63132285
 P 5500 2100
 F 0 "R3" H 5570 2146 50  0000 L CNN
 F 1 "10k" H 5570 2055 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric" V 5430 2100 50  0001 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal" V 5430 2100 50  0001 C CNN
 F 3 "~" H 5500 2100 50  0001 C CNN
 	1    5500 2100
 	1    0    0    -1  
@@ -1004,7 +1004,7 @@ NoConn ~ 4250 6200
 NoConn ~ 4250 6300
 NoConn ~ 4250 6400
 NoConn ~ 4250 6700
-NoConn ~ 2900 5200
+NoConn ~ 2900 5700
 NoConn ~ 2900 5300
 NoConn ~ 2900 5400
 NoConn ~ 2900 5500
@@ -1027,7 +1027,6 @@ $EndComp
 Wire Wire Line
 	3500 1150 4200 1150
 NoConn ~ 2900 3500
-NoConn ~ 2900 3400
 NoConn ~ 4750 6700
 $Comp
 L MCU_Microchip_ATmega:ATmega328P-PU U1
@@ -1041,9 +1040,9 @@ F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328_P%20AVR%20MCU%20w
 	1    0    0    -1  
 $EndComp
 NoConn ~ 2900 5600
-Text Label 2900 3300 0    50   Italic 0
+Text Label 2900 3400 0    50   Italic 0
 ENABLE_Z
-Text Label 2900 5700 0    50   Italic 0
+Text Label 2900 5200 0    50   Italic 0
 ENABLE_XY
 Wire Wire Line
 	3100 3800 2900 3800
@@ -1091,7 +1090,7 @@ U 1 1 632C6F4E
 P 2000 2600
 F 0 "C9" V 1748 2600 50  0000 C CNN
 F 1 "100n" V 1839 2600 50  0000 C CNN
-F 2 "Capacitor_SMD:C_1206_3216Metric" H 2038 2450 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D6.0mm_W4.4mm_P5.00mm" H 2038 2450 50  0001 C CNN
 F 3 "~" H 2000 2600 50  0001 C CNN
 	1    2000 2600
 	0    1    1    0   
@@ -1115,4 +1114,6 @@ RXD
 NoConn ~ 4750 6500
 NoConn ~ 4750 6600
 NoConn ~ 4750 6800
+NoConn ~ 2900 3300
+NoConn ~ 4900 4000
 $EndSCHEMATC
