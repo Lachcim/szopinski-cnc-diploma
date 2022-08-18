@@ -1,0 +1,29 @@
+.dropzone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1rem;
+    border: 0.6rem dashed #E0E0E0;
+    border-radius: 1.5rem;
+
+    cursor: pointer;
+
+    .drop-here {
+        text-align: center;
+
+        svg {
+            font-size: 4rem;
+        }
+        p {
+            margin: 0;
+        }
+    }
+
+    & > input {
+        display: none;
+    }
+    &:hover {
+        background-color: #FAFAFA;
+    }
+}

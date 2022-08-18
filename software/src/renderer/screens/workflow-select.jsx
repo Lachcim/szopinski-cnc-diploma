@@ -30,6 +30,7 @@ export default function WorkflowSelect() {
                 <LargeButton
                     icon={<VscFileBinary/>}
                     title="Batch program execution"
+                    onClick={() => navigate("/batchExecution")}
                 >
                     Execute a program loaded from the file system
                 </LargeButton>
