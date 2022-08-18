@@ -16,7 +16,7 @@ export default function WorkScreen({ title, children }) {
                 { title }
             </header>
             <div className="preview-main">
-                <div className="preview">
+                <div className="work-screen-preview">
                     <DrawPreview/>
                 </div>
                 <div className="work-screen-main">

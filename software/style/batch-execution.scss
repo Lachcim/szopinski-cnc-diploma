@@ -11,4 +11,19 @@
     .command-preview {
         flex: 1;
     }
+    .file-info {
+        display: flex;
+        align-items: center;
+
+        height: 2rem;
+        margin-bottom: 1em;
+
+        .file-name {
+            flex: 1;
+
+            margin: 0;
+            font-size: 12pt;
+            font-weight: 600;
+        }
+    }
 }

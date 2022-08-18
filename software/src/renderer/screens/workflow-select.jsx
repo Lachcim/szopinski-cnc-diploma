@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -6,11 +6,15 @@ import MicroScreen from "renderer/components/micro-screen";
 import LargeButton from "renderer/components/large-button";
 import LinkButton from "renderer/components/link-button";
 import { VscTools, VscFileBinary, VscTerminal, VscEdit } from "react-icons/vsc";
-import { disconnect } from "renderer/cnc/store";
+
+import { clearHistory, disconnect } from "renderer/cnc/store";
 
 export default function WorkflowSelect() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    //clear command history before any screen is loaded
+    useEffect(() => { dispatch(clearHistory()); }, [dispatch]);
 
     const requestDiconnect = () => {
         dispatch(disconnect());

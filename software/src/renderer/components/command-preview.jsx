@@ -9,21 +9,29 @@ export default function CommandPreview({ commands }) {
     const listRef = useRef(null);
 
     //detect new executing node
+    const previewMode = commands.every(command => command.status == "preview");
     const executingIndex = commands.findIndex(command => command.status == "executing");
 
     //scroll new executing node into view
     useLayoutEffect(() => {
-        if (executingIndex != -1) {
+        if (executingIndex != -1 && !previewMode) {
             listRef.current?.querySelector("li.executing")?.scrollIntoView({
                 block: "center"
             });
         }
-    }, [executingIndex]);
+    }, [executingIndex, previewMode]);
 
     //scroll newly typed command into view
     useLayoutEffect(() => {
-        listRef.current?.querySelector("li:last-child")?.scrollIntoView();
-    }, [commands.length]);
+        if (!previewMode)
+            listRef.current?.querySelector("li:last-child")?.scrollIntoView();
+    }, [commands.length, previewMode]);
+
+    //scroll to top when preview mode begins
+    useLayoutEffect(() => {
+        if (previewMode)
+            listRef.current?.querySelector("li")?.scrollIntoView();
+    }, [previewMode]);
 
     return (
         <ul
@@ -40,7 +48,7 @@ export default function CommandPreview({ commands }) {
                             className={`command ${status}`}
                         >
                             <div className="status">
-                                <p>{ status }</p>
+                                <p>{ status != "preview" ? status : "unsent" }</p>
                                 {
                                     command.error &&
                                     <Tooltip align="right">
