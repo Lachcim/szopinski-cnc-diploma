@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import "style/command-input";
 
-import { useDispatch } from "react-redux";
-import { sendCommand } from "renderer/cnc/store";
-
-export default function CommandInput() {
+export default function CommandInput({ onSubmit }) {
     const [value, setValue] = useState("");
-    const dispatch = useDispatch();
 
     const handleKeyDown = event => {
         //handle enter key without shift key
         if (event.key != "Enter" || event.shiftKey)
             return;
 
-        //dispatch all input commands
+        //submit all input commands
         for (const subcommand of value.split(/[\r\n]+/))
-            dispatch(sendCommand(subcommand));
+            onSubmit(subcommand);
 
         //clear input
         setValue("");

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "style/batch-execution";
 
@@ -7,10 +7,18 @@ import Dropzone from "renderer/components/dropzone";
 import CommandPreview from "renderer/components/command-preview";
 
 export default function CommandPrompt() {
+    const [file, setFile] = useState(null);
+
     return (
         <WorkScreen title="Batch execution">
             <div className="batch-execution">
-                <Dropzone/>
+                {
+                    file ? (
+                        "o jezusku"
+                    ) : (
+                        <Dropzone onSubmit={setFile}/>
+                    )
+                }
             </div>
         </WorkScreen>
     );

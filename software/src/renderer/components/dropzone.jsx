@@ -3,7 +3,12 @@ import "style/dropzone";
 
 import { VscFile } from "react-icons/vsc";
 
-export default function Dropzone({ ref }) {
+export default function Dropzone({ onSubmit }) {
+    const handleInputChange = event => {
+        if (event.target.files[0])
+            onSubmit(event.target.files[0]);
+    };
+
     return (
         <label className="dropzone">
             <div className="drop-here">
@@ -12,7 +17,7 @@ export default function Dropzone({ ref }) {
             </div>
             <input
                 type="file"
-                ref={ref}
+                onChange={handleInputChange}
             />
         </label>
     );

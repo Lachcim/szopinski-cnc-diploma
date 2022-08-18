@@ -1,18 +1,12 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useLayoutEffect, useRef } from "react";
 
 import "style/command-preview";
 
-import { clearHistory } from "renderer/cnc/store";
 import Tooltip from "renderer/components/tooltip";
 import { ERROR_MESSAGES } from "renderer/cnc/config.js";
-export default function CommandPreview() {
-    const commands = useSelector(state => state.commandHistory);
-    const dispatch = useDispatch();
-    const listRef = useRef(null);
 
-    //clear command history when the screen is first loaded
-    useEffect(() => { dispatch(clearHistory()); }, [dispatch]);
+export default function CommandPreview({ commands }) {
+    const listRef = useRef(null);
 
     //detect new executing node
     const executingIndex = commands.findIndex(command => command.status == "executing");
