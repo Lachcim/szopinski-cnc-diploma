@@ -23,7 +23,6 @@ export default function CommandPrompt() {
             const fileText = await file?.text();
             const dummyCommands = fileText
                 .split(/[\r\n]+/)
-                .filter(command => command.replace(/\s/, "").length > 0)
                 .map(command => ({
                     text: command,
                     status: "preview",

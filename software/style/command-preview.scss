@@ -10,9 +10,6 @@
 
     .command {
         font-family: "Roboto Mono";
-        white-space: pre;
-        overflow: hidden;
-        text-overflow: ellipsis;
         padding: 0.5rem;
 
         color: #424242;
@@ -21,6 +18,12 @@
 
         &:last-child {
             border-bottom: none;
+        }
+        .command-text {
+            margin: 0;
+            white-space: pre;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .status {
             float: right;

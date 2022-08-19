@@ -12,6 +12,7 @@ import PortSelect from "renderer/screens/port-select";
 import WorkflowSelect from "renderer/screens/workflow-select";
 import BatchExecution from "renderer/screens/batch-execution";
 import CommandPrompt from "renderer/screens/command-prompt";
+import BitmapTracing from "renderer/screens/bitmap-tracing";
 
 import ConnectionErrorModal from "renderer/components/connection-error-modal";
 
@@ -23,6 +24,7 @@ export default function App() {
         { path: "/workflowSelect", element: <WorkflowSelect/> },
         { path: "/batchExecution", element: <BatchExecution/> },
         { path: "/commandPrompt", element: <CommandPrompt/> },
+        { path: "/bitmapTracing", element: <BitmapTracing/> }
     ]);
 
     const [displayedError, setDisplayedError] = useState(null);
@@ -33,11 +35,10 @@ export default function App() {
             setDisplayedError(connection.error);
         }
 
-        const displayedPort = (
-            connection.status != "disconnected" || connection.error
-        ) && connection.port;
-
-        ipcRenderer.send("set-port", displayedPort);
+        if (connection.status != "disconnected" || connection.error)
+            ipcRenderer.send("set-port", connection.port);
+        else
+            ipcRenderer.send("set-port", null);
     }, [connection.status, connection.error, connection.port]);
 
     return (

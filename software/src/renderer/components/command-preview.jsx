@@ -56,7 +56,9 @@ export default function CommandPreview({ commands }) {
                                     </Tooltip>
                                 }
                             </div>
-                            { command.text }
+                            <p className="command-text">
+                                { command.text }
+                            </p>
                         </li>
                     );
                 })

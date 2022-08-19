@@ -48,6 +48,7 @@ export default function WorkflowSelect() {
                 <LargeButton
                     icon={<VscEdit/>}
                     title="Bitmap tracing"
+                    onClick={() => navigate("/bitmapTracing")}
                 >
                     Generate toolpath from a raster image
                 </LargeButton>

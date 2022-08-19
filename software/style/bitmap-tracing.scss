@@ -1,0 +1,11 @@
+.bitmap-tracing {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    .dropzone {
+        flex: 1;
+    }
+}
