@@ -234,8 +234,8 @@ function generateCommands({width, height}, segments) {
             commands.push(`x${x.toFixed(3)} y${y.toFixed(3)}`);
 
             //lower or raise tool
-            if (index == 0) commands.push("z0", "g1");
-            if (index == segment.length - 1) commands.push("g0", "z2");
+            if (index == 0) commands.push("g1 z0");
+            if (index == segment.length - 1) commands.push("g0 z2");
         });
 
     //move back home

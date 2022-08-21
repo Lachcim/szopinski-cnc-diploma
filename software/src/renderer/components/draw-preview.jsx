@@ -31,7 +31,7 @@ function visualizeStroke(command, index) {
             return (
                 <line
                     key={index}
-                    className={active}
+                    className={`rapid ${active}`}
                     vectorEffect="non-scaling-stroke"
                     x1={command.stroke.origin.x / UNITS_PER_MM}
                     y1={command.stroke.origin.y / UNITS_PER_MM}
@@ -48,7 +48,7 @@ function visualizeStroke(command, index) {
         return (
             <React.Fragment key={index}>
                 <line
-                    className={active}
+                    className={`rapid ${active}`}
                     vectorEffect="non-scaling-stroke"
                     x1={command.stroke.origin.x / UNITS_PER_MM}
                     y1={command.stroke.origin.y / UNITS_PER_MM}
@@ -56,7 +56,7 @@ function visualizeStroke(command, index) {
                     y2={(command.stroke.origin.y + diagonalDeltaY) / UNITS_PER_MM}
                 />
                 <line
-                    className={active}
+                    className={`rapid ${active}`}
                     vectorEffect="non-scaling-stroke"
                     x1={(command.stroke.origin.x + diagonalDeltaX) / UNITS_PER_MM}
                     y1={(command.stroke.origin.y + diagonalDeltaY) / UNITS_PER_MM}

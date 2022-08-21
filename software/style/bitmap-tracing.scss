@@ -12,7 +12,7 @@
         .command-preview {
             flex: 1;
         }
-        .file-info {
+        .command-preview-file-info {
             display: flex;
             align-items: center;
 
@@ -20,7 +20,6 @@
             font-weight: 600;
 
             height: 2rem;
-            margin-top: 0;
             margin-bottom: 1em;
         }
         .trace-preview {
@@ -32,12 +31,19 @@
             & > div {
                 text-align: center;
 
+                .file-info {
+                    font-size: 12pt;
+                    font-weight: 600;
+
+                    margin: 0;
+                    margin-bottom: 1rem;
+                }
                 .trace-canvas {
-                    margin: 0 1rem;
+                    margin: 1rem;
                     box-shadow: 0 0 1em #9E9E9E;
                 }
-                .actions {
-                    margin-top: 1rem;
+                .actions p {
+                    margin-bottom: 0;
                 }
             }
         }

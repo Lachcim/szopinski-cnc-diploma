@@ -75,7 +75,7 @@ export default function BitmapTracing() {
         if (executing) {
             return (
                 <>
-                    <p className="file-info">Executing: {fileName}</p>
+                    <p className="command-preview-file-info">Executing: {fileName}</p>
                     <CommandPreview commands={commandHistory}/>
                 </>
             );
@@ -93,11 +93,11 @@ export default function BitmapTracing() {
                         <button onClick={execute}>
                             Execute
                         </button>
-                    </div>
-                    <div className="actions">
-                        <LinkButton onClick={resetFile}>
-                            discard
-                        </LinkButton>
+                        <p>
+                            <LinkButton onClick={resetFile}>
+                                discard
+                            </LinkButton>
+                        </p>
                     </div>
                 </div>
             </div>

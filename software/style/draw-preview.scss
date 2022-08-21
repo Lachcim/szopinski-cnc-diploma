@@ -19,6 +19,9 @@
             stroke-width: 1.5px;
             stroke-linecap: round;
         }
+        .strokes > *.rapid {
+            stroke: rgba(0, 0, 0, 0.122);
+        }
         .strokes > *.active {
             stroke: #0091EA;
         }
