@@ -25,7 +25,7 @@ export default function SlideScreen({ screenKey, children }) {
         }
 
         //stabilize once slid out
-        setAnimation("slide-in");
+        setTimeout(() => setAnimation("slide-in"), 0);
         setStableScreenKey(screenKey);
         setStableChildren(children);
     };

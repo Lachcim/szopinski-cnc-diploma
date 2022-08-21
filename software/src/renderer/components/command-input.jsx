@@ -24,6 +24,7 @@ export default function CommandInput({ onSubmit }) {
         <textarea
             className="command-input"
             value={value}
+            autoFocus
             onChange={event => setValue(event.target.value)}
             onKeyDown={handleKeyDown}
             rows={rowCount}

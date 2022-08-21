@@ -2,28 +2,30 @@
     position: absolute;
     inset: 0;
 
-    display: flex;
-    flex-direction: column;
-
-    .dropzone {
-        flex: 1;
-    }
-    .command-preview {
-        flex: 1;
-    }
-    .file-info {
+    .slide-screen {
         display: flex;
-        align-items: center;
+        flex-direction: column;
 
-        height: 2rem;
-        margin-bottom: 1em;
-
-        .file-name {
+        .dropzone {
             flex: 1;
+        }
+        .command-preview {
+            flex: 1;
+        }
+        .file-info {
+            display: flex;
+            align-items: center;
 
-            margin: 0;
-            font-size: 12pt;
-            font-weight: 600;
+            height: 2rem;
+            margin-bottom: 1em;
+
+            .file-name {
+                flex: 1;
+
+                margin: 0;
+                font-size: 12pt;
+                font-weight: 600;
+            }
         }
     }
 }
