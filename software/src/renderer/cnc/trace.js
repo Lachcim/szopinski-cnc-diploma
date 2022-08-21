@@ -38,8 +38,11 @@ export async function traceBitmap(file) {
             const index = y * (width * 4) + x * 4;
 
             if (data.data[index] == 0)
-                tracePath(data, index, segments);
+                segments.push(discoverSegment(data, index));
         }
+
+    //extend segments to connect with their neighbors
+    extendSegments(data, segments);
 
     context.putImageData(data, 0, 0);
     return canvas;
@@ -57,41 +60,45 @@ function quantize({ data }) {
     }
 }
 
-function tracePath({ data, width }, startIndex, segments) {
+function getNeighborIndices(width, index) {
+    //calculate index of each neighbor of a node
+    const yOffset = width * 4;
+    return [
+        index - yOffset,
+        index + 4,
+        index + yOffset,
+        index - 4,
+        index - yOffset + 4,
+        index + yOffset + 4,
+        index + yOffset - 4,
+        index - yOffset - 4
+    ];
+}
+
+function discoverSegment({ data, width }, startIndex) {
     const segment = [];
     let index = startIndex;
     let preferredDirection = null;
     let distance = 10;
 
-    //mark pixel as segment entry point
+    //mark node as segment entry point
     data[index + 2] = 255;
 
     while (index != null) {
         //include node in current segment
         segment.push(index);
 
-        //calculate index of each neighbor
-        const yOffset = width * 4;
-        const neighborIndices = [
-            index - yOffset,
-            index + 4,
-            index + yOffset,
-            index - 4,
-            index - yOffset + 4,
-            index + yOffset + 4,
-            index + yOffset - 4,
-            index - yOffset - 4
-        ];
-
         //find next node to explore
         let nextNeighbor = null;
         let nextNeighborDirection = null;
+        const neighborIndices = getNeighborIndices(width, index);
+
         neighborIndices.forEach((neighborIndex, direction) => {
             //skip invalid indices
             if (neighborIndex < 0 || neighborIndex >= data.length)
                 return;
 
-            //skip explored neighbors
+            //skip explored and white neighbors
             if (data[neighborIndex] != 0)
                 return;
 
@@ -104,10 +111,88 @@ function tracePath({ data, width }, startIndex, segments) {
 
         //mark node as explored and move to next neighbor
         data[index] = distance;
-        distance += 10; if (distance > 255) distance = 255;
         index = nextNeighbor;
         preferredDirection = nextNeighborDirection;
+
+        //update distance from origin for debug purposes
+        distance += 10;
+        if (distance >= 255)
+            distance = 254;
     }
 
-    segments.push(segment);
+    return segment;
+}
+
+function extendSegments({ data, width }, segments) {
+    for (const segment of segments) {
+        //single-point segment, no extrapolation
+        if (segment.length == 1) {
+            const neighborIndices = getNeighborIndices(width, segment[0]);
+
+            //connect segment to any neighbor
+            for (const index of neighborIndices)
+                if (data[index] != 255) {
+                    segment.push(index);
+
+                    //mark node as extension
+                    data[index] = 0;
+                    data[index + 1] = 255;
+                    break;
+                }
+
+            continue;
+        }
+
+        //linearly extrapolate extension points
+        const extensionPoints = [
+            {
+                index: segment[0],
+                extrapolation: segment[0] - (segment[1] - segment[0]),
+                extend: point => segment.unshift(point)
+            },
+            {
+                index: segment.at(-1),
+                extrapolation: segment.at(-1) - (segment.at(-2) - segment.at(-1)),
+                extend: point => segment.push(point)
+            }
+        ];
+
+        //extend each end of the segment
+        const segmentSet = new Set(segment);
+        for (const extensionPoint of extensionPoints) {
+            let newPoint = null;
+            const neighborIndices = getNeighborIndices(width, extensionPoint.index);
+
+            for (const neighborIndex of neighborIndices) {
+                //skip invalid indices
+                if (neighborIndex < 0 || neighborIndex >= data.length)
+                    continue;
+
+                //skip white neighbors
+                if (data[neighborIndex] == 255)
+                    continue;
+
+                //skip neighbors belonging to the segment, allow loops
+                if (segmentSet.has(neighborIndex) && neighborIndex != segment[0])
+                    continue;
+
+                //find black neighbor, prefer extrapolation
+                if (!newPoint || neighborIndex == extensionPoint.extrapolation) {
+                    newPoint = neighborIndex;
+
+                    if (newPoint == extensionPoint.extrapolation)
+                        break;
+                }
+            }
+
+            //if extending neighbor found, add it to the segment
+            if (newPoint != null) {
+                extensionPoint.extend(newPoint);
+
+                //mark node as extension
+                data[newPoint] = 0;
+                data[newPoint + 1] = 255;
+            }
+        }
+    }
 }
