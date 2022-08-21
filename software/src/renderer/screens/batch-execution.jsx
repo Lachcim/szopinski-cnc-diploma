@@ -23,7 +23,7 @@ export default function CommandPrompt() {
     useEffect(() => {
         if (commandHistory.at(-1)?.status == "done")
             setExecuting(false);
-    }, [commandHistory, commandPreview]);
+    }, [commandHistory]);
 
     //construct command preview when the file is loaded
     const loadFile = async (file) => {
@@ -88,7 +88,6 @@ export default function CommandPrompt() {
                         )
                     }
                 </SlideScreen>
-
             </div>
         </WorkScreen>
     );

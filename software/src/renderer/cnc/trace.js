@@ -41,11 +41,15 @@ export async function traceBitmap(file) {
                 segments.push(discoverSegment(data, index));
         }
 
-    //extend segments to connect with their neighbors
+    //extend segments to connect with their neighbors, reduce to lines
     extendSegments(data, segments);
+    linearize(segments);
 
-    context.putImageData(data, 0, 0);
-    return canvas;
+    //return graphic representation and generated g-code
+    return {
+        imageData: data,
+        commands: generateCommands(data, segments)
+    };
 }
 
 function quantize({ data }) {
@@ -195,4 +199,46 @@ function extendSegments({ data, width }, segments) {
             }
         }
     }
+}
+
+function linearize(segments) {
+    for (const i in segments)
+        segments[i] = segments[i].filter((element, index) => {
+            //initial and final elements always pass
+            if (index == 0 || index == segments.length - 1)
+                return true;
+
+            const prev = segments[i][index - 1];
+            const next = segments[i][index + 1];
+
+            //filter out if part of arithmetic progression
+            return prev - element != element - next;
+        });
+}
+
+function generateCommands({width, height}, segments) {
+    const commands = [];
+    const xScale = WORKSPACE_WIDTH_MM / width;
+    const yScale = WORKSPACE_HEIGHT_MM / height;
+
+    //rapid movement, raise tool
+    commands.push("g0 z00");
+
+    for (const segment of segments)
+        segment.forEach((point, index) => {
+            //translate data index to coordinates
+            const x = (point % (width * 4)) * xScale;
+            const y = Math.floor(point / (width * 4)) * yScale;
+
+            //move to segment point
+            commands.push(`x${x.toFixed(3)} y${y.toFixed(3)}`);
+
+            //lower or raise tool
+            if (index == 0) commands.push("z0");
+            if (index == segment.length - 1) commands.push("z00");
+        });
+
+    //move back home
+    commands.push("x0 y0");
+    return commands;
 }
