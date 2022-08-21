@@ -33,7 +33,6 @@ function resetTimeout() {
 
 function sendCommands() {
     const textEncoder = new TextEncoder();
-    let bufferSpace = store.getState().machineState.bufferSpace;
 
     while (true) {
         //obtain first command in queue
@@ -43,13 +42,12 @@ function sendCommands() {
 
         //no more room in buffer
         const commandBytes = textEncoder.encode(command.text + "\n");
-        if (commandBytes.length > bufferSpace)
+        if (commandBytes.length > store.getState().connection.bufferSpace)
             return;
 
         //write command to serial, update queue
         serialPort.write(commandBytes);
-        bufferSpace -= commandBytes.length;
-        store.dispatch(commandSent());
+        store.dispatch(commandSent(commandBytes.length));
     }
 }
 

@@ -18,7 +18,8 @@ const initialState = {
     connection: {
         port: null,
         status: "disconnected",
-        error: null
+        error: null,
+        bufferSpace: null
     },
     machineState: null,
     commandHistory: []
@@ -34,7 +35,8 @@ export const store = configureStore({
             state.connection = {
                 port: action.payload,
                 status: "connecting",
-                error: null
+                error: null,
+                bufferSpace: null
             };
         });
         builder.addCase(connectionFailed, state => {
@@ -61,14 +63,20 @@ export const store = configureStore({
             //add command to history
             state.commandHistory.push({
                 text: action.payload,
+                bufferSize: null,
                 status: "unsent",
                 stroke: null,
                 error: null
             });
         });
-        builder.addCase(commandSent, state => {
-            //mark first unsent command in queue as sent
-            findFirstCommand(state, "unsent").status = "sent";
+        builder.addCase(commandSent, (state, action) => {
+            //update first unsent command in queue
+            const command = findFirstCommand(state, "unsent");
+            command.status = "sent";
+            command.bufferSize = action.payload;
+
+            //subtract command size from buffer space
+            state.connection.bufferSpace -= command.bufferSize;
         });
         builder.addCase(clearHistory, state => {
             //remove all executed commands from history
@@ -78,12 +86,10 @@ export const store = configureStore({
         });
 
         builder.addCase(positionFeedback, (state, action) => {
-            //initialize machine state if newly connected
+            //initialize state if newly connected
             if (state.connection.status != "connected") {
-                state.machineState = {
-                    busy: false,
-                    bufferSpace: 255
-                };
+                state.machineState = { busy: false };
+                state.connection.bufferSpace = 255;
                 state.commandHistory = [];
             }
 
@@ -101,7 +107,9 @@ export const store = configureStore({
             //mark command as executing
             const command = findFirstCommand(state, "sent");
             command.status = "executing";
+
             state.machineState.busy = true;
+            state.connection.bufferSpace += command.bufferSize;
 
             //error in command, no stroke info
             if (action.payload.error) {

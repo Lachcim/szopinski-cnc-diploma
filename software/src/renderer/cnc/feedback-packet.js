@@ -53,7 +53,6 @@ export default class FeedbackPacket {
         }
         return {
             type: "command",
-            bufferSpace: this.data[1],
             finished: Boolean(this.data[2]),
             error: ERRORS[this.data[3]],
             strokeType: STROKE_TYPES[String.fromCharCode(this.data[4])],

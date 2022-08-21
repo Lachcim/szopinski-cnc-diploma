@@ -227,15 +227,15 @@ function generateCommands({width, height}, segments) {
     for (const segment of segments)
         segment.forEach((point, index) => {
             //translate data index to coordinates
-            const x = (point % (width * 4)) * xScale;
-            const y = Math.floor(point / (width * 4)) * yScale;
+            const x = ((point / 4) % width) * xScale;
+            const y = Math.floor((point / 4) / width) * yScale;
 
             //move to segment point
             commands.push(`x${x.toFixed(3)} y${y.toFixed(3)}`);
 
             //lower or raise tool
-            if (index == 0) commands.push("z0");
-            if (index == segment.length - 1) commands.push("z00");
+            if (index == 0) commands.push("z0", "g1");
+            if (index == segment.length - 1) commands.push("z00", "g0");
         });
 
     //move back home

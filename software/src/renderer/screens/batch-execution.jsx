@@ -35,6 +35,7 @@ export default function CommandPrompt() {
             .filter(command => command.replace(/\s/, "").length != 0)
             .map(command => ({
                 text: command,
+                bufferSize: null,
                 status: "preview",
                 stroke: null,
                 error: null
