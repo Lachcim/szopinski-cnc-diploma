@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#define RX_BUFFER_SIZE 255
+#define RX_BUFFER_SIZE 256
 
 #define USART_SENDING (UCSR0B & (1 << UDRIE0))
 

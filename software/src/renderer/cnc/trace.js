@@ -222,7 +222,7 @@ function generateCommands({width, height}, segments) {
     const yScale = WORKSPACE_HEIGHT_MM / height;
 
     //rapid movement, raise tool
-    commands.push("g0 z00");
+    commands.push("g0 z2");
 
     for (const segment of segments)
         segment.forEach((point, index) => {
@@ -235,7 +235,7 @@ function generateCommands({width, height}, segments) {
 
             //lower or raise tool
             if (index == 0) commands.push("z0", "g1");
-            if (index == segment.length - 1) commands.push("z00", "g0");
+            if (index == segment.length - 1) commands.push("g0", "z2");
         });
 
     //move back home

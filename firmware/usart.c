@@ -5,7 +5,7 @@
 #include <avr/interrupt.h>
 
 static char rx_buf[RX_BUFFER_SIZE];
-static char* receive_iter_in = rx_buf;
+static char* volatile receive_iter_in = rx_buf;
 static const char* receive_iter_out = rx_buf;
 
 static const char* transmit_iter;

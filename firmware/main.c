@@ -32,7 +32,7 @@ int main() {
 
 	//configure motion timer
 	TCCR0A |= (1 << WGM01); //clear timer on compare
-	TCCR0B |= (1 << CS02);	//prescale by 256, f/256 = 78125 Hz max
+	TCCR0B |= (1 << CS02) | (1 << CS00); //prescale by 1024, f/1024 = 19531 Hz max
 
 	//configure feedback timer
 	TCCR1B |= (1 << WGM12) | (1 << CS12) | (1 << CS10); //CTC, prescale by 1024
