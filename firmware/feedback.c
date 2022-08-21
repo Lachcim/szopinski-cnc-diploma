@@ -16,7 +16,6 @@ static struct command_feedback command_feedback = {
 void send_command_started() {
     while (USART_SENDING);
 
-    command_feedback.rx_buf_space = machine_state.rx_buf_space;
     command_feedback.finished = false;
     command_feedback.error = machine_state.error;
     command_feedback.interpretation = motion_state.motion_handler ? machine_state.motion_mode : 'x';

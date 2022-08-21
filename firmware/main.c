@@ -12,7 +12,6 @@
 
 struct machine_state machine_state = {
 	.error = ERROR_NONE,
-	.rx_buf_space = RX_BUFFER_SIZE,
 	.motion_mode = MOTION_RAPID,
 	.distance_mode = DISTANCE_ABSOLUTE,
 	.offset_mode = OFFSET_INCREMENTAL,

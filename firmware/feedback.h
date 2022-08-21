@@ -13,7 +13,6 @@ struct pos_feedback {
 struct command_feedback {
     char header[12];
     char feedback_type;
-    unsigned char rx_buf_space;
     bool finished;
     char error;
     char interpretation;

@@ -1,10 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define DISABLE_XY PD7
+#define DISABLE_XY PD2
 #define DISABLE_XY_PORT PORTD
 #define DISABLE_XY_DIR_PORT DDRD
-#define DISABLE_Z PB0
+#define DISABLE_Z PB1
 #define DISABLE_Z_PORT PORTB
 #define DISABLE_Z_DIR_PORT DDRB
 

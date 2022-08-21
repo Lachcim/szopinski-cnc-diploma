@@ -13,11 +13,10 @@ static size_t transmit_counter;
 
 char usart_receive() {
     //wait for a byte to appear in the buffer
-    while (machine_state.rx_buf_space == RX_BUFFER_SIZE);
+    while (receive_iter_in == receive_iter_out);
 
     //read byte
     char output = *receive_iter_out;
-    machine_state.rx_buf_space++;
 
     //increnent iterator
     receive_iter_out++;
@@ -56,13 +55,8 @@ void usart_send(const void* buf, size_t size) {
 }
 
 ISR(USART_RX_vect) {
-    //no room to receive the data
-    if (machine_state.rx_buf_space == 0)
-        return;
-
     //place data in buffer
     *receive_iter_in = UDR0;
-    machine_state.rx_buf_space--;
 
     //increment receive iterator
     receive_iter_in++;

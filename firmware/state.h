@@ -28,7 +28,6 @@
 
 struct machine_state {
     volatile unsigned char error;
-    volatile unsigned char rx_buf_space;
 
     char motion_mode;
     char distance_mode;
