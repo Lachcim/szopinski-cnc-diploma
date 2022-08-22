@@ -89,7 +89,7 @@ export const store = configureStore({
             //initialize state if newly connected
             if (state.connection.status != "connected") {
                 state.machineState = { busy: false };
-                state.connection.bufferSpace = 250;
+                state.connection.bufferSpace = 254;
                 state.commandHistory = [];
             }
 

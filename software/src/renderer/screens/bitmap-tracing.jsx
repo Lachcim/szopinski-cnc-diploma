@@ -83,22 +83,20 @@ export default function BitmapTracing() {
 
         return (
             <div className="trace-preview">
-                <div>
-                    <p className="file-info">Trace preview: { fileName }</p>
-                    <canvas
-                        className="trace-canvas"
-                        ref={updateCanvas}
-                    />
-                    <div className="actions">
-                        <button onClick={execute}>
-                            Execute
-                        </button>
-                        <p>
-                            <LinkButton onClick={resetFile}>
-                                discard
-                            </LinkButton>
-                        </p>
-                    </div>
+                <p className="file-info">Trace preview: { fileName }</p>
+                <canvas
+                    className="trace-canvas"
+                    ref={updateCanvas}
+                />
+                <div className="actions">
+                    <button onClick={execute}>
+                        Execute
+                    </button>
+                    <p>
+                        <LinkButton onClick={resetFile}>
+                            discard
+                        </LinkButton>
+                    </p>
                 </div>
             </div>
         )

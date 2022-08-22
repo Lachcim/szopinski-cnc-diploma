@@ -28,7 +28,7 @@ function resetTimeout() {
             return;
 
         store.dispatch(disconnect("timedOut"));
-    }, 500);
+    }, 2000);
 }
 
 function sendCommands() {

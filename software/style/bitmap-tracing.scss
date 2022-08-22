@@ -23,28 +23,28 @@
             margin-bottom: 1em;
         }
         .trace-preview {
-            flex: 1;
+            position: absolute;
+            inset: 1rem;
+
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
 
-            & > div {
-                text-align: center;
+            .file-info {
+                font-size: 12pt;
+                font-weight: 600;
 
-                .file-info {
-                    font-size: 12pt;
-                    font-weight: 600;
-
-                    margin: 0;
-                    margin-bottom: 1rem;
-                }
-                .trace-canvas {
-                    margin: 1rem;
-                    box-shadow: 0 0 1em #9E9E9E;
-                }
-                .actions p {
-                    margin-bottom: 0;
-                }
+                margin: 0;
+                margin-bottom: 1rem;
+            }
+            .trace-canvas {
+                margin: 1rem;
+                box-shadow: 0 0 1em #9E9E9E;
+                min-height: 0;
+            }
+            .actions p {
+                margin-bottom: 0;
             }
         }
     }
