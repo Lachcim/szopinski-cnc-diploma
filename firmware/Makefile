@@ -31,3 +31,7 @@ clean:
 .PHONY: upload
 upload: $(BUILD)/firmware.hex
 	$(AVRDUDE) -p m328p -c $(PROG) -V -U flash:w:$(BUILD)/firmware.hex
+
+.PHONY: fuses
+fuses:
+	$(AVRDUDE) -p m328p -c $(PROG) -U lfuse:w:0xD7:m -U hfuse:w:0xD9:m -U efuse:w:0xFF:m

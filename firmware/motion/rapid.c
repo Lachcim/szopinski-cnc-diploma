@@ -20,8 +20,8 @@ void init_rapid(const struct command* command) {
     if (dest.z > motion_state.machine_pos.z) STEP_PORT |= (1 << Z_DIR);
     else STEP_PORT &= ~(1 << Z_DIR);
 
-    //run timer at max rate
-    OCR0A = 0;
+    //divide timer frequency by 3
+    OCR0A = 2;
 
     //update motion state
     motion_state.destination = dest;
