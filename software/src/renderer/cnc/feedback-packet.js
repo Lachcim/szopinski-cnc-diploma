@@ -17,10 +17,10 @@ export default class FeedbackPacket {
 
         //position feedback requires no validation beyond size check
         if (packetType == "p")
-            return this.data.length == 7;
+            return this.data.length == 13;
 
         //command feedback size check
-        if (this.data.length != 22)
+        if (this.data.length != 40)
             return false;
 
         //finished field is a boolean
@@ -40,15 +40,18 @@ export default class FeedbackPacket {
 
     parse() {
         const rawType = String.fromCharCode(this.data[0]);
-        const parseInt16 = (pos) => this.data[pos] | this.data[pos + 1] << 8;
+        const parseInt32 = (pos) => this.data[pos]
+            | this.data[pos + 1] << 8
+            | this.data[pos + 2] << 16
+            | this.data[pos + 3] << 24;
 
         //arrange packet data into flat structure
         if (rawType == "p") {
             return {
                 type: "position",
-                machineX: parseInt16(1),
-                machineY: parseInt16(3),
-                machineZ: parseInt16(5)
+                machineX: parseInt32(1),
+                machineY: parseInt32(5),
+                machineZ: parseInt32(9)
             };
         }
         return {
@@ -56,15 +59,15 @@ export default class FeedbackPacket {
             finished: Boolean(this.data[1]),
             error: ERRORS[this.data[2]],
             strokeType: STROKE_TYPES[String.fromCharCode(this.data[3])],
-            originX: parseInt16(4),
-            originY: parseInt16(6),
-            originZ: parseInt16(8),
-            destinationX: parseInt16(10),
-            destinationY: parseInt16(12),
-            destinationZ: parseInt16(14),
-            centerX: parseInt16(16),
-            centerY: parseInt16(18),
-            centerZ: parseInt16(20)
+            originX: parseInt32(4),
+            originY: parseInt32(8),
+            originZ: parseInt32(12),
+            destinationX: parseInt32(16),
+            destinationY: parseInt32(20),
+            destinationZ: parseInt32(24),
+            centerX: parseInt32(28),
+            centerY: parseInt32(32),
+            centerZ: parseInt32(36)
         };
     }
 }
