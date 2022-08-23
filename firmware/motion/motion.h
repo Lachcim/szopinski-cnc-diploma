@@ -35,10 +35,13 @@ struct motion_state {
 extern struct motion_state motion_state;
 
 void translate(const struct command*, struct cartesian*);
+void translate_offset(const struct command*, long*, long*);
 
 void init_rapid(const struct command*);
 void rapid_handler();
 void init_linear(const struct command*);
 void linear_handler();
+void init_arc(const struct command*, bool);
+void arc_handler();
 
 #endif

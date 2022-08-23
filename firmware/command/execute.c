@@ -23,13 +23,13 @@ void execute_command(const struct command* command) {
     //set XYZ distance mode
     if (command->word_flag & FLAG_G_DISTANCE)
         machine_state.distance_mode =
-            command->g_unit_mode == TO_FIXED(90) ?
+            command->g_distance_mode == TO_FIXED(90) ?
             DISTANCE_ABSOLUTE : DISTANCE_INCREMENTAL;
 
     //set IJK offset mode
     if (command->word_flag & FLAG_G_OFFSET)
         machine_state.offset_mode =
-            command->g_unit_mode == TO_FIXED(90.1) ?
+            command->g_offset_mode == TO_FIXED(90.1) ?
             OFFSET_ABSOLUTE : OFFSET_INCREMENTAL;
 
     //set motion mode
@@ -41,8 +41,11 @@ void execute_command(const struct command* command) {
             case TO_FIXED(1):
                 machine_state.motion_mode = MOTION_LINEAR;
                 break;
-            case MOTION_ARC:
-            case MOTION_ARC_CCW:
+            case TO_FIXED(2):
+                machine_state.motion_mode = MOTION_ARC;
+                break;
+            case TO_FIXED(3):
+                machine_state.motion_mode = MOTION_ARC_CCW;
                 break;
         }
 

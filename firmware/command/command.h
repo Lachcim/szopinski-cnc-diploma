@@ -17,10 +17,9 @@
 #define FLAG_F_WORD ((unsigned int) 0x20)
 #define FLAG_I_WORD ((unsigned int) 0x40)
 #define FLAG_J_WORD ((unsigned int) 0x80)
-#define FLAG_K_WORD ((unsigned int) 0x100)
-#define FLAG_X_WORD ((unsigned int) 0x200)
-#define FLAG_Y_WORD ((unsigned int) 0x400)
-#define FLAG_Z_WORD ((unsigned int) 0x800)
+#define FLAG_X_WORD ((unsigned int) 0x100)
+#define FLAG_Y_WORD ((unsigned int) 0x200)
+#define FLAG_Z_WORD ((unsigned int) 0x400)
 
 struct word {
     char letter;
@@ -38,7 +37,6 @@ struct command {
     long f_word;
     long i_word;
     long j_word;
-    long k_word;
     long x_word;
     long y_word;
     long z_word;

@@ -45,7 +45,7 @@ void parse_command(const char* buffer, struct command* command) {
 
 void assign_word(struct command* command, struct word word) {
     //assign auxillary (non-G, non-M) words
-    const char* aux_letter = "FIJKXYZ";
+    const char* aux_letter = "FIJXYZ";
     unsigned int aux_word_flag = FLAG_F_WORD;
     long* aux_word_pointer = &command->f_word;
 
