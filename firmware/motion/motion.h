@@ -15,13 +15,13 @@
 
 #define MINUTES_PER_TICK TO_FIXED_FRAC(1.0 / (60 * 78125))
 
-#define abs_diff(a, b) ((a > b) ? (a - b) : (b - a))
+#define abs(x) ((x > 0) ? x : -x)
 
 #define ENABLE_MOTION_TIMER TIMSK0 |= (1 << OCIE0A)
 #define DISABLE_MOTION_TIMER TIMSK0 &= ~(1 << OCIE0A)
 
 struct cartesian {
-    unsigned int x, y, z;
+    long x, y, z;
 };
 
 struct motion_state {
