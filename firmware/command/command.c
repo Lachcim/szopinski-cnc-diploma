@@ -6,7 +6,6 @@ struct modal_mapping modal_map[] = {
     {TO_FIXED(1), FLAG_G_MOTION},
     {TO_FIXED(2), FLAG_G_MOTION},
     {TO_FIXED(3), FLAG_G_MOTION},
-    {TO_FIXED(4), 0},
     {TO_FIXED(20), FLAG_G_UNITS},
     {TO_FIXED(21), FLAG_G_UNITS},
     {TO_FIXED(90), FLAG_G_DISTANCE},
@@ -20,7 +19,6 @@ struct modal_mapping modal_map[] = {
 void parse_command(const char* buffer, struct command* command) {
     //mark all words as absent
     command->word_flag = 0;
-    command->non_modal_count = 0;
 
     //parse block delete
     command->deleted = parse_block_delete(&buffer);
@@ -47,7 +45,7 @@ void parse_command(const char* buffer, struct command* command) {
 
 void assign_word(struct command* command, struct word word) {
     //assign auxillary (non-G, non-M) words
-    const char* aux_letter = "FIJKLPRXYZ";
+    const char* aux_letter = "FIJKXYZ";
     unsigned int aux_word_flag = FLAG_F_WORD;
     long* aux_word_pointer = &command->f_word;
 
@@ -101,12 +99,6 @@ void assign_word(struct command* command, struct word word) {
     if (index == -1) {
         machine_state.error = ERROR_UNSUPPORTED;
         return;
-    }
-
-    //add non-modal word
-    if (modal_map[index].flag == 0) {
-        command->g_non_modal[command->non_modal_count] = word.num;
-        command->non_modal_count++;
     }
 
     //can't have two words from the same modal group

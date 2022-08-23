@@ -25,3 +25,7 @@ void translate(const struct command* command, struct cartesian* xyz) {
         if (command->word_flag & FLAG_Z_WORD) xyz->z += motion_state.machine_pos.z;
     }
 }
+
+void translate_offset(const struct command* command, long i, long j, long k) {
+
+}

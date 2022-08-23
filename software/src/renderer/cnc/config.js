@@ -6,7 +6,6 @@ export const UNITS_PER_MM_Z = 1587.30158;
 
 export const ERRORS = [
     null,
-    "blockDelete",
     "malformedInput",
     "unsupportedFeature",
     "duplicateWord",

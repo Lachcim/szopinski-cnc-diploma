@@ -14,11 +14,6 @@ void execute_command(const struct command* command) {
             return;
         }
 
-    //dwell
-    if (has_non_modal(command, TO_FIXED(4))) {
-        //TODO
-    }
-
     //set units
     if (command->word_flag & FLAG_G_UNITS)
         machine_state.unit_mode =
@@ -46,11 +41,8 @@ void execute_command(const struct command* command) {
             case TO_FIXED(1):
                 machine_state.motion_mode = MOTION_LINEAR;
                 break;
-            case TO_FIXED(2):
-                machine_state.motion_mode = MOTION_ARC;
-                break;
-            case TO_FIXED(3):
-                machine_state.motion_mode = MOTION_ARC_CCW;
+            case MOTION_ARC:
+            case MOTION_ARC_CCW:
                 break;
         }
 
@@ -63,19 +55,10 @@ void execute_command(const struct command* command) {
         switch (machine_state.motion_mode) {
             case MOTION_RAPID: init_rapid(command); break;
             case MOTION_LINEAR: init_linear(command); break;
-            case MOTION_ARC:
-            case MOTION_ARC_CCW:
-                break;
+            case MOTION_ARC: init_arc(command, false); break;
+            case MOTION_ARC_CCW: init_arc(command, true); break;
         }
 
         motion_state.origin = motion_state.machine_pos;
     }
-}
-
-bool has_non_modal(const struct command* command, long word) {
-    for (unsigned char i = 0; i < MAX_NON_MODALS; i++)
-        if (command->g_non_modal[i] == word)
-            return true;
-
-    return false;
 }
