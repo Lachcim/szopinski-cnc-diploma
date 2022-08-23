@@ -73,13 +73,10 @@ int main() {
 			continue;
 		}
 
-		//if motion started, wait for it to finish
+		//if command initiated motion, wait for it to finish
 		if (motion_state.motion_handler) {
-			DISABLE_XY_PORT &= ~(1 << DISABLE_XY);
-
-			ENABLE_MOTION_TIMER;
+			TIMSK0 |= (1 << OCIE0A);
 			while (motion_state.motion_handler);
-			DISABLE_MOTION_TIMER;
 		}
 
 		send_command_finished();

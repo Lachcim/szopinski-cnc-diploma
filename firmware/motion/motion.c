@@ -10,6 +10,8 @@ struct motion_state motion_state = {
     .falling_edge = false
 };
 
+unsigned long motorTimeout;
+
 static inline void update_position() {
     //capture state of step port
     char step = STEP_PORT;
@@ -32,9 +34,20 @@ ISR(TIMER0_COMPA_vect) {
         return;
     }
 
-    //if there is no motion handler, do nothing
-    if (!motion_state.motion_handler)
+    //if there is no motion handler, handle motion timeout
+    if (!motion_state.motion_handler) {
+        //set minimum timer speed
+        OCR0A = 255;
+
+        if (motorTimeout == 0) {
+            DISABLE_XY_PORT |= (1 << DISABLE_XY);
+	        DISABLE_Z_PORT |= (1 << DISABLE_Z);
+            TIMSK0 &= ~(1 << OCIE0A);
+        }
+
+        motorTimeout--;
         return;
+    }
 
     //delegate control to motion handler
     motion_state.motion_handler();
@@ -42,4 +55,5 @@ ISR(TIMER0_COMPA_vect) {
     //update machine and motion state
     update_position();
     motion_state.falling_edge = true;
+    motorTimeout = MOTOR_TIMEOUT;
 }

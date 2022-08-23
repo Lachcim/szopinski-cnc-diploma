@@ -6,7 +6,9 @@ void init_rapid(const struct command* command) {
     struct cartesian dest;
     translate(command, &dest);
 
-    //enable Z motor if needed to make the move
+    //enable motors needed to make the move
+    if (dest.x != motion_state.machine_pos.x || dest.y != motion_state.machine_pos.y)
+        DISABLE_XY_PORT &= ~(1 << DISABLE_XY);
     if (dest.z != motion_state.machine_pos.z)
         DISABLE_Z_PORT &= ~(1 << DISABLE_Z);
 

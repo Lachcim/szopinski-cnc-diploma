@@ -1,6 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define F_CPU 20000000UL
+
 #define DISABLE_XY PD2
 #define DISABLE_XY_PORT PORTD
 #define DISABLE_XY_DIR_PORT DDRD
