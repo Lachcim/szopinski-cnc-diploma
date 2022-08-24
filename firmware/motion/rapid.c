@@ -40,9 +40,12 @@ void rapid_handler() {
     if (move_y) STEP_PORT |= (1 << Y_STEP);
     if (move_z) STEP_PORT |= (1 << Z_STEP);
 
+    //disable z motor if not needed anymore
+    if (!move_z)
+        DISABLE_Z_PORT |= (1 << DISABLE_Z);
+
     //reset handler if there are no more steps to make
     if (!move_x && !move_y && !move_z) {
-        DISABLE_Z_PORT |= (1 << DISABLE_Z);
         motion_state.motion_handler = 0;
     }
 }

@@ -11,7 +11,8 @@ export const ERRORS = [
     "duplicateWord",
     "conflictingModal",
     "missingArgument",
-    "invalidArgument"
+    "invalidArgument",
+    "radiusMismatch"
 ];
 
 export const ERROR_MESSAGES = {
@@ -20,7 +21,8 @@ export const ERROR_MESSAGES = {
     duplicateWord: "Duplicate word",
     conflictingModal: "Conflicting words",
     missingArgument: "Missing argument",
-    invalidArgument: "Invalid argument"
+    invalidArgument: "Invalid argument",
+    radiusMismatch: "Radius mismatch"
 };
 
 export const STROKE_TYPES = {

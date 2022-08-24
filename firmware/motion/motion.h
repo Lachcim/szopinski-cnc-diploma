@@ -16,6 +16,8 @@
 #define MOTOR_TIMEOUT (F_CPU / 256 / 256 * 5)
 
 #define abs(x) ((x > 0) ? x : -x)
+#define abs_diff(a, b) ((a > b) ? (a - b) : (b - a))
+#define square(x) ((x) * (x))
 
 struct cartesian {
     long x, y, z;

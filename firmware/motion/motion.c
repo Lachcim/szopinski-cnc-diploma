@@ -10,7 +10,7 @@ struct motion_state motion_state = {
     .falling_edge = false
 };
 
-unsigned int motorTimeout;
+static unsigned int motorTimeout;
 
 static inline void update_position() {
     //capture state of step port

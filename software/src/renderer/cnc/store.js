@@ -132,7 +132,7 @@ export const store = configureStore({
                 }
             };
             if (action.payload.strokeType == "arc" || action.payload.strokeType == "ccwArc") {
-                this.stroke.center = {
+                command.stroke.center = {
                     x: action.payload.centerX,
                     y: action.payload.centerY,
                     z: action.payload.centerZ

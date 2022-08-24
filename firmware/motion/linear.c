@@ -5,8 +5,8 @@
 static long delta_x, delta_y, delta_z; //1.30 signed fixed-point
 static long long acc_x, acc_y, acc_z; //33.30 fixed-point
 
-long* leader;
-long leader_dest;
+static long* leader;
+static long leader_dest;
 
 void init_linear(const struct command* command) {
     //initalize ports as in rapid movement

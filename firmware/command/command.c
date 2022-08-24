@@ -1,7 +1,7 @@
 #include "command.h"
 #include "../state.h"
 
-struct modal_mapping modal_map[] = {
+static struct modal_mapping modal_map[] = {
     {TO_FIXED(0), FLAG_G_MOTION},
     {TO_FIXED(1), FLAG_G_MOTION},
     {TO_FIXED(2), FLAG_G_MOTION},
