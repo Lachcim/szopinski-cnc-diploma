@@ -2,7 +2,6 @@
 #include "../state.h"
 
 static bool ccw, started;
-static long center_x, center_y;
 static unsigned long long radius_sq;
 
 void init_arc(const struct command* command, bool init_ccw) {
@@ -14,15 +13,16 @@ void init_arc(const struct command* command, bool init_ccw) {
     ccw = init_ccw;
     started = false;
 
-    translate_offset(command, &center_x, &center_y);
+    translate_offset(command, &motion_state.center);
     if (machine_state.error != ERROR_NONE) return;
 
     //calculate radius
-    radius_sq = square((long long)dest.x - center_x) + square((long long)dest.y - center_y);
+    radius_sq = square((long long)dest.x - motion_state.center.x)
+        + square((long long)dest.y - motion_state.center.y);
 
     //detect radius mismatch
-    unsigned long long origin_radius_sq = square((long long)motion_state.machine_pos.x - center_x)
-        + square((long long)motion_state.machine_pos.y - center_y);
+    unsigned long long origin_radius_sq = square((long long)motion_state.machine_pos.x - motion_state.center.x)
+        + square((long long)motion_state.machine_pos.y - motion_state.center.y);
 
     unsigned long radius = sqrt_int(radius_sq);
     unsigned long origin_radius = sqrt_int(origin_radius_sq);
@@ -77,8 +77,8 @@ void arc_handler() {
         DISABLE_Z_PORT |= (1 << DISABLE_Z);
 
     //get position relative to center
-    long x_rel = motion_state.machine_pos.x - center_x;
-    long y_rel = motion_state.machine_pos.y - center_y;
+    long x_rel = motion_state.machine_pos.x - motion_state.center.x;
+    long y_rel = motion_state.machine_pos.y - motion_state.center.y;
 
     //get current direction
     char step_x, step_y;
@@ -92,8 +92,8 @@ void arc_handler() {
     }
 
     //calculate radius for each movement option (+x, +x +y, +y)
-    unsigned long long radius_component_x = square((long long)motion_state.machine_pos.x + step_x - center_x);
-    unsigned long long radius_component_y = square((long long)motion_state.machine_pos.y + step_y - center_y);
+    unsigned long long radius_component_x = square((long long)motion_state.machine_pos.x + step_x - motion_state.center.x);
+    unsigned long long radius_component_y = square((long long)motion_state.machine_pos.y + step_y - motion_state.center.y);
     unsigned long long radius_component_non_x = square((long long)x_rel);
     unsigned long long radius_component_non_y = square((long long)y_rel);
 

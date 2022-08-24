@@ -58,13 +58,13 @@ export default function BitmapTracing() {
     const resetFile = () => {
         setFileName(null);
         setTraceResult(null);
-    }
+    };
 
     const getScreenKey = () => {
         if (!traceResult) return "dropzone";
         if (!executing) return "preview";
         return "executing";
-    }
+    };
 
     const getScreen = () => {
         if (!traceResult) {
@@ -75,7 +75,7 @@ export default function BitmapTracing() {
         if (executing) {
             return (
                 <>
-                    <p className="command-preview-file-info">Executing: {fileName}</p>
+                    <p className="command-preview-file-info">Executing: { fileName }</p>
                     <CommandPreview commands={commandHistory}/>
                 </>
             );
@@ -99,8 +99,8 @@ export default function BitmapTracing() {
                     </p>
                 </div>
             </div>
-        )
-    }
+        );
+    };
 
     return (
         <WorkScreen title="Bitmap tracing">

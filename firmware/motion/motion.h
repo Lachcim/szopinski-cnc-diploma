@@ -38,7 +38,7 @@ struct motion_state {
 extern struct motion_state motion_state;
 
 void translate(const struct command*, struct cartesian*);
-void translate_offset(const struct command*, long*, long*);
+void translate_offset(const struct command*, struct cartesian*);
 unsigned long sqrt_int(unsigned long long);
 
 void init_rapid(const struct command*);

@@ -216,7 +216,7 @@ function linearize(segments) {
         });
 }
 
-function generateCommands({width, height}, segments) {
+function generateCommands({ width, height }, segments) {
     const commands = [];
     const xScale = WORKSPACE_WIDTH_MM / width;
     const yScale = WORKSPACE_HEIGHT_MM / height;

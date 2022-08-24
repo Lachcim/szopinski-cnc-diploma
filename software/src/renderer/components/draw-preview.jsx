@@ -80,6 +80,47 @@ function visualizeStroke(command, index) {
                 y2={command.stroke.destination.y / UNITS_PER_MM}
             />
         );
+
+    if (command.stroke.type == "arc" || command.stroke.type == "ccwArc") {
+        const originDiffX = (command.stroke.origin.x - command.stroke.center.x) / UNITS_PER_MM;
+        const originDiffY = (command.stroke.origin.y - command.stroke.center.y) / UNITS_PER_MM;
+        const destDiffX = (command.stroke.destination.x - command.stroke.center.x) / UNITS_PER_MM;
+        const destDiffY = (command.stroke.destination.y - command.stroke.center.y) / UNITS_PER_MM;
+        const radius = Math.sqrt(destDiffX ** 2 + destDiffY ** 2);
+
+        const originAngle = Math.atan2(originDiffY, originDiffX);
+        const destAngle = Math.atan2(destDiffY, destDiffX);
+
+        const getArcAngle = () => {
+            if (command.stroke.type == "arc") {
+                if (originAngle < destAngle) return destAngle - originAngle;
+                else return 2 * Math.PI - originAngle + destAngle;
+            }
+            else {
+                if (originAngle < destAngle) return 2 * Math.PI - destAngle + originAngle;
+                else return originAngle - destAngle;
+            }
+        };
+
+        return (
+            <path
+                key={index}
+                className={active}
+                vectorEffect="non-scaling-stroke"
+                d={`
+                    M
+                    ${command.stroke.origin.x / UNITS_PER_MM}
+                    ${command.stroke.origin.y / UNITS_PER_MM}
+                    A
+                    ${radius} ${radius} 0
+                    ${getArcAngle() > Math.PI ? 1 : 0}
+                    ${command.stroke.type == "arc" ? 1 : 0}
+                    ${command.stroke.destination.x / UNITS_PER_MM}
+                    ${command.stroke.destination.y / UNITS_PER_MM}
+                `}
+            />
+        );
+    }
 }
 
 export default function DrawPreview() {
