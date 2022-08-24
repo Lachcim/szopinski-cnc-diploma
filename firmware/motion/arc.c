@@ -17,8 +17,20 @@ void init_arc(const struct command* command, bool init_ccw) {
     translate_offset(command, &center_x, &center_y);
     if (machine_state.error != ERROR_NONE) return;
 
-    //calculate squared radius
-    radius_sq = square(dest.x - center_x) + square(dest.y - center_y);
+    //calculate radius
+    radius_sq = square((long long)dest.x - center_x) + square((long long)dest.y - center_y);
+
+    //detect radius mismatch
+    unsigned long long origin_radius_sq = square((long long)motion_state.machine_pos.x - center_x)
+        + square((long long)motion_state.machine_pos.y - center_y);
+
+    unsigned long radius = sqrt_int(radius_sq);
+    unsigned long origin_radius = sqrt_int(origin_radius_sq);
+
+    if (abs_diff(radius, origin_radius) > MAX_RADIUS_ERROR) {
+        machine_state.error = ERROR_RADIUS_MISMATCH;
+        return;
+    }
 
     //set z direction
     if (dest.z > motion_state.machine_pos.z) STEP_PORT |= (1 << Z_DIR);
