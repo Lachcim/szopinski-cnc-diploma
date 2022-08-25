@@ -88,6 +88,19 @@ function visualizeStroke(command, index) {
         const destDiffY = (command.stroke.destination.y - command.stroke.center.y) / UNITS_PER_MM;
         const radius = Math.sqrt(destDiffX ** 2 + destDiffY ** 2);
 
+        if (command.stroke.origin.x == command.stroke.destination.x
+            && command.stroke.origin.y == command.stroke.destination.y)
+            return (
+                <circle
+                    key={index}
+                    className={active}
+                    vectorEffect="non-scaling-stroke"
+                    cx={command.stroke.center.x / UNITS_PER_MM}
+                    cy={command.stroke.center.y / UNITS_PER_MM}
+                    r={radius}
+                />
+            );
+
         const originAngle = Math.atan2(originDiffY, originDiffX);
         const destAngle = Math.atan2(destDiffY, destDiffX);
 
