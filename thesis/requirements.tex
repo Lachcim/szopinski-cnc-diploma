@@ -1,2 +1,92 @@
 \clearpage
-\section{Project requirements}
+\section{CNC machine design}
+
+\subsection{Project requirements}
+
+The goal of this project is to construct a general-purpose CNC machine capable
+of applying a variety of drawing instruments to a flat surface. This involves
+the capability to freely move a tool in three-dimensional space, with a large
+range of motion in the horizontal plane and a relatively restricted range of
+motion in the vertical axis. It must be compatible with common workpiece
+formats, including A4 paper. It must have the ability to use interchangeable
+tools of different shapes and sizes.
+
+Because the machine does not face much physical resistance during normal
+operation, there is no need to monitor the tool position - it may be assumed
+that it is in accordance with the executed instructions. As such, an open-loop
+control scheme may be implemented. Similarly, because the machine is not used
+to remove material from the workpiece, it may operate at a pre-defined constant
+feed rate, low enough for open-loop control.
+
+To achieve partial compatibility with other solutions available on the market,
+it must use G-code as the input instruction format, and it must implement a
+large enough subset of G-code to implement basic functionality. This includes:
+\begin{enumerate}
+    \item Three types of motion: rapid, linear and arc
+    \item Absolute and incremental coordinate mode
+    \item Metric and Imperial units of measurement
+    \item Commands and syntax related to feed rate, even though the
+    functionality itself is not implemented
+\end{enumerate}
+
+The machine uses a serial port to communicate with its controlling computer.
+Because modern personal computers do not come with a physical RS-232 serial
+port, the connection must be established over USB, using generic drivers to
+create a virtual serial port.
+
+To enhance user experience, the machine must provide feedback in response to
+input. The feedback includes:
+\begin{enumerate}
+    \item The current physical coordinates of the work tool, sent periodically
+    \item A message sent whenever a commands starts or finishes executing
+    \item An error code describing any syntax or semantic errors in the command
+    \item An interpretation of the currently executing command, including:
+        \begin{itemize}
+            \item The type of movement it triggered
+            \item The source and destination of the movement
+            \item The center of the arc, in the case of arcs
+        \end{itemize}
+\end{enumerate}
+
+Table~\ref{table:projectRequirements} contains a summary of the requirements
+of the CNC machine.
+
+\begin{table}[ht]
+    \begin{center}
+        \begin{tabular}{ |l|c|c| }
+            \hline
+            Parameter & Value & Unit \\
+            \hline
+            Axes of motion & 3 & - \\
+            Controller type & Open-loop & - \\
+            Input method & G-code over serial port & - \\
+            Connection interface & USB & - \\
+            Supported motion types & Rapid, linear, arc & - \\
+            X axis travel & 200 & mm \\
+            Y axis travel & 200 & mm \\
+            Z axis travel & 5 & mm \\
+            Max tool diameter & 18 & mm \\
+            Max workpiece width & 297 & mm \\
+            \hline
+        \end{tabular}
+        \caption{Project requirements of the CNC machine}
+        \label{table:projectRequirements}
+    \end{center}
+\end{table}
+
+The machine must be user-friendly. It must come with control software which
+guides the user through common use-case scenarios. Those scenarios are:
+\begin{enumerate}
+    \item Batch execution, where the user specifies a file containing
+    instructions to be executed in sequence
+    \item Command prompt, where the user may type commands by hand and observe
+    their effects
+    \item Bitmap tracing, where the user submits a raster image to be converted
+    into a vector approximation, which can then be drawn by the machine
+\end{enumerate}
+
+The software must allow the user to select which serial port to use. It detects
+the presence of the CNC machine on the other end informs the user if a
+connection problem occurs. During program execution, the user may view each
+command, see its execution status, its associated error message, and a graphical
+representation of the motion it initiated.
