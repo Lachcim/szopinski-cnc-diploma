@@ -296,13 +296,13 @@
             na~kierunku \@kierunek \\
         \fi
         \ifnum \pdf@strcmp{\@lang}{en} = 0
-            in~the~field~of~study \@kierunek \\
+            in \@kierunek, \\
         \fi
         \ifnum \pdf@strcmp{\@lang}{pl} = 0
             w~specjalności \@specjalnosc \\
         \fi
         \ifnum \pdf@strcmp{\@lang}{en} = 0
-            and~specialisation \@specjalnosc \\
+            \@specjalnosc \\
         \fi
         \vspace{4em}
         \large \@title \\
@@ -313,14 +313,14 @@
             Numer~albumu \@album \\
         \fi
         \ifnum \pdf@strcmp{\@lang}{en} = 0
-            student record book number \@album \\
+            Student record book number \@album \\
         \fi
         \vspace{4em}
         \ifnum \pdf@strcmp{\@lang}{pl} = 0
             promotor \\
         \fi
         \ifnum \pdf@strcmp{\@lang}{en} = 0
-            thesis supervisor \\
+            Thesis supervisor \\
         \fi
         \@promotor \\
         \vfill

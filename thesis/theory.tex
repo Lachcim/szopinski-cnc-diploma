@@ -1,0 +1,75 @@
+\clearpage
+\section{Theoretical background}
+
+\subsection{CNC machine design}
+
+The concept of numerical control of machining tools is not new; the first
+solutions involving punched cards date back to the 1950s. Since that time,
+various manufacturers have implemented their own standards for communicating
+with machines, the most prominent of which is a data format named G-code.
+Originally developed by Gerber Scientific, the format was adopted by many
+companies and has become a de-facto industry standard.
+
+In its original form, G-code lacked the ability to read, manipulate and store
+data, which made it more akin to a vector graphics description format than to a
+programming language. Basic G-code instructions modify the state of the machine
+and instruct it to move to a specified position. The machine state impacts the
+interpretation of commands and the interpolation between requested positions.
+
+The basic set of instructions enables the operator to (including but not
+limited to):
+\begin{itemize}
+    \item Move in a straight line, draw an arc, or move the tool rapidly
+    \item Adjust the movement speed
+    \item Switch between absolute and relative positioning
+    \item Change the origin of the coordinate system
+    \item Switch between metric and US customary units
+\end{itemize}
+Various manufacturers, however, have opted to implement their own versions of
+G-code. This includes differences in instruction encoding, interpretation, and
+parsing. Only a small subset of instructions and syntaxes may be expected to
+work on all machines universally.
+
+Due to G-code's origin as a vector data format rather than a communication
+protocol, there is also no standarized way to obtain any sort of feedback from
+the machine to its controlling computer. To establish two-way communication
+with the machine, manufacturers employ proprietary solutions.
+
+\subsection{GUI application design}
+
+Modern developments in user interface design show a tendency to step away from
+native user controls in favor of web technologies. Desktop and mobile
+applications present their interface as an embedded browser window where
+controls are implemented using HTML, CSS and JavaScript. This improves user
+experience by presenting the user with a modern and familiar UI.
+
+A commonly used software framework for creating this kind of applications is
+Electron. It consists of three crucial components:
+\begin{itemize}
+    \item A standalone JavaScript engine, Node.js. This enables JavaScript to
+    be executed outside of a browser context, thanks to which the entire
+    application may be written in JavaScript.
+    \item JavaScript bindings for native OS functionality, such as interacting
+    with the window system or capturing the screen contents. Node.js, being a
+    web server by design, lacks this functionality.
+    \item A browser context in which the UI code is executed and rendered.
+\end{itemize}
+
+When building complex UI applications, it is important to maintain and follow
+a strict set of rules regarding data flow and update logic. Between managing
+the global program state, handling user interactions and rendering interface
+updates, it may be difficult to write readable and maintainable code. A popular
+solution to this problem is the React framework, which facilitates the
+development of UI applications by introducing the following design principles:
+\begin{itemize}
+    \item The UI is split into components, each of which is only responsible
+    for rendering a small part of the application. Components maintain the
+    logical state and handle the side effects of whatever abstraction they
+    represent.
+    \item Components follow a declarative convention where their rendered
+    output is determined solely by their state. This removes the need for
+    update logic.
+    \item Components can only directly influence components directly contained
+    within them. This creates an unidirectional data flow that is easy to manage
+    and maintain.
+\end{itemize}

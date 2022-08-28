@@ -24,7 +24,7 @@
 }
 \author{Michał Szopiński}
 \album{300182}
-\promotor{mgr inż. Maciej Urbański}
+\promotor{Maciej Urbański, MSc Eng.}
 \date{2022}
 \maketitle
 
@@ -40,46 +40,20 @@
 \pagestyle{headings}
 
 \input{introduction}
-
-\clearpage
-\section{Hardware}
-\subsection{Analysis}
-\subsection{Mechanics overview}
-\subsection{Electronics overview}
-\subsection{Detailed description}
-
-\section{Firmware}
-\subsection{Analysis}
-\subsection{Overview}
-\subsection{Detailed description}
-
-\section{Software}
-\subsection{Analysis}
-\subsection{Overview}
-\subsection{Detailed description}
-
-\section{Final product}
-\subsection{CNC capabilities}
-\subsection{User interface}
-
-\section{Summary}
+\input{theory}
+\input{analysis}
+\input{requirements}
+\input{hardware}
+\input{firmware}
+\input{software}
+\input{tests}
+\input{summary}
 
 \cleardoublepage
 \printbibliography
 \clearpage
 
-\acronymlist
-
-% acronym list \acronym{acronym}{definition}
-
-\vspace{0.8cm}
-
 \pagestyle{plain}
-
-\listoffigurestoc
-\vspace{1cm}
-\listoftablestoc
-\vspace{1cm}
 \listofappendicestoc
 
 \captionsetup[figure]{list=no}
