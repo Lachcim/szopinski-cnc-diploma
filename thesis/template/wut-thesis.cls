@@ -49,6 +49,7 @@
 \RequirePackage{listings}      % Code listings
 \RequirePackage{longtable}     % Multi-page tables
 \RequirePackage{multirow}      % Advanced table cells
+\RequirePackage{rotating}
 \RequirePackage{setspace}      % Set space between lines
 \RequirePackage{scrextend}     % Allows \addmargin environment
 \RequirePackage{tablefootnote} % Table footnotes
