@@ -9,19 +9,17 @@ USBasp.
 Conceptually, the firmware may be divided into several sections which interact
 with each other at various stages of the program execution. These are:
 \begin{itemize}
-    \item Main section, which contains the entry point of the program and the
-    main loop
-    \item USART section, which contains wrappers around the serial communication
-    interface exposed by the microcontroller
-    \item Command section, which parses, validates and executes commands
-    \item Motion section, which contains code for calculating curves and
-    controlling motors
-    \item Feedback section, which sends data to the controlling computer
+    \item The entry point -- configures the device and runs the main loop
+    \item USART communication -- contains wrappers around the serial
+    communication interface exposed by the microcontroller
+    \item Command processing -- parses, validates and executes commands
+    \item Motion -- code for calculating curves and controlling motors
+    \item Feedback -- sends data to the controlling computer
 \end{itemize}
-All sections have access to a global object referred to as the \textit{machine
-state}. It represents the current configuration of the CNC machine as a result
-of the commands it received. It also contains the global error code, which is
-used to implement a system of exceptions.
+All sections access a global object referred to as the \textit{machine state}.
+It represents the current configuration of the CNC machine as a result of the
+commands it received. It also contains the global error code, which is used to
+implement a system of exceptions.
 
 \begin{figure}[ht]
     \begin{center}
@@ -47,7 +45,7 @@ With the above in mind, the main loop serves several purposes:
     \item It clears the global error code once feedback is sent
 \end{enumerate}
 
-Upon power-up, before the main loop is entered, configuration code is executed.
+On power-up, before the main loop is entered, configuration code is executed.
 This includes setting I/O pin directions, configuring timers and USART, and
 enabling interrupts.
 
@@ -61,5 +59,67 @@ enabling interrupts.
     \end{center}
 \end{figure}
 
-Receiving data is a time-sensitive operation. A byte must be collected before
-the next one is received, otherwise it is lost.
+To be able to process commands independently of when they are received, all
+incoming data is placed in a buffer. It is a circular buffer which operates as a
+FIFO queue. Incoming bytes are placed in the \texttt{receive\_iter\_in}
+iterator, and the iterator is incremented. At a later time, they may be
+retrieved in insertion order by reading from \texttt{receive\_iter\_out} and
+incrementing it. If both iterators point to the same address, the buffer is
+empty.
+
+Commands are received by repeatedly reading from the receive buffer until a
+newline character is encountered. If the buffer is empty, execution is stalled
+until new data arrives. Collected characters are placed in a non-circular buffer
+and terminated with a null byte.
+
+Data transmission is done by calling a subroutine which takes a pointer to a
+transmit buffer and the number of bytes to transmit. These are saved to a
+statically allocated variable. Whenever the microcontroller is ready to send
+the next byte, the pointer is dereferenced and incremented, and the length
+counter is decremented. Transmission ends when the counter reaches zero.
+
+To send feedback, the program statically allocates structures whose members
+carry the feedback data. These structures are populated with data from the
+program's global state and passed to the USART transmit subroutine, which sends
+their binary representation to the control software.
+
+\subsubsection{Command processing}
+
+The command processor is a combined lexer-parser that populates a structure used
+to describe a command. The production of a G-code command, in extended
+Backus-Naur form, is as follows \cite{gcode}:
+\footnotesize
+\begin{verbatim}command ::= [block-delete], [line-number], {word | parameter-setting | comment};
+word ::= letter, number;\end{verbatim}
+\normalsize
+(Remaining productions skipped for brevity.)
+
+The parser attempts to parse each sub-production until the end of the buffer is
+reached. It simultaneously checks for syntax errors and semantic errors. These
+include:
+\begin{itemize}
+    \item Malformed input (failure to parse the root production)
+    \item Unsupported syntax (parameter settings are not supported)
+    \item Unsupported word letters (only letters from the set \texttt{G FIJXYZ}
+    are supported)
+    \item Unsupported G-word numbers (only a subset of G-code is implemented)
+    \item Conflicting modal words (can't use rapid and arc movement at the same
+    time)
+    \item Duplicate non-modal words (can't have two X words)
+\end{itemize}
+The result of a successful parse is a structure describing which words were
+present in the input and specifying their value. If there were no errors, this
+structure is then passed to a subroutine responsible for command execution.
+
+Execution is performed in a standarized order, guaranteeing consistent behavior
+across machines. First, the machine state is updated to match the command. This
+means setting the motion mode and other modes. Then, if the presence of the
+words X, Y, or Z is detected, motion is initiated.
+
+It is at this point that control is returned to the main loop, which generates
+a feedback message about the command and waits for the motion to finish. The
+loop then reiterates and another command is processed.
+
+\subsubsection{Rapid and linear motion}
+
+\subsubsection{Arc motion}
