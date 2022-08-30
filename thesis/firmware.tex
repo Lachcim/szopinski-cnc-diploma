@@ -9,12 +9,13 @@ USBasp.
 Conceptually, the firmware may be divided into several sections which interact
 with each other at various stages of the program execution. These are:
 \begin{itemize}
-    \item The entry point -- configures the device and runs the main loop
-    \item USART communication -- contains wrappers around the serial
+    \item The entry point, which configures the device and runs the main loop
+    \item USART communication, which implements wrappers around the serial
     communication interface exposed by the microcontroller
-    \item Command processing -- parses, validates and executes commands
-    \item Motion -- code for calculating curves and controlling motors
-    \item Feedback -- sends data to the controlling computer
+    \item Command processing, which parses, validates and executes commands
+    \item Motion handling, which contains code for calculating curves and
+    controlling motors
+    \item Feedback, which sends data to the controlling computer
 \end{itemize}
 All sections access a global object referred to as the \textit{machine state}.
 It represents the current configuration of the CNC machine as a result of the
@@ -122,4 +123,96 @@ loop then reiterates and another command is processed.
 
 \subsubsection{Rapid and linear motion}
 
+For each kind of motion implemented in the program, there are two subroutines:
+the initializing subroutine and the handling subroutine. The former performs
+initial calculations necessary to make the move and configures the device as
+needed. The latter calculates the next step to be taken by the motors and runs
+repeatedly at a frequency of several kilohertz. Motion ends when the handling
+subroutine detects that it has reached its destination and resets the global
+motion handler pointer to null.
+
+\begin{figure}[ht]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.76\textwidth]{rapid}
+        \caption{Rapid motion.}
+        \label{rapid}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{linear}
+        \caption{Linear motion.}
+        \label{linear}
+    \end{minipage}
+\end{figure}
+
+Rapid motion starts by configuring the direction of each of the motors. It then
+moves the motor for each axis on every step until its respective destination
+is reached. This allows it to move at $\sqrt{2}$ times the maximum speed of
+a single motor when moving diagonally (see figure~\ref{rapid}).
+
+Linear motion aims to limit the rate of movement for two of the three axes, so
+that the destination point is reached by all axes at the same time. It does so
+by calculating a fractional delta for each axis as such:
+\begin{align*}
+    \delta_{x} = \frac{\Delta_{x}}{max(\Delta_{x}, \Delta_{y}, \Delta_{z})} &&
+    \delta_{y} = \frac{\Delta_{y}}{max(\Delta_{x}, \Delta_{y}, \Delta_{z})} &&
+    \delta_{z} = \frac{\Delta_{z}}{max(\Delta_{x}, \Delta_{y}, \Delta_{z})}
+\end{align*}
+where $\Delta_n$ refers to the offset between the origin and the destination for
+each axis.
+
+On each step, the fractional delta is added to an accumulator which stores the
+current position as a fixed-point non-integer number. Whenever the integer value
+of the accumulator changes, its corresponding motor is made to move. As a
+result, a straight line is plotted from the origin to the destination
+(figure~\ref{linear}).
+
 \subsubsection{Arc motion}
+
+In G-code, arcs are described by specifying the arc center, the destination
+point, and an implicit origin point. Not all combinations are valid; the origin
+and the destination must be at a similar enough distance from the center,
+otherwise an error is raised.
+
+When the motion is initialized, the square of the distance between the center
+and the destinaton becomes the \textit{reference radius}. The drawing algorithm
+attempts to minimize the difference between the current measured radius and the
+reference radius, while at the same time moving forward. This causes it to move
+in a circular path.
+
+On each step, the current direction of travel is calculated. For clockwise arcs,
+this is:
+\begin{align*}
+    \delta_x = \begin{cases}
+        1 & \text{if } (x \geq 0 \land y < 0) \lor (x < 0 \land y \leq 0)\\
+        -1 & \text{otherwise}
+    \end{cases}
+    &&
+    \delta_y = \begin{cases}
+        1 & \text{if } (x \geq 0 \land y < 0) \lor (x > 0 \land y \geq 0)\\
+        -1 & \text{otherwise}
+    \end{cases}
+\end{align*}
+where $x$ and $y$ are coordinates relative to the arc center. Once this is done,
+there are three possible moves to be considered. The algorithm choses the one
+whose radius is the closest to the reference radius (see figure~\ref{arc}).
+\begin{align*}
+    R^2_x &= (x + \delta_x)^2 + y^2 \\
+    R^2_{xy} &= (x + \delta_x)^2 + (y + \delta_y)^2 \\
+    R^2_y &= x^2 + (y + \delta_y)^2
+\end{align*}
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=0.3\linewidth]{arc}
+        \caption{Possible steps when drawing an arc.}
+        \label{arc}
+    \end{center}
+\end{figure}
+
+The algorithm terminates once the destination point has been reached. This is
+always possible because the reference radius is measured against the
+destination, not the origin. Also note that this algorithm is able to recover
+from a situation where the starting point is not strictly in the arc.
