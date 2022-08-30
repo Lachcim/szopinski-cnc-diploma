@@ -184,17 +184,17 @@ in a circular path.
 
 On each step, the current direction of travel is calculated. For clockwise arcs,
 this is:
-\begin{align*}
+\begin{gather*}
     \delta_x = \begin{cases}
         1 & \text{if } (x \geq 0 \land y < 0) \lor (x < 0 \land y \leq 0)\\
         -1 & \text{otherwise}
     \end{cases}
-    &&
+    \\
     \delta_y = \begin{cases}
         1 & \text{if } (x \geq 0 \land y < 0) \lor (x > 0 \land y \geq 0)\\
         -1 & \text{otherwise}
     \end{cases}
-\end{align*}
+\end{gather*}
 where $x$ and $y$ are coordinates relative to the arc center. Once this is done,
 there are three possible moves to be considered. The algorithm choses the one
 whose radius is the closest to the reference radius (see figure~\ref{arc}).
@@ -206,7 +206,7 @@ whose radius is the closest to the reference radius (see figure~\ref{arc}).
 
 \begin{figure}[ht]
     \begin{center}
-        \includegraphics[width=0.3\linewidth]{arc}
+        \includegraphics[width=0.5\linewidth]{arc}
         \caption{Possible steps when drawing an arc.}
         \label{arc}
     \end{center}
