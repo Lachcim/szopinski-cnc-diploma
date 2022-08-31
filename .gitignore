@@ -23,6 +23,7 @@ yarn.lock
 *.fdb_latexmk
 *.run.xml
 *.synctex.gz
+*.synctex(busy)
 
 szopinski-cnc-diploma.pdf
 
