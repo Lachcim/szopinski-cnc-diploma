@@ -242,7 +242,7 @@ rendered and the calculation ends. Otherwise, the remaining arc parameters are
 computed.
 
 $x$-axis rotation $\theta$ is irrelevant for circles, therefore it is always
-assigned a value of $0$. The sweep flag $f_S$ is conceptually equvialent to
+assigned a value of $0$. The sweep flag $f_S$ is conceptually equivalent to
 drawing the arc in a clockwise or a counter\-clockwise manner, and so its value
 is inferred from the motion type.
 \begin{align*}
@@ -354,12 +354,12 @@ possible, given certain constraints (figure~\ref{segments}).
 \end{figure}
 
 On every iteration of the segment exploration algorithm, neighbors of the most
-recently added pixel are inspected. If there are no neighbors elegible for
+recently added pixel are inspected. If there are no neighbors eligible for
 inclusion in the segment, the segment is terminated and the algorithm returns
 to the scanning phase. This ensures that all pixels are eventually included in
 a segment.
 
-If there are multiple neighbors elegible for inclusion in a segment, the
+If there are multiple neighbors eligible for inclusion in a segment, the
 algorithm gives preference to the one which maintains the current direction of
 travel (figure~\ref{straight}). This reduces the amount of generated commands
 by allowing multiple points to be covered by a single line.
@@ -377,7 +377,7 @@ by allowing multiple points to be covered by a single line.
 Segments constructed in the described manner contain interpolations between
 their constituent points, but not between other segments. To enable the
 construction of more complex shapes, segments that neighbor other segments are
-extended to maintain continuity. Segments whose terminal points neigbor each
+extended to maintain continuity. Segments whose terminal points neighbor each
 other are extended to form loops.
 
 Before segments are translated to G-code, an optimization is performed where

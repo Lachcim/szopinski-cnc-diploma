@@ -1,6 +1,6 @@
 \subsection{Firmware}
 
-AVR is among the many architectures suported by the \texttt{gcc} compiler,
+AVR is among the many architectures supported by the \texttt{gcc} compiler,
 which makes it possible to write microcontroller software in C. The compiled
 binary may be flashed to the chip using \texttt{avrdude}, a generic
 on-chip memory uploader for AVR, paired with a hardware programmer such as
@@ -110,7 +110,7 @@ The result of a successful parse is a structure describing which words were
 present in the input and specifying their value. If there were no errors, this
 structure is then passed to a subroutine responsible for command execution.
 
-Execution is performed in a standarized order, guaranteeing consistent behavior
+Execution is performed in a standardized order, guaranteeing consistent behavior
 across machines. First, the machine state is updated to match the command. This
 means setting the motion mode and other modes. Then, if the presence of the
 words X, Y, or Z is detected, motion is initiated.
@@ -175,7 +175,7 @@ and the destination must be at a similar enough distance from the center,
 otherwise an error is raised.
 
 When the motion is initialized, the square of the distance between the center
-and the destinaton becomes the \textit{reference radius}. The drawing algorithm
+and the destination becomes the \textit{reference radius}. The drawing algorithm
 attempts to minimize the difference between the current measured radius and the
 reference radius, while at the same time moving forward. This causes it to move
 in a circular path.
