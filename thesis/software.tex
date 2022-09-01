@@ -308,12 +308,13 @@ Raster images contain no information about the curves they depict, however, a
 vector approximation of an image may be constructed by linearly interpolating
 between each marked pixel. A continuous sequence of points that may be drawn
 without raising the tool is referred to as a \textit{segment}. Bitmap tracing
-is implemented in four steps:
+is implemented in five steps:
 \begin{enumerate}
     \item Bitmap normalization, where the bitmap is reduced to a basic form
     \item Segment discovery, where continuous sequences of points are found
     \item Segment extension, where neighboring segments are connected
     \item Linear reduction, where unnecessary segment points are removed
+    \item G-code generation, where segments are translated into commands
 \end{enumerate}
 
 Tracing begins by normalizing the input bitmap's dimensions and pixel data. The
@@ -346,7 +347,7 @@ possible, given certain constraints (figure~\ref{segments}).
 
 \begin{figure}[ht]
     \begin{center}
-        \includegraphics[width=0.75\linewidth]{segments}
+        \includegraphics[width=0.6\linewidth]{segments}
         \caption{Flowchart of segment discovery and exploration.}
         \label{segments}
     \end{center}
@@ -355,7 +356,41 @@ possible, given certain constraints (figure~\ref{segments}).
 On every iteration of the segment exploration algorithm, neighbors of the most
 recently added pixel are inspected. If there are no neighbors elegible for
 inclusion in the segment, the segment is terminated and the algorithm returns
-to the scanning phase. If there are multiple neighbors elegible for inclusion in
-the segment, the algorithm gives preference to the one which maintains the
-current direction of travel. This reduces the amount of generated commands by
-allowing multiple points to be covered by a single line.
+to the scanning phase. This ensures that all pixels are eventually included in
+a segment.
+
+If there are multiple neighbors elegible for inclusion in a segment, the
+algorithm gives preference to the one which maintains the current direction of
+travel (figure~\ref{straight}). This reduces the amount of generated commands
+by allowing multiple points to be covered by a single line.
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=0.25\linewidth]{straightpreview}
+        \caption{Trace preview of a solid black square. Blue denotes segment
+        origin, black-to-red gradient denotes segment progression.}
+        \label{straight}
+    \end{center}
+\end{figure}
+
+
+Segments constructed in the described manner contain interpolations between
+their constituent points, but not between other segments. To enable the
+construction of more complex shapes, segments that neighbor other segments are
+extended to maintain continuity. Segments whose terminal points neigbor each
+other are extended to form loops.
+
+Before segments are translated to G-code, an optimization is performed where
+linear sequences are reduced to their terminal points. For each point of each
+segment, if the following holds:
+\begin{align*}
+    \big(x - x_{prev} = x_{next} - x\big)
+    \land
+    \big(y - y_{prev} = y_{next} - y\big)
+\end{align*}
+then the point is eliminated.
+
+Finally, G-code commands are generated from each segment. The machine makes a
+rapid move to the initial point of a segment, lowers the tool, and then linearly
+moves from one point to another. Once all segments have been drawn, the machine
+returns to the coordinate origin.
