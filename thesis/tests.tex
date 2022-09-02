@@ -208,10 +208,89 @@ automatically so that the currently executing command is always in the middle.
 
 \begin{figure}[ht]
     \begin{center}
-        \includegraphics[width=0.6\textwidth]{commandlist}
+        \includegraphics[width=0.5\textwidth]{commandlist}
         \caption{Command list showing commands at different lifecycle stages.}
         \label{commandlist}
     \end{center}
 \end{figure}
 
+Command preview has been verified to correctly display motion interpretations
+by preparing a sequence of commands generating rapid movement, linear movement,
+circles and arcs (figure~\ref{commandpreview}).
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=0.2\textwidth]{commandpreview}
+        \caption{Command preview showing different types of curves.}
+        \label{commandpreview}
+    \end{center}
+\end{figure}
+
 \subsubsection{Bitmap tracing}
+
+To verify that the bitmap feature is behaving correctly, a test bitmap was
+prepared (figure~\ref{heloworin}) which contains the following features:
+\begin{itemize}
+    \item Simple isolated segments
+    \item Neighboring segments
+    \item Loops
+    \item Intersecting diagonal lines
+    \item Light-colored areas and transparent areas
+    \item Sigle-pixel segments, isolated and connected
+    \item Filled-in areas
+    \item Freehand shapes
+\end{itemize}
+Figure~\ref{helowor} shows the result of the trace. Simple segments (the
+\texttt{L} shape) are drawn correctly. Segments which neighbor other segments
+(\texttt{H}, \texttt{E}) are extended to preserve continuity. Loops are closed
+(\texttt{O}). Light and transparent areas are ignored. Linear segments are
+reduced to a single command.
+
+Examining the filled-in area reveals the algorithm's tendency to travel in a
+straight path. The area is entered through the top-left corner and a long broken
+line is drawn. Later, the remaining area is revisited and a maze-like structure
+is created. Figure~\ref{helowortrace} shows the path taken by the algorithm.
+
+\begin{figure}[ht]
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{heloworin}
+        \caption{Test bitmap for tracing.}
+        \label{heloworin}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.9\textwidth]{helowor}
+        \caption{Result of the trace.}
+        \label{helowor}
+    \end{minipage}
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{helowortrace}
+        \caption{Trace preview.}
+        \label{helowortrace}
+    \end{minipage}
+\end{figure}
+
+To test the machine's capabilities to the fullest extent, a large bitmap
+consisting mostly of filled-in areas was supplied to the bitmap tracing
+algorithm. The resulting toolpath is shown in figure~\ref{kicad}.
+
+Maze-like structures are can be seen throughout the picture. As the drawing
+progresses, imperfections start to appear - the tip of the drawing instrument
+becomes offset in the Y axis by about a millimeter.
+
+This is likely not an issue in the firmware or the software, but rather a fault
+in the 3D-printed part which holds the tool. The part is given too much
+clearance relative to the tube which holds it, and may become tilted when
+drawing long vertical lines. A solution to this problem was planned, but it
+could not be implemented in a timely manner.
+
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{kicad}
+        \caption{A general test of the plotter's ability to draw traced
+        bitmaps.}
+        \label{kicad}
+    \end{center}
+\end{figure}
