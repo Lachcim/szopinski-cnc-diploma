@@ -2,8 +2,6 @@
 #include "../state.h"
 #include "../motion/motion.h"
 
-#include "../usart.h"
-
 void execute_command(const struct command* command) {
     //command deleted, ignore remaining fields
     if (command->deleted)
@@ -33,7 +31,6 @@ void execute_command(const struct command* command) {
         machine_state.offset_mode =
             command->g_offset_mode == TO_FIXED(90.1) ?
             OFFSET_ABSOLUTE : OFFSET_INCREMENTAL;
-
 
     //set motion mode
     if (command->word_flag & FLAG_G_MOTION)
