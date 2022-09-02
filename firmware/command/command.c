@@ -74,42 +74,29 @@ void assign_word(struct command* command, struct word word) {
         return;
     }
 
-    //assign to proper modal group, binary search
-    unsigned char min = 0;
-    unsigned char max = sizeof(modal_map) / sizeof(struct modal_mapping) - 1;
-    int index = -1;
-
-    while (min != max) {
-        unsigned char mid = (min + max) >> 1;
-
-        if (modal_map[mid].g_word < word.num) {
-            min = mid;
-            continue;
+    //assign to proper modal group
+    int modal_index = -1;
+    for (int i = 0; i < sizeof(modal_map) / sizeof(struct modal_mapping); i++)
+        if (modal_map[i].g_word == word.num) {
+            modal_index = i;
+            break;
         }
-        if (modal_map[mid].g_word > word.num) {
-            max = mid;
-            continue;
-        }
-
-        index = mid;
-        break;
-    }
 
     //no mapping found for g-word, unsupported
-    if (index == -1) {
+    if (modal_index == -1) {
         machine_state.error = ERROR_UNSUPPORTED;
         return;
     }
 
     //can't have two words from the same modal group
-    if (command->word_flag & modal_map[index].flag) {
+    if (command->word_flag & modal_map[modal_index].flag) {
         machine_state.error = ERROR_CONFLICTING_MODAL;
         return;
     }
 
     //assign values to struct
-    command->word_flag |= modal_map[index].flag;
-    switch (modal_map[index].flag)
+    command->word_flag |= modal_map[modal_index].flag;
+    switch (modal_map[modal_index].flag)
     {
         case FLAG_G_MOTION: command->g_motion = word.num; break;
         case FLAG_G_DISTANCE: command->g_distance_mode = word.num; break;
