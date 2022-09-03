@@ -304,7 +304,7 @@
             w~specjalności \@specjalnosc \\
         \fi
         \ifnum \pdf@strcmp{\@lang}{en} = 0
-            \@specjalnosc \\
+            \@specjalnosc~specialization\\
         \fi
         \vspace{4em}
         \large \@title \\
