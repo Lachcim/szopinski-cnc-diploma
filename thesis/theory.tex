@@ -8,7 +8,7 @@ solutions involving punched cards date back to the 1950s. Since that time,
 various manufacturers have implemented their own standards for communicating
 with machines, the most prominent of which is a data format named G-code.
 Originally developed by Gerber Scientific, the format was adopted by many
-companies and has become a de-facto industry standard.
+companies and has become a de-facto industry standard \cite{cnc}.
 
 In its original form, G-code lacked the ability to read, manipulate and store
 data, which made it more akin to a vector graphics description format than to a
@@ -33,7 +33,7 @@ work on all machines universally.
 Due to G-code's origin as a vector data format rather than a communication
 protocol, there is also no standardized way to obtain any sort of feedback from
 the machine to its controlling computer. To establish two-way communication
-with the machine, manufacturers employ proprietary solutions.
+with the machine, manufacturers employ proprietary solutions \cite{monitoring}.
 
 \subsection{GUI application design}
 
@@ -41,7 +41,7 @@ Modern developments in user interface design show a tendency to step away from
 native user controls in favor of web technologies. Desktop and mobile
 applications present their interface as an embedded browser window where
 controls are implemented using HTML, CSS and JavaScript. This improves user
-experience by presenting the user with a modern and familiar UI.
+experience by presenting the user with a modern and familiar UI \cite{webgui}.
 
 A commonly used software framework for creating this kind of applications is
 Electron. It consists of three crucial components:
@@ -60,7 +60,8 @@ a strict set of rules regarding data flow and update logic. Between managing
 the global program state, handling user interactions and rendering interface
 updates, it may be difficult to write readable and maintainable code. A popular
 solution to this problem is the React framework, which facilitates the
-development of UI applications by introducing the following design principles:
+development of UI applications by introducing the following design principles
+\cite{react}:
 \begin{itemize}
     \item The UI is split into components, each of which is only responsible
     for rendering a small part of the application. Components maintain the
