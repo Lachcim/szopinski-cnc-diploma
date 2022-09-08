@@ -1,0 +1,62 @@
+\clearpage
+\section{Analysis of market-available solutions}
+
+\subsection{HP 7470A}
+
+Although no longer popular, plotters used to be a commonly found piece of office
+equipment. Designed to connect to a personal computer, they were used to plot
+graphics before inkjet printers became available. One such plotter is the
+Hewlett-Packard 7470A, introduced in 1982.
+
+The 7470A used a felt-tip pen to draw monochrome graphics on A4 paper.
+Communication was established over an RS-232 serial connection, and it used a
+proprietary language called HP-GL to encode vector data. Software for the device
+was often written in BASIC. Its task was to generate HP-GL instructions from
+input data according to hard-coded algorithms \cite{7470a}.
+
+The HP-GL language offered capabilities similar to those of G-code, while also
+defining a protocol for serial communication required to obtain feedback from
+the device. A handshake procedure was employed to govern the transmission of
+data, so as not to overflow the machine's serial buffer.
+
+Functionally, the machine was capable of:
+\begin{itemize}
+    \item Moving freely in the horizontal plane, raising and lowering the
+    pen
+    \item Drawing lines and arcs
+    \item Drawing text using multiple fonts
+    \item Scaling and translating output coordinates
+    \item Switching between unit systems
+    \item Switching between absolute and relative coordinates
+    \item Moving at different speeds
+\end{itemize}
+The above list fully encompasses the features of standard G-code, but also it
+makes the machine useful without the need for dedicated control software. The
+7470A could be hand-operated from a simple serial terminal.
+
+\subsection{LinuxCNC}
+
+A more modern CNC solution is LinuxCNC, a software suite designed to bypass the
+control firmware of a CNC machine and to interact with the machine's hardware
+directly. By using a real-time Linux kernel and communicating over the
+high-speed PCI bus, the software makes it possible to control stepper motors
+with a personal computer \cite{linuxcnc}.
+
+Not being linked to any manufacturer gives LinuxCNC the freedom to accept any
+data format and to directly execute arbitrary toolpath generation algorithms.
+Nonetheless, the software implements its own G-code parser with a wide range of
+functionality equivalent to that of commercial manufacturers. Features include:
+\begin{itemize}
+    \item Linear and rotational axes of motion
+    \item Additional toolpath curves
+    \item Rotation and translation of the coordinate system
+    \item Compensation for tool size during movement
+    \item Canned cycles for lathes and drills
+    \item Multiple tools
+\end{itemize}
+
+Being a purely software solution, the system allows the user to inspect the
+CNC machine state in great detail. The user may step through a CNC program and
+view generated toolpaths before and after they are executed. Current parameters
+of the machine, including its configuration, position and memory state, are
+displayed on-screen.
