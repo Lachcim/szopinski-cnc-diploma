@@ -30,21 +30,22 @@ The following libraries and tools were used to create this application:
 
 \begin{itemize}
     \item Yarn, a combined package manager and project manager. Used for
-    managing dependencies and launching build utilities.
+    managing dependencies and launching build utilities \cite{yarn}.
     \item Webpack, a module bundler. Needed to compile the project into a
-    compact set of files suitable for consumption by Electron.
+    compact set of files suitable for consumption by Electron \cite{webpack}.
     \item React, a framework for building user interfaces. It introduces a
     system of components and a mechanism to coordinate the flow of information
-    within the application.
+    within the application \cite{react}.
     \item React Redux, a library for managing the global application state.
     Facilitates handling events which impact multiple unrelated parts of the
-    user interface.
-    \item React Router, a library to handle screen navigation.
+    user interface \cite{redux}.
+    \item React Router, a library to handle screen navigation \cite{router}.
     \item Node SerialPort, a JavaScript wrapper around the operating system's
-    serial interface.
-    \item Sass, a dialect of CSS which introduces a hierarchical structure.
+    serial interface \cite{nodeserial}.
+    \item Sass, a dialect of CSS which introduces a hierarchical structure
+    \cite{sass}.
     \item ESLint, a code analysis tool for detecting errors and enforcing code
-    style.
+    style \cite{eslint}.
 \end{itemize}
 
 Because the application does not fetch data from the Internet nor does it
@@ -100,12 +101,12 @@ selection screen (figure~\ref{serialselect}). Choosing one of the options
 changes the connection status to \texttt{connecting}. The subscriber detects
 this change and attempts to establish a new serial connection.
 
-The device sends three kinds of feedback. The software verifies that the
+The device sends several kinds of feedback. The software verifies that the
 feedback is received within a certain time frame and that it isn't malformed.
 Violating the serial protocol terminates the connection. Receiving valid
 feedback marks the connection as established (see figure~\ref{serialstate}).
 
-There are three kinds of feedback:
+There are three types of feedback packets:
 
 \begin{itemize}
     \item Position feedback, sent every quarter second. Receiving this packet
